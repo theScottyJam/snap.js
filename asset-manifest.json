@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/theScottyJam/snap.js/static/css/main.0fcfcf19.chunk.css",
+    "main.js": "/theScottyJam/snap.js/static/js/main.08a2a49f.chunk.js",
+    "main.js.map": "/theScottyJam/snap.js/static/js/main.08a2a49f.chunk.js.map",
+    "runtime-main.js": "/theScottyJam/snap.js/static/js/runtime-main.275a7832.js",
+    "runtime-main.js.map": "/theScottyJam/snap.js/static/js/runtime-main.275a7832.js.map",
+    "static/js/2.a86b4580.chunk.js": "/theScottyJam/snap.js/static/js/2.a86b4580.chunk.js",
+    "static/js/2.a86b4580.chunk.js.map": "/theScottyJam/snap.js/static/js/2.a86b4580.chunk.js.map",
+    "index.html": "/theScottyJam/snap.js/index.html",
+    "static/css/main.0fcfcf19.chunk.css.map": "/theScottyJam/snap.js/static/css/main.0fcfcf19.chunk.css.map",
+    "static/js/2.a86b4580.chunk.js.LICENSE.txt": "/theScottyJam/snap.js/static/js/2.a86b4580.chunk.js.LICENSE.txt",
+    "static/media/logo.d348da24.svg": "/theScottyJam/snap.js/static/media/logo.d348da24.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.275a7832.js",
+    "static/js/2.a86b4580.chunk.js",
+    "static/css/main.0fcfcf19.chunk.css",
+    "static/js/main.08a2a49f.chunk.js"
+  ]
+}
