@@ -1,0 +1,4 @@
+{
+  "fnSignature": "truncate(str, maxSize, options?)",
+  "summary": "Truncates `str` and append an ellipse when it's length exceeds `maxSize`"
+}

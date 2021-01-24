@@ -1,0 +1,4 @@
+{
+  "fnSignature": "trimLeft(str, toRemove?)",
+  "summary": "Trims characters from the left end of the string `str` that are found in the string `toRemove`."
+}

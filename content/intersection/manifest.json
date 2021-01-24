@@ -1,0 +1,4 @@
+{
+  "fnSignature": "intersection(array1, array2)",
+  "summary": "Returns an array of elements that exist in both `array1` and `array2`"
+}

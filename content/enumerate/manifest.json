@@ -1,0 +1,4 @@
+{
+  "fnSignature": "enumerate(iterable)",
+  "summary": "Allows iterating over an iterable's entries and indicies at the same time."
+}

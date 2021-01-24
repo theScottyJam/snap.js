@@ -10,6 +10,7 @@
 
 # production
 /build
+/public/content.json
 
 # misc
 .DS_Store

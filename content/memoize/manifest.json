@@ -1,0 +1,4 @@
+{
+  "fnSignature": "memoize(fn, options?)",
+  "summary": "Returns a memoized version of `fn`. The results of calling the returned function gets cached, so when it's called again with the same arguments, the cached result will be returned."
+}

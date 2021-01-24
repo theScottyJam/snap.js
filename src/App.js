@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Frame from './Frame'
+import OverviewPage from './OverviewPage'
+import SingleEntryPage from './SingleEntryPage'
+import style from './App.style.js'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [page, setPage] = React.useState(null)
+  return (<>
+    {page != null && (<>
+      <div className={style.outsidePopup} onClick={() => setPage(null)} />
+      <div className={style.popup}>
+        <div className={style.popupInner}>
+          <SingleEntryPage page={page} setPage={setPage}/>
+        </div>
+      </div>
+    </>)}
+    <Frame>
+      <OverviewPage setPage={setPage} />
+    </Frame>
+  </>);
 }
 
 export default App;

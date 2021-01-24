@@ -1,0 +1,4 @@
+{
+  "fnSignature": "shuffle(array)",
+  "summary": "Returns a copy of `array` that has been shuffled."
+}

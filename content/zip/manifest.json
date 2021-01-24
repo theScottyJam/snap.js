@@ -1,0 +1,4 @@
+{
+  "fnSignature": "zip(...iterables)",
+  "summary": "Allows iterating over multiple iterables at the same time."
+}

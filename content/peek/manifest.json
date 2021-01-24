@@ -1,0 +1,4 @@
+{
+  "fnSignature": "peek(array)",
+  "summary": "Returns the last element of `array`."
+}

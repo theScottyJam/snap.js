@@ -1,0 +1,4 @@
+{
+  "fnSignature": "clamp(numb, lowerBound, upperBound)",
+  "summary": "Returns the number `numb` unless it exceeds one of the two bounds, in which case, the bound is returned."
+}

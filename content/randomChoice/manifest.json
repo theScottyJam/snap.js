@@ -1,0 +1,4 @@
+{
+  "fnSignature": "randomChoice(array)",
+  "summary": "Returns a random element from `array`."
+}

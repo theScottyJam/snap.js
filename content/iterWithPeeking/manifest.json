@@ -1,0 +1,4 @@
+{
+  "fnSignature": "iterWithPeeking(iterable)",
+  "summary": "Provides the ability to see future entrees in the iterable as you're iterating over it."
+}

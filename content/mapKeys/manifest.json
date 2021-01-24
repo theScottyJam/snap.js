@@ -1,0 +1,4 @@
+{
+  "fnSignature": "mapKeys(obj, fn)",
+  "summary": "Constructs a new object where each key in `obj` has been mapped by `fn` to a new key."
+}

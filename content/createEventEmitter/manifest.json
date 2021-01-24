@@ -1,0 +1,4 @@
+{
+  "fnSignature": "createEventEmitter()",
+  "summary": "Creates a simple eventEmitter instance to aid with the pub-sub pattern of subscribing to events and notifying subscribers."
+}

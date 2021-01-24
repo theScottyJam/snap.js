@@ -1,0 +1,4 @@
+{
+  "fnSignature": "randomInt(min, max)",
+  "summary": "Returns a random integer between `min` and `max` (but not including `max`)."
+}

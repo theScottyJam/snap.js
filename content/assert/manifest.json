@@ -1,0 +1,4 @@
+{
+  "fnSignature": "assert(condition, message?)",
+  "summary": "Throws an error with the optional `message` if `condition` is false."
+}

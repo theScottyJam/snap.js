@@ -1,0 +1,4 @@
+{
+  "fnSignature": "addToDate(date, offset)",
+  "summary": "Returns a new date with year/month/day offsets added the `date`"
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "categoryHeading": "Methods for objects",
+    "entries": [
+      "mapKeys",
+      "mapValues",
+      "invert",
+      "setDefault"
+    ]
+  },
+  {
+    "categoryHeading": "Methods for arrays/iterables",
+    "entries": [
+      "peek",
+      "intersection",
+      "difference",
+      "iterWithPeeking",
+      "zip",
+      "enumerate"
+    ]
+  },
+  {
+    "categoryHeading": "Methods for strings",
+    "entries": [
+      "truncate",
+      "trim",
+      "trimLeft",
+      "trimRight"
+    ]
+  },
+  {
+    "categoryHeading": "Methods related to randomness",
+    "entries": [
+      "randomInt",
+      "randomChoice",
+      "shuffle"
+    ]
+  },
+  {
+    "categoryHeading": "Miscellaneous methods",
+    "entries": [
+      "memoize",
+      "assert",
+      "createEventEmitter",
+      "sum",
+      "clamp",
+      "addToDate"
+    ]
+  }
+]

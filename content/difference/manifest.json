@@ -1,0 +1,4 @@
+{
+  "fnSignature": "difference(array1, array2)",
+  "summary": "Returns an array of elements that are in `array1` but not in `array2`."
+}

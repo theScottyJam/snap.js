@@ -1,0 +1,4 @@
+{
+  "fnSignature": "invert(obj)",
+  "summary": "Constructs a new object that maps `obj`'s values to its keys."
+}

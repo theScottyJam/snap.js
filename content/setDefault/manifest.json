@@ -1,0 +1,4 @@
+{
+  "fnSignature": "setDefault(obj, key, defaultValue)",
+  "summary": "Returns the value at `obj[key]`. If `obj[key]` does not have a value, then assign `defaultValue` to it, and return `defaultValue` instead."
+}
