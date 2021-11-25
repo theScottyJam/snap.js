@@ -1,4 +1,0 @@
-{
-  "fnSignature": "sum(iterable)",
-  "summary": "Returns the sum of all the entries in `iterable`."
-}

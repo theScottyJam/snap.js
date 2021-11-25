@@ -1,4 +1,4 @@
 {
-  "fnSignature": "zip(...iterables)",
-  "summary": "Allows iterating over multiple iterables at the same time."
+  "fnSignature": "zip(...arrays)",
+  "summary": "Allows iterating over multiple arrays at the same time."
 }

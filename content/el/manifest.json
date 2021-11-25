@@ -1,0 +1,4 @@
+{
+  "fnSignature": "el(tagName, attrs?, children?)",
+  "summary": "Creates an HTML element."
+}

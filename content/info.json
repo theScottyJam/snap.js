@@ -4,19 +4,15 @@
     "entries": [
       "mapKeys",
       "mapValues",
-      "invert",
-      "setDefault"
+      "invert"
     ]
   },
   {
-    "categoryHeading": "Methods for arrays/iterables",
+    "categoryHeading": "Methods for arrays",
     "entries": [
-      "peek",
       "intersection",
       "difference",
-      "iterWithPeeking",
-      "zip",
-      "enumerate"
+      "zip"
     ]
   },
   {
@@ -37,13 +33,17 @@
     ]
   },
   {
+    "categoryHeading": "HTML-building logic",
+    "entries": [
+      "el",
+      "fragment"
+    ]
+  },
+  {
     "categoryHeading": "Miscellaneous methods",
     "entries": [
       "memoize",
-      "assert",
       "createEventEmitter",
-      "sum",
-      "clamp",
       "addToDate"
     ]
   }

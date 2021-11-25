@@ -1,0 +1,4 @@
+{
+  "fnSignature": "fragment(tagName, attrs?, children?)",
+  "summary": "Creates an HTML fragment."
+}
