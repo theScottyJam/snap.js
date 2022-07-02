@@ -1,8 +1,11 @@
+import style from './index.style'
 import Header from './Header'
+import Footer from './Footer'
 
 export default function Frame({ children }) {
-  return (<div>
+  return (<div className={style.frame}>
     <Header />
-    <div>{children}</div>
+    <div className={style.childrenContainer}>{children}</div>
+    <Footer />
   </div>)
 }

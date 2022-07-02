@@ -8,7 +8,6 @@ style.header = css`
   width: 100%;
   height: 160px;
   background: radial-gradient(circle, rgba(0,140,140,1) 0%, rgba(0,106,89,1) 100%);
-  color: white;
   position: relative; // Makes overflow work properly
   overflow: hidden;
   box-shadow: 0 -15px 15px -15px rgba(0,0,0,0.15) inset;
