@@ -1,6 +1,7 @@
 import style from './Header.style'
 import BackgroundDecor from './BackgroundDecor'
-import logo from './logo.svg'
+// Importing with !fild-loader! do to this create-react-app bug: https://github.com/facebook/create-react-app/issues/11770
+import logo from '!file-loader!./logo.svg' // eslint-disable-line import/no-webpack-loader-syntax
 
 export default function Header() {
   return (
