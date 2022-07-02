@@ -23,7 +23,7 @@ function Category({heading, entries, setPage}) {
 
 function useLoadContent() {
   const [content, setContent] = React.useState(null)
-  React.useEffect(() => (
+  React.useEffect(() => void (
     fetch(process.env.PUBLIC_URL + '/content.json')
     .then(x => x.json())
     .then(setContent)
