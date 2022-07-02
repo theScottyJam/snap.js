@@ -22,37 +22,27 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "prettier": "^2.7.1",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3"
+    "prettier": "^2.7.1"
   },
   "scripts": {
-    "predeploy": "npm run build",
+    "predeploy": "npm run lint-fix && npm run test && npm run build",
     "deploy": "gh-pages -d build",
     "start": "node ./buildContent.js && react-scripts start",
     "build": "node ./buildContent.js && react-scripts build",
     "test-watch": "node ./buildContent.js && react-scripts test",
     "test": "react-scripts test --watchAll=false",
-    "pre-commit": "bash precommit.sh",
     "build-content": "node ./buildContent.js",
-    "lint-fix": "prettier --single-quote --arrow-parens avoid --write $(git diff --name-only --cached | grep -E '(src|content)/.*\\.(js|jsx|ts|tsx|json|css|scss|md)')",
-    "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "lint-fix": "prettier --write '{src,content}/**/(*.js|.json|.css|.md)'",
+    "eject": "react-scripts eject"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "singleQuote": true
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "{src,content}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "npm run pre-commit"
     ]
   },
   "browserslist": {

@@ -4,11 +4,8 @@ The copy-past library.
 
 ## Commands
 
-- `npm run prepare` after fetching this repository to install the prettier pre-commit hook.
-- `npm run deploy` to publish this webpage.
+- `npm run predeploy` to run prettier and tests
+- `npm run deploy` to publish this webpage. `predeploy` is autorun, I believe, but it won't stop it from deploying if there's errors or changes.
 - `npm run test` to run tests
+- `npm run lint-fix` to auto-run prettier
 - `npm run start` to run the webpage in development mode. Currently, if you change anything in content/ you'll have to rerun this command to receive the changes.
-
-There's also a pre-commit hook registered to automatically run the linter and tests.
-
-Note that the pre-commit hook wasn't written to be cross-platform, and will probably fail on non-unix machines. The pre-commit hook is experimental in general, I might throw it out if I don't like it.
