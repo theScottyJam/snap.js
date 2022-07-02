@@ -1,7 +1,7 @@
 function mapValues(obj, fn) {
-  const newObj = {}
+  const newObj = {};
   for (const [key, value] of Object.entries(obj)) {
-    newObj[key] = fn(value)
+    newObj[key] = fn(value);
   }
-  return newObj
+  return newObj;
 }

@@ -1,11 +1,11 @@
-import {css} from '@emotion/css'
+import { css } from '@emotion/css';
 
-let style = {}
-export default style
+let style = {};
+export default style;
 
 style.docEntry = css`
   label: doc-entry;
-`
+`;
 
 style.fnSignature = css`
   label: fn-signature;
@@ -14,7 +14,7 @@ style.fnSignature = css`
   padding: 2px 4px;
   cursor: pointer;
   font-size: 0.9rem;
-`
+`;
 
 style.summary = css`
   label: summary;
@@ -29,4 +29,4 @@ style.summary = css`
     margin-top: 0;
     margin-bottom: 0;
   }
-`
+`;

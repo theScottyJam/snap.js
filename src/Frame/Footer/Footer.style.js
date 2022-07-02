@@ -1,7 +1,7 @@
-import {css} from '@emotion/css'
+import { css } from '@emotion/css';
 
-let style = {}
-export default style
+let style = {};
+export default style;
 
 style.footer = css`
   label: footer;
@@ -11,8 +11,8 @@ style.footer = css`
   width: 100%;
   height: 26px;
   background: #325d56;
-  box-shadow: 0 15px 15px -15px rgba(0,0,0,0.25) inset;
-`
+  box-shadow: 0 15px 15px -15px rgba(0, 0, 0, 0.25) inset;
+`;
 
 style.footerText = css`
   label: footer-text;
@@ -25,4 +25,4 @@ style.footerText = css`
   & a {
     color: inherit;
   }
-`
+`;

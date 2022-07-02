@@ -1,6 +1,6 @@
 # Parameters
 
-* `obj`
+- `obj`
 
   The object to invert.
 

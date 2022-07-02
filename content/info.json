@@ -1,50 +1,26 @@
 [
   {
     "categoryHeading": "Object Helpers",
-    "entries": [
-      "mapKeys",
-      "mapValues",
-      "invert"
-    ]
+    "entries": ["mapKeys", "mapValues", "invert"]
   },
   {
     "categoryHeading": "Array Helpers",
-    "entries": [
-      "intersection",
-      "difference",
-      "zip"
-    ]
+    "entries": ["intersection", "difference", "zip"]
   },
   {
     "categoryHeading": "String Helpers",
-    "entries": [
-      "truncate",
-      "trim",
-      "trimLeft",
-      "trimRight"
-    ]
+    "entries": ["truncate", "trim", "trimLeft", "trimRight"]
   },
   {
     "categoryHeading": "Helper Functions for Randomness",
-    "entries": [
-      "randomInt",
-      "randomChoice",
-      "shuffle"
-    ]
+    "entries": ["randomInt", "randomChoice", "shuffle"]
   },
   {
     "categoryHeading": "HTML-Building Helpers",
-    "entries": [
-      "el",
-      "fragment"
-    ]
+    "entries": ["el", "fragment"]
   },
   {
     "categoryHeading": "Miscellaneous Helpers",
-    "entries": [
-      "memoize",
-      "createEventEmitter",
-      "addToDate"
-    ]
+    "entries": ["memoize", "createEventEmitter", "addToDate"]
   }
 ]

@@ -1,7 +1,7 @@
-import {css} from '@emotion/css'
+import { css } from '@emotion/css';
 
-let style = {}
-export default style
+let style = {};
+export default style;
 
 style.square1 = css`
   label: square1-decor;
@@ -12,7 +12,7 @@ style.square1 = css`
   top: 30px;
   transform: rotate(25deg);
   background: rgb(0, 135, 135);
-`
+`;
 
 style.square2 = css`
   label: square2-decor;
@@ -23,7 +23,7 @@ style.square2 = css`
   top: 80px;
   transform: rotate(-37deg);
   background: rgb(0, 135, 135);
-`
+`;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#polka-dot
 style.dotted = css`
@@ -34,9 +34,9 @@ style.dotted = css`
   right: -50px;
   top: -50px;
   transform: rotate(35deg);
-  background-image: radial-gradient(rgba(0,0,0,0.4) 10%, transparent 16%);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.4) 10%, transparent 16%);
   background-size: 15px 15px;
-`
+`;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#waves
 style.squiggle = css`
@@ -46,13 +46,28 @@ style.squiggle = css`
   height: 120%;
   left: 80px;
   top: -12px;
-  background:
-    radial-gradient(circle at 100% 50%, transparent 18%, rgba(150,255,255,.15) 19%, rgba(150,255,255,.15) 36%, transparent 37%, transparent) 30px 0,
-    radial-gradient(circle at 0% 50%, transparent 18%, rgba(150,255,255,.15) 19%, rgba(150,255,255,.15) 36%, transparent 37%, transparent) 30px -40px;
+  background: radial-gradient(
+        circle at 100% 50%,
+        transparent 18%,
+        rgba(150, 255, 255, 0.15) 19%,
+        rgba(150, 255, 255, 0.15) 36%,
+        transparent 37%,
+        transparent
+      )
+      30px 0,
+    radial-gradient(
+        circle at 0% 50%,
+        transparent 18%,
+        rgba(150, 255, 255, 0.15) 19%,
+        rgba(150, 255, 255, 0.15) 36%,
+        transparent 37%,
+        transparent
+      )
+      30px -40px;
   background-color: transparent;
   background-size: 60px 80px;
   transform: rotate(-15deg);
-`
+`;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#polka-dot
 style.dottedLine = css`
@@ -62,7 +77,7 @@ style.dottedLine = css`
   height: 50px;
   left: 0;
   top: 10px;
-  background-image: radial-gradient(rgba(0,137,137,1) 8%, transparent 10%);
+  background-image: radial-gradient(rgba(0, 137, 137, 1) 8%, transparent 10%);
   background-size: 30px 40px;
   background-position: 0 0, 10px 10px;
-`
+`;

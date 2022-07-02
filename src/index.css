@@ -11,11 +11,16 @@ body {
   height: 100vh;
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: 'Questrial', sans-serif;
   letter-spacing: 0.05em;
 }
 
-pre, code {
+pre,
+code {
   font-family: 'Roboto Mono', monospace;
 }

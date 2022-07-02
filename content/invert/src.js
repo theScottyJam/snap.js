@@ -1,7 +1,7 @@
 function invert(obj) {
-  const newObj = {}
+  const newObj = {};
   for (const [key, value] of Object.entries(obj)) {
-    newObj[value] = key
+    newObj[value] = key;
   }
-  return newObj
+  return newObj;
 }

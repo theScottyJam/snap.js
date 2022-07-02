@@ -1,7 +1,7 @@
-import {css} from '@emotion/css'
+import { css } from '@emotion/css';
 
-let style = {}
-export default style
+let style = {};
+export default style;
 
 style.backButton = css`
   label: back-button;
@@ -11,4 +11,4 @@ style.backButton = css`
   padding: 5px 10px;
   font-size: 1rem;
   cursor: pointer;
-`
+`;

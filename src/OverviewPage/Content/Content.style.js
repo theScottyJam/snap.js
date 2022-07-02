@@ -1,14 +1,14 @@
-import {css} from '@emotion/css'
+import { css } from '@emotion/css';
 
-let style = {}
-export default style
+let style = {};
+export default style;
 
 style.content = css`
   label: content;
   margin: 50px auto 80px;
   width: 800px;
   position: relative;
-`
+`;
 
 style.categoryName = css`
   label: category-name;
@@ -19,4 +19,4 @@ style.categoryName = css`
   color: #eee;
   padding: 4px 8px 3px;
   display: inline-block;
-`
+`;

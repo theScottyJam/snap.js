@@ -1,7 +1,7 @@
 function mapKeys(obj, fn) {
-  const newObj = {}
+  const newObj = {};
   for (const [key, value] of Object.entries(obj)) {
-    newObj[fn(key)] = value
+    newObj[fn(key)] = value;
   }
-  return newObj
+  return newObj;
 }

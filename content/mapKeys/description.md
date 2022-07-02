@@ -1,14 +1,14 @@
 # Parameters
 
-* `obj`
+- `obj`
 
   The object to be processed
 
-* `fn`
+- `fn`
 
   A callback that will be called with each key in the object. This function should return a transformed key that will be used to construct the new object. The callback accepts the following parameters:
 
-  * `key`: The current key to transform.
+  - `key`: The current key to transform.
 
 # Examples
 

@@ -1,1 +1,1 @@
-export { default } from './DocEntry'
+export { default } from './DocEntry';
