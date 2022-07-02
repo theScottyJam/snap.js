@@ -1,21 +1,14 @@
 {
   "files": {
-    "main.css": "/snap.js/static/css/main.f2107d2f.chunk.css",
-    "main.js": "/snap.js/static/js/main.60e53826.chunk.js",
-    "main.js.map": "/snap.js/static/js/main.60e53826.chunk.js.map",
-    "runtime-main.js": "/snap.js/static/js/runtime-main.f93fa839.js",
-    "runtime-main.js.map": "/snap.js/static/js/runtime-main.f93fa839.js.map",
-    "static/js/2.347201ea.chunk.js": "/snap.js/static/js/2.347201ea.chunk.js",
-    "static/js/2.347201ea.chunk.js.map": "/snap.js/static/js/2.347201ea.chunk.js.map",
+    "main.css": "/snap.js/static/css/main.d5d8d1cd.css",
+    "main.js": "/snap.js/static/js/main.007402dc.js",
+    "logo.svg": "/snap.js/d348da244d951e05555c4a3cfa3952eb.svg",
     "index.html": "/snap.js/index.html",
-    "static/css/main.f2107d2f.chunk.css.map": "/snap.js/static/css/main.f2107d2f.chunk.css.map",
-    "static/js/2.347201ea.chunk.js.LICENSE.txt": "/snap.js/static/js/2.347201ea.chunk.js.LICENSE.txt",
-    "static/media/logo.d348da24.svg": "/snap.js/static/media/logo.d348da24.svg"
+    "main.d5d8d1cd.css.map": "/snap.js/static/css/main.d5d8d1cd.css.map",
+    "main.007402dc.js.map": "/snap.js/static/js/main.007402dc.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.f93fa839.js",
-    "static/js/2.347201ea.chunk.js",
-    "static/css/main.f2107d2f.chunk.css",
-    "static/js/main.60e53826.chunk.js"
+    "static/css/main.d5d8d1cd.css",
+    "static/js/main.007402dc.js"
   ]
 }
