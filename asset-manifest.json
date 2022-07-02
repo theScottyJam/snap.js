@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/snap.js/static/css/main.d5d8d1cd.css",
-    "main.js": "/snap.js/static/js/main.007402dc.js",
+    "main.js": "/snap.js/static/js/main.3dfe6d19.js",
     "logo.svg": "/snap.js/d348da244d951e05555c4a3cfa3952eb.svg",
     "index.html": "/snap.js/index.html",
     "main.d5d8d1cd.css.map": "/snap.js/static/css/main.d5d8d1cd.css.map",
-    "main.007402dc.js.map": "/snap.js/static/js/main.007402dc.js.map"
+    "main.3dfe6d19.js.map": "/snap.js/static/js/main.3dfe6d19.js.map"
   },
   "entrypoints": [
     "static/css/main.d5d8d1cd.css",
-    "static/js/main.007402dc.js"
+    "static/js/main.3dfe6d19.js"
   ]
 }
