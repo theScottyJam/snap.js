@@ -1,6 +1,5 @@
-function addToDate(
-  date_,
-  {
+function addToDate(date_, offset) {
+  const {
     years = 0,
     months = 0,
     days = 0,
@@ -8,8 +7,8 @@ function addToDate(
     minutes = 0,
     seconds = 0,
     ms = 0,
-  }
-) {
+  } = offset;
+
   const date = new Date(date_.valueOf());
   date.setFullYear(date.getFullYear() + years);
   date.setMonth(date.getMonth() + months);
