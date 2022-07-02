@@ -1,6 +1,6 @@
 [
   {
-    "categoryHeading": "Methods for objects",
+    "categoryHeading": "Object Helpers",
     "entries": [
       "mapKeys",
       "mapValues",
@@ -8,7 +8,7 @@
     ]
   },
   {
-    "categoryHeading": "Methods for arrays",
+    "categoryHeading": "Array Helpers",
     "entries": [
       "intersection",
       "difference",
@@ -16,7 +16,7 @@
     ]
   },
   {
-    "categoryHeading": "Methods for strings",
+    "categoryHeading": "String Helpers",
     "entries": [
       "truncate",
       "trim",
@@ -25,7 +25,7 @@
     ]
   },
   {
-    "categoryHeading": "Methods related to randomness",
+    "categoryHeading": "Helper Functions for Randomness",
     "entries": [
       "randomInt",
       "randomChoice",
@@ -33,14 +33,14 @@
     ]
   },
   {
-    "categoryHeading": "HTML-building logic",
+    "categoryHeading": "HTML-Building Helpers",
     "entries": [
       "el",
       "fragment"
     ]
   },
   {
-    "categoryHeading": "Miscellaneous methods",
+    "categoryHeading": "Miscellaneous Helpers",
     "entries": [
       "memoize",
       "createEventEmitter",

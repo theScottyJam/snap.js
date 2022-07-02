@@ -1,0 +1,12 @@
+{
+  "spellright.language": [
+    "English (American)"
+  ],
+  "spellright.documentTypes": [
+    "javascript",
+    "json",
+    "markdown",
+    "latex",
+    "plaintext"
+  ],
+}
