@@ -1,6 +1,6 @@
 # Snap.Js
 
-The copy-past library.
+The Copy-Paste Library.
 
 ## Commands
 

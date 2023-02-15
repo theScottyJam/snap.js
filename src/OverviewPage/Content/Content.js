@@ -1,17 +1,22 @@
 import React from 'react';
 import style from './Content.style';
 import DocEntry from '../DocEntry';
+import { extractTopLevelPageFromRoute } from '../../shared';
 
-export default function Content({ setPage }) {
-  const content = useLoadContent();
-  if (!content) return null;
+export default function Content({ page, setPage, content }) {
+  let topLevelPage = extractTopLevelPageFromRoute(page);
+  if (topLevelPage === null) {
+    throw new Error('Invalid route');
+  }
+
   return (
     <div className={style.content}>
-      {content.map(({ categoryHeading, entries }) => (
+      {content[topLevelPage].map(({ categoryHeading, entries }) => (
         <Category
           key={categoryHeading}
           heading={categoryHeading}
           entries={entries}
+          page={page}
           setPage={setPage}
         />
       ))}
@@ -19,25 +24,18 @@ export default function Content({ setPage }) {
   );
 }
 
-function Category({ heading, entries, setPage }) {
+function Category({ heading, entries, page, setPage }) {
   return (
     <>
       <h1 className={style.categoryName}>{heading}</h1>
       {entries.map(entry => (
-        <DocEntry key={entry.name} entry={entry} setPage={setPage} />
+        <DocEntry
+          key={entry.name}
+          entry={entry}
+          page={page}
+          setPage={setPage}
+        />
       ))}
     </>
   );
-}
-
-function useLoadContent() {
-  const [content, setContent] = React.useState(null);
-  React.useEffect(
-    () =>
-      void fetch(process.env.PUBLIC_URL + '/content.json')
-        .then(x => x.json())
-        .then(setContent),
-    []
-  );
-  return content;
 }

@@ -1,0 +1,4 @@
+{
+  "fnSignature": "_.differenceBy(array, values?, iteratee?)",
+  "summary": "This method is like `_.difference` except that it accepts `iteratee` which is invoked for each element of `array` and `values` to generate the criterion by which they're compared. The order and references of result values are determined by the first array."
+}

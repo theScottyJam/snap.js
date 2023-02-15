@@ -13,8 +13,8 @@
 # Examples
 
 ```
-> mapValues({a: 2, b: 3}, x => x**2)
-{a: 4, b: 9}
+> mapValues({ a: 2, b: 3 }, x => x**2)
+{ a: 4, b: 9 }
 ```
 
 # Additional Information

@@ -10,7 +10,8 @@
 
 # production
 /build
-/public/content.json
+/public/nolodashContent.json
+/public/utilsContent.json
 
 # misc
 .DS_Store
