@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.pullAllWith(array, values, comparator?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pullAllWith",
+  "summary": "This method is like `_.pullAll` except that it accepts `comparator` which is invoked to compare elements of `array` to `values`."
+}

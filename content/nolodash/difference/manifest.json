@@ -1,4 +1,5 @@
 {
   "fnSignature": "_.difference(array, values?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#difference",
   "summary": "Creates an array of `array` values not included in the other given arrays using `SameValueZero` for equality comparisons. The order and references of result values are determined by the first array."
 }

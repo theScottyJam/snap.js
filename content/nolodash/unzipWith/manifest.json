@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.unzipWith(array, iteratee)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#unzipWith",
+  "summary": "This method is like `_.unzip` except that it accepts `iteratee` to specify how regrouped values should be combined."
+}

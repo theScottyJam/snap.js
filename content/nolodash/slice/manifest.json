@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.slice(array, start?, end?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#slice",
+  "summary": "Creates a slice of `array` from `start` up to, but not including, `end`."
+}

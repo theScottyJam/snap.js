@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sortedIndexOf(array, value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sortedIndexOf",
+  "summary": "This method is like `_.indexOf` except that it performs a binary search on a sorted `array`."
+}

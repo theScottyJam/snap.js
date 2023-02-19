@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.uniqBy(array, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#uniqBy",
+  "summary": "This method is like `_.uniq` except that it accepts `iteratee` which is invoked for each element in array to generate the criterion by which uniqueness is computed."
+}

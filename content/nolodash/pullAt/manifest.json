@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.pullAt(array, indexes?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pullAt",
+  "summary": "Removes elements from `array` corresponding to `indexes` and returns an array of removed elements."
+}

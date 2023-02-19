@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.xorBy(...arrays, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#xorBy",
+  "summary": "This method is like `_.xor` except that it accepts `iteratee` which is invoked for each element of each `arrays` to generate the criterion by which by which they're compared."
+}

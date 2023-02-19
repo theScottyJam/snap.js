@@ -1,0 +1,3 @@
+```javascript
+array[0];
+```

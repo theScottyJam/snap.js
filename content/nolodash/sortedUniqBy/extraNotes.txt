@@ -1,0 +1,1 @@
+In the proposed solution, note that `result.at(-1)` and for-of can't be used, as that would kill any performance gains that using a function like this has to offer.

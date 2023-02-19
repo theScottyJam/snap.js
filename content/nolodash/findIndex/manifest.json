@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.findIndex(array, predicate?, fromIndex?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#findIndex",
+  "summary": "This method is like `_.find` except that it returns the index of the first element `predicate` returns truthy for instead of the element itself."
+}

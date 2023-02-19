@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.lastIndexOf(array, value, fromIndex?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#lastIndexOf",
+  "summary": "This method is like `_.indexOf` except that it iterates over elements of `array` from right to left."
+}

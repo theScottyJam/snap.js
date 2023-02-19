@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.drop(array, n?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#drop",
+  "summary": "Creates a slice of `array` with `n` elements dropped from the beginning."
+}

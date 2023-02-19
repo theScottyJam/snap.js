@@ -17,15 +17,20 @@ function buildContentFile({ sourcePath, destPath }) {
   const entries = entryInfo.map(({categoryHeading, entries}) => {
     const loadedEntries = entries.map(name => {
       const entryBasePath = `${sourcePath}/${name}`
+      let src = tryReadFile(`${entryBasePath}/src.js`, { fallbackValue: null });
+      if (src !== null) {
+        src = src.trim();
+      }
+
       return {
         name,
         manifest: JSON.parse(fs.readFileSync(`${entryBasePath}/manifest.json`, 'utf-8')),
         description: fs.readFileSync(`${entryBasePath}/description.md`, 'utf-8'),
-        src: fs.readFileSync(`${entryBasePath}/src.js`, 'utf-8'),
-        test: tryReadFile(`${entryBasePath}/test.js`, ''),
+        src,
+        test: tryReadFile(`${entryBasePath}/test.js`, { fallbackValue: '' }),
       }
     })
-    return {categoryHeading, entries: loadedEntries}
+    return { categoryHeading, entries: loadedEntries }
   })
 
   fs.writeFileSync(destPath, JSON.stringify(entries), 'utf-8')

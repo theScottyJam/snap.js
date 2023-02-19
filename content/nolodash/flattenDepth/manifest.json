@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.flattenDepth(array, depth?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#flattenDeep",
+  "summary": "Recursively flatten `array` up to `depth` times."
+}

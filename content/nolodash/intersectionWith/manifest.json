@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.intersectionWith(...arrays, comparator?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#intersectionWith",
+  "summary": "This method is like `_.intersection` except that it accepts `comparator` which is invoked to compare elements of `arrays`."
+}

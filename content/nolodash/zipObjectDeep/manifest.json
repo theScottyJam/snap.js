@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.zipObjectDeep(props?, values?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#zipObjectDeep",
+  "summary": "This method is like `_.zipObject` except that it supports property paths."
+}

@@ -12,18 +12,54 @@ export default function SingleEntryPage({ page, setPage, content }) {
     return <NotFound setPage={setPage} page={page} />;
   }
 
-  const { src, name, description } = pageData;
+  const topLevelPage = extractTopLevelPageFromRoute(page);
+  if (topLevelPage === 'nolodash') {
+    return (
+      <NolodashSingleEntryPage
+        pageData={pageData}
+        page={page}
+        setPage={setPage}
+      />
+    );
+  } else {
+    return (
+      <DefaultSingleEntryPage
+        pageData={pageData}
+        page={page}
+        setPage={setPage}
+      />
+    );
+  }
+}
+
+function DefaultSingleEntryPage({ pageData, setPage, page }) {
+  const { name, src, description } = pageData;
   const { summary } = pageData.manifest;
   return (
     <div>
       <BackButton setPage={setPage} page={page} />
-      <h1
-        style={{ fontSize: '1.7rem', fontFamily: "'Roboto Mono', monospace" }}
-      >
-        {name}()
-      </h1>
-      <Code src={src} />
+      <h1 className={style.entryHeader}>{name}()</h1>
+      {src && <Code src={src} />}
       <Description summary={summary} description={description} />
+    </div>
+  );
+}
+
+function NolodashSingleEntryPage({ pageData, setPage, page }) {
+  const { src, description } = pageData;
+  const { summary, lodashLink } = pageData.manifest;
+  return (
+    <div>
+      <BackButton setPage={setPage} page={page} />
+      <h1 className={style.entryHeader}>Lodash's version</h1>
+      <a className={style.fnSignatureLink} href={lodashLink}>
+        <code>{pageData.manifest.fnSignature}</code>
+      </a>
+      {src && <Code src={src} />}
+      <Description
+        summary={summary}
+        description={'# The Vanilla JavaScript Equivalent\n\n' + description}
+      />
     </div>
   );
 }

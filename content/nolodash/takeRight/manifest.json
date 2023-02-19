@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.takeRight(array, n?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#takeRight",
+  "summary": "Creates a slice of `array` with `n` elements taken from the end."
+}

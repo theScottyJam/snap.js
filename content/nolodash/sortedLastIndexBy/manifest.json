@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sortedLastIndexBy(array, value, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sortedLastIndexBy",
+  "summary": "This method is like `_.sortedLastIndex` except that it accepts `iteratee` which is invoked for value and each element of array to compute their sort ranking."
+}

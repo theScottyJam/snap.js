@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.pullAll(array, values)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pullAll",
+  "summary": "This method is like `_.pull` except that it accepts an array of values to remove."
+}

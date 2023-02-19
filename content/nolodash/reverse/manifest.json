@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.reverse(array)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#reverse",
+  "summary": "Reverses `array` so that the first element becomes the last, the second element becomes the second to last, and so on."
+}

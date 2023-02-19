@@ -1,0 +1,3 @@
+```javascript
+array.flat(Infinity);
+```

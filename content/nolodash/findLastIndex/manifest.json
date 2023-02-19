@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.findLastIndex(array, predicate?, fromIndex?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#findLastIndex",
+  "summary": "This method is like `_.findIndex` except that it iterates over elements of `collection` from right to left."
+}

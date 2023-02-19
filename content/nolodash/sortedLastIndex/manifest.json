@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sortedLastIndex(array, value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sortedLastIndex",
+  "summary": "This method is like `_.sortedIndex` except that it returns the highest index at which `value` should be inserted into `array` in order to maintain its sort order."
+}

@@ -1,5 +1,14 @@
-View this function [on Lodash's website](https://lodash.com/docs/4.17.15#difference).
+To subtract everything in array2 from array1, use the following:
 
-When dealing with larger arrays, you may wish to turn the second array (the one you use `.includes()` on) into a set first, since `.includes()` has an O(n) worst-case lookup time, while `yourSet.has()` has an O(1) lookup time.
+```javascript
+array1.filter(x => !array2.includes(x));
+```
 
-Note that both `array.includes()` and `set.has()` use [the SameValueZero comparison algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality) under-the-hood as well, just like Lodash's `_.difference()`.
+Remember that `.includes()` has an `O(n)` lookup time. If you're dealing with larger arrays, make sure to convert the target array into a set first (a set's `.has()` method has `O(1)` lookup time).
+
+```javascript
+const set2 = new Set(array2);
+const result = array1.filter(x => !set2.has(x));
+```
+
+Both `array.includes()` and `set.has()` use [the SameValueZero comparison algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality) under-the-hood as well, just like Lodash's `_.difference()`.

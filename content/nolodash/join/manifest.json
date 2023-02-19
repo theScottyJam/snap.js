@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.join(array, separator?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#join",
+  "summary": "Converts all elements in `array` into a string separated by `separator`."
+}

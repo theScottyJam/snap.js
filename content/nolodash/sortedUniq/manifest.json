@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sortedUniq(array)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sortedUniq",
+  "summary": "This method is like `_.uniq` except that it's designed and optimized for sorted arrays."
+}

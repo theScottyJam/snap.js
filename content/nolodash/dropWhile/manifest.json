@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.dropWhile(array, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#dropWhile",
+  "summary": "Creates a slice of `array` excluding elements dropped from the beginning. Elements are dropped until `predicate` returns falsey."
+}

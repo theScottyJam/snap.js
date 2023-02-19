@@ -1,1 +1,6 @@
-View this function [on Lodash's website](https://lodash.com/docs/4.17.15#differenceBy).
+```javascript
+function differenceBy(array, values, iteratee) {
+  const transformedValues = new Set(values.map(x => iteratee(x)));
+  return array.filter(x => !transformedValues.has(iteratee(x)));
+}
+```

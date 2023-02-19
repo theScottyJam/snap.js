@@ -1,0 +1,3 @@
+```javascript
+Object.fromEntries(pairs);
+```

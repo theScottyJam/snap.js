@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.unionBy(...arrays, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#unionBy",
+  "summary": "This method is like `_.union` except that it accepts `iteratee` which is invoked for each element of each `arrays` to generate the criterion by which uniqueness is computed."
+}

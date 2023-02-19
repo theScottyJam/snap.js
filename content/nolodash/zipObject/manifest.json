@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.zipObject(props?, values?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#zipObject",
+  "summary": "This method is like `_.fromPairs` except that it accepts two arrays, one of property identifiers and one of corresponding values."
+}

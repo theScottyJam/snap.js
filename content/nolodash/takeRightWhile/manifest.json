@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.takeRightWhile(array, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#takeRightWhile",
+  "summary": "Creates a slice of `array` with elements taken from the end. Elements are taken until `predicate` returns falsey."
+}

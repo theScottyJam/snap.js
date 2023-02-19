@@ -1,0 +1,15 @@
+```javascript
+function sortedLastIndex(array, value, _range) {
+  const [low, high] = _range ?? [0, array.length];
+  if (low === high) {
+    return low;
+  }
+
+  const midPoint = low + Math.floor((high - low) / 2);
+  const newRange = value < array[midPoint]
+    ? [low, midPoint]
+    : [midPoint + 1, high];
+
+  return sortedLastIndex(array, value, newRange);
+}
+```

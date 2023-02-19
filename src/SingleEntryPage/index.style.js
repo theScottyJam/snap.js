@@ -12,3 +12,19 @@ style.backButton = css`
   font-size: 1rem;
   cursor: pointer;
 `;
+
+style.entryHeader = css`
+  label: entry-header;
+  fontSize: 1.7rem;
+  fontFamily: 'Roboto Mono', monospace;
+`;
+
+style.fnSignatureLink = css`
+  label: fn-signature-link;
+  color: #222;
+  font-weight: bold;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;

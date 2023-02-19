@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.nth(array, n?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#nth",
+  "summary": "Gets the element at index `n` of `array`. If `n` is negative, the nth element from the end is returned."
+}
