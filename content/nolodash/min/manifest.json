@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.min(array)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#min",
+  "summary": "Computes the minimum value of `array`. If `array` is empty or falsey, `undefined` is returned."
+}

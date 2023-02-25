@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.divide(dividend, divisor)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#divide",
+  "summary": "Divide two numbers."
+}

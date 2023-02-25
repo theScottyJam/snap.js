@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.multiply(multiplier, multiplicand)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#multiply",
+  "summary": "Multiply two numbers."
+}

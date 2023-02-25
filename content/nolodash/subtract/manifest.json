@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.subtract(minuend, subtrahend)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#subtract",
+  "summary": "Subtract two numbers."
+}

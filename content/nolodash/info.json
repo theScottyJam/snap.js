@@ -68,6 +68,26 @@
     ]
   },
   {
+    "categoryHeading": "Math",
+    "entries": [
+      "add",
+      "ceil",
+      "divide",
+      "floor",
+      "max",
+      "maxBy",
+      "mean",
+      "meanBy",
+      "min",
+      "minBy",
+      "multiply",
+      "round",
+      "subtract",
+      "sum",
+      "sumBy"
+    ]
+  },
+  {
     "categoryHeading": "Object",
     "entries": [
       "get",

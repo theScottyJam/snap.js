@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.ceil(number, precision?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#ceil",
+  "summary": "Computes `number` rounded up to `precision`."
+}

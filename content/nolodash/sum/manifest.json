@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sum(array)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sum",
+  "summary": "Computes the sum of the values in `array`."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.maxBy(array, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#maxBy",
+  "summary": "This method is like `_.max` except that it accepts `iteratee` which is invoked for each element in `array` to generate the criterion by which the value is ranked."
+}
