@@ -1,0 +1,3 @@
+```javascript
+Date.now();
+```

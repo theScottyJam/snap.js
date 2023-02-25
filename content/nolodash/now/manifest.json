@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.now()",
+  "lodashLink": "https://lodash.com/docs/4.17.15#now",
+  "summary": "Gets the timestamp of the number of milliseconds that have elapsed since the Unix epoch."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.inRange(number, start?, end)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#clamp",
+  "summary": "Checks if `n` is between `start` and up to, but not including, `end`. If `start` is greater than `end` the params are swapped to support negative ranges."
+}

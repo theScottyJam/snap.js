@@ -68,6 +68,12 @@
     ]
   },
   {
+    "categoryHeading": "Date",
+    "entries": [
+      "now"
+    ]
+  },
+  {
     "categoryHeading": "Math",
     "entries": [
       "add",
@@ -85,6 +91,14 @@
       "subtract",
       "sum",
       "sumBy"
+    ]
+  },
+  {
+    "categoryHeading": "Number",
+    "entries": [
+      "clamp",
+      "inRange",
+      "random"
     ]
   },
   {
