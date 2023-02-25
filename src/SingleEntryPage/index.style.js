@@ -15,8 +15,8 @@ style.backButton = css`
 
 style.entryHeader = css`
   label: entry-header;
-  fontSize: 1.7rem;
-  fontFamily: 'Roboto Mono', monospace;
+  fontsize: 1.7rem;
+  fontfamily: 'Roboto Mono', monospace;
 `;
 
 style.fnSignatureLink = css`

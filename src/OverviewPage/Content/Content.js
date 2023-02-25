@@ -11,6 +11,7 @@ export default function Content({ page, setPage, content }) {
 
   return (
     <div className={style.content}>
+      <PageSummary topLevelPage={topLevelPage} />
       {content[topLevelPage].map(({ categoryHeading, entries }) => (
         <Category
           key={categoryHeading}
@@ -38,4 +39,35 @@ function Category({ heading, entries, page, setPage }) {
       ))}
     </>
   );
+}
+
+function PageSummary({ topLevelPage }) {
+  if (topLevelPage === 'utils') {
+    return (
+      <>
+        <h2>Simple Utilities</h2>
+        <p>
+          These are a handful of various copy-paste-friendly utility functions,
+          that are ready to be mixed into any project that might need them.
+        </p>
+      </>
+    );
+  } else if (topLevelPage === 'nolodash') {
+    return (
+      <>
+        <h2>Lodash Replacements</h2>
+        <p>
+          This is intended to be a complete catalogue of all the functions
+          that <a href="https://lodash.com">Lodash</a> provides, along with a
+          description of how one would go about doing the same thing in vanilla JavaScript.
+        </p>
+        <p>
+          Note that this page is still a work-in-progress. Additional entries
+          are constantly being added to this page.
+        </p>
+      </>
+    );
+  } else {
+    return null;
+  }
 }

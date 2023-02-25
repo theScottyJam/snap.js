@@ -1,4 +1,4 @@
-Simply map over your array with `iteratee`, before trying to sum them:
+Simply map over your array with `iteratee`, before trying to sum it:
 
 ```javascript
 array
