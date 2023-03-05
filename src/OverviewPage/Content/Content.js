@@ -57,7 +57,7 @@ function PageSummary({ topLevelPage }) {
       <>
         <h2>Lodash Replacements</h2>
         <p>
-          This is intended to be a complete catalogue of all the functions that{' '}
+          This is intended to be a complete catalog of all the functions that{' '}
           <a href="https://lodash.com">Lodash</a> provides, along with a
           description of how one would go about doing the same thing in vanilla
           JavaScript.
