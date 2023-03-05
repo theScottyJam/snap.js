@@ -15,4 +15,4 @@ function sortedUniq(array) {
 }
 ```
 
-[Some basic benchmarks](https://gist.github.com/theScottyJam/8424183e49f4555b60752b21f1076129) shows that performance improves as the number of repeated items increase. If you're not dealing with large arrays, or arrays with many repeated items, then using the simpler `[...new Set(array)]` solution should be sufficient.
+[Some basic benchmarks](https://gist.github.com/theScottyJam/8424183e49f4555b60752b21f1076129) shows that the processing time per item improves as the number of repeated items increase. If you're not dealing with large arrays, or arrays with many repeated items, then using the simpler `[...new Set(array)]` solution should be sufficient.
