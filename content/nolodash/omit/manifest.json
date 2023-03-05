@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.omit(object, ...paths)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#omit",
+  "summary": "This method is like `_.merge` except that it accepts `customizer` which is invoked to produce the merged values of the destination and source properties. If `customizer` returns `undefined`, merging is handled by the method instead."
+}

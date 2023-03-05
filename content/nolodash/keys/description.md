@@ -1,0 +1,3 @@
+```javascript
+Object.keys(object);
+```

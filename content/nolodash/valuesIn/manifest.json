@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.valuesIn(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#valuesIn",
+  "summary": "Creates an array of the own and inherited enumerable string keyed property values of `object`."
+}

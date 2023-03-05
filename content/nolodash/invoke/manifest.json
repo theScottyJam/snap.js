@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.invoke(object, path, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#invoke",
+  "summary": "Invokes the method at `path` of `object`."
+}

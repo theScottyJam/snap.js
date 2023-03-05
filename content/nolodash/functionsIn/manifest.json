@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.functionsIn(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#functionsIn",
+  "summary": "Creates an array of function property names from own and inherited enumerable properties of object."
+}

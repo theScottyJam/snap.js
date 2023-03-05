@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.unset(object, path)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#unset",
+  "summary": "Removes the property at `path` of `object`."
+}

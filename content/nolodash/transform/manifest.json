@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.transform(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#transform",
+  "summary": "An alternative to `_.reduce`; this method transforms `object` to a new `accumulator` object which is the result of running each of its own enumerable string keyed properties thru `iteratee`, with each invocation potentially mutating the `accumulator` object. If `accumulator` is not provided, a new object with the same `[[Prototype]]` will be used."
+}

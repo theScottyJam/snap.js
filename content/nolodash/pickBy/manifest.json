@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.pickBy(object, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pickBy",
+  "summary": "Creates an object composed of the object properties `predicate` returns truthy for. "
+}

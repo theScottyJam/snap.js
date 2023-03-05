@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.merge(object, ...sources)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#merge",
+  "summary": "This method is like `_.assign` except that it recursively merges own and inherited enumerable string keyed properties of source objects into the destination object. Source properties that resolve to `undefined` are skipped if a destination value exists. Source objects are applied from left to right. Subsequent sources overwrite property assignments of previous sources."
+}

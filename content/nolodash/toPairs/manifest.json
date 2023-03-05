@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toPairs(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toPairs",
+  "summary": "Creates an array of own enumerable string keyed-value pairs for `object` which can be consumed by `_.fromPairs`. If object is a map or set, its entries are returned."
+}

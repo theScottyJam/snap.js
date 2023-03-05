@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.assign(object, ...sources)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#assign",
+  "summary": "Assigns own enumerable string keyed properties of source objects to the destination object."
+}

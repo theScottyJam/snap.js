@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.setWith(object, path, value, customizer?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#setWith",
+  "summary": "This method is like `_.set` except that it accepts `customizer` which is invoked to produce the objects of `path`. If `customizer` returns `undefined` path creation is handled by the method instead."
+}

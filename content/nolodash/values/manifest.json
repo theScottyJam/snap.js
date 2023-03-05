@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.values(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#values",
+  "summary": "Creates an array of the own enumerable string keyed property values of `object`."
+}

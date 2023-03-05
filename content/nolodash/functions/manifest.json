@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.functions(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#functions",
+  "summary": "Creates an array of function property names from own enumerable properties of `object`."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.invertBy(object, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#invertBy",
+  "summary": "This method is like `_.invert` except that the inverted object is generated from the results of running each element of `object` thru `iteratee`. The corresponding inverted value of each inverted key is an array of keys responsible for generating the inverted value."
+}

@@ -57,13 +57,26 @@ function PageSummary({ topLevelPage }) {
       <>
         <h2>Lodash Replacements</h2>
         <p>
-          This is intended to be a complete catalogue of all the functions
-          that <a href="https://lodash.com">Lodash</a> provides, along with a
-          description of how one would go about doing the same thing in vanilla JavaScript.
+          This is intended to be a complete catalogue of all the functions that{' '}
+          <a href="https://lodash.com">Lodash</a> provides, along with a
+          description of how one would go about doing the same thing in vanilla
+          JavaScript.
         </p>
         <p>
-          Note that this page is still a work-in-progress. Additional entries
-          are constantly being added to this page.
+          If you ever see, in any of the examples, a built-in function that you
+          wish to learn more about, please search{' '}
+          <a href="https://developer.mozilla.org/en-US/">MDN</a> for an in-depth
+          explanation about that particular function.
+        </p>
+        <p>
+          This page is still a work-in-progress. Additional entries are
+          constantly being added to this page. If you see any issues on any of
+          the existing entries, or if you have any suggestions for improvement,
+          please{' '}
+          <a href="https://github.com/theScottyJam/snap.js/issues">
+            open an issue on GitHub
+          </a>
+          .
         </p>
       </>
     );

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.forIn(object, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#forIn",
+  "summary": "Iterates over own and inherited enumerable string keyed properties of an object and invokes iteratee for each property. Iteratee functions may exit iteration early by explicitly returning `false`."
+}

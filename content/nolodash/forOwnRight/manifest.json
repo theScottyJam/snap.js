@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.forOwnRight(object, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#forOwnRight",
+  "summary": "This method is like `_.forOwn` except that it iterates over properties of `object` in the opposite order."
+}

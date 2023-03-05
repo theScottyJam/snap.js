@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.omitBy(object, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#omitBy",
+  "summary": "The opposite of `_.pickBy`; this method creates an object composed of the own and inherited enumerable string keyed properties of `object` that `predicate` doesn't return truthy for."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.defaults(object, ...sources)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#defaults",
+  "summary": "Assigns own and inherited enumerable string keyed properties of source objects to the destination object for all destination properties that resolve to `undefined`. Source objects are applied from left to right. Once a property is set, additional values of the same property are ignored."
+}

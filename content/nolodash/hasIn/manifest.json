@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.hasIn(object, path)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#hasIn",
+  "summary": "Checks if `path` is a direct or inherited property of `object`."
+}

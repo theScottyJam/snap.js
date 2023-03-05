@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.assignIn(object, ...sources)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#assignIn",
+  "summary": "This method is like `_.assign` except that it iterates over own and inherited source properties."
+}

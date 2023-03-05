@@ -18,14 +18,15 @@ function set(object, path, value) {
 
   if (tail.length === 0) {
     object[head] = value;
-    return;
+    return object;
   }
 
   if (!(head in object)) {
     object[head] = typeof tail[0] === 'number' ? [] : {};
   }
 
-  return set(object[head], tail, value)
+  set(object[head], tail, value);
+  return object;
 }
 
 function zip(...arrays) {

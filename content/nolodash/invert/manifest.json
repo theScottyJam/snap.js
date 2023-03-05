@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.invert(object)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#invert",
+  "summary": "Creates an object composed of the inverted keys and values of object. If object contains duplicate values, subsequent values overwrite property assignments of previous values."
+}

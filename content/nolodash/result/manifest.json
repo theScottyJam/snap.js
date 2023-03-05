@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.result(object, path, defaultValue?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#result",
+  "summary": "This method is like `_.get` except that if the resolved value is a function it's invoked with the `this` binding of its parent object and its result is returned."
+}
