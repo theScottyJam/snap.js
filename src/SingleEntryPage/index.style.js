@@ -17,6 +17,9 @@ style.entryHeader = css`
   label: entry-header;
   fontsize: 1.7rem;
   fontfamily: 'Roboto Mono', monospace;
+  @media (max-width: 400px) {
+    font-size: 1.6rem;
+  }
 `;
 
 style.fnSignatureLink = css`

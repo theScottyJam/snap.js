@@ -67,6 +67,9 @@ style.squiggle = css`
   background-color: transparent;
   background-size: 60px 80px;
   transform: rotate(-15deg);
+  @media (max-width: 470px) {
+    display: none;
+  }
 `;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#polka-dot
@@ -80,4 +83,7 @@ style.dottedLine = css`
   background-image: radial-gradient(rgba(0, 137, 137, 1) 8%, transparent 10%);
   background-size: 30px 40px;
   background-position: 0 0, 10px 10px;
+  @media (max-width: 470px) {
+    display: none;
+  }
 `;

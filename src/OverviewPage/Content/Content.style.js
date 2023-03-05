@@ -8,6 +8,10 @@ style.content = css`
   margin: 50px auto 80px;
   width: 800px;
   position: relative;
+  @media (max-width: 850px) {
+    width: 90vw;
+    margin-left: 5vw;
+  }
 `;
 
 style.categoryName = css`
