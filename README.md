@@ -14,7 +14,7 @@ Use `npm ci` to install the dependencies.
 
 To start the development server, use `npm start`. Note that you'll have to restart the command whenever you change something in `content/`.
 
-Before committing, try to remember to run `npm test` first - this will run a handful of tests and lint the project. The UI itself isn't tested, but some of the utility functions have automated tests to go with them. If there are lint errors, you can use `npm run lint-fix` to auto-fix them.
+Before committing, try to remember to run `npm test` and `npm run lint-fix` first. The first command will run a handful of tests and the second will lint the project. The UI itself isn't tested, but some of the utility functions have automated tests to go with them.
 
 Other available commands:
 
