@@ -75,6 +75,12 @@
     ]
   },
   {
+    "categoryHeading": "Lang",
+    "entries": [
+      "cloneDeep"
+    ]
+  },
+  {
     "categoryHeading": "Math",
     "entries": [
       "add",
