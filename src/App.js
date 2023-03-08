@@ -90,25 +90,41 @@ function useLoadContent() {
 }
 
 function useRoute() {
-  const currentHashRoute = (window.location.hash ?? '').split('#!/')[1] ?? '';
-  let startingRoute = currentHashRoute;
-  if (startingRoute.endsWith('/')) {
-    // Remove trailing slash
-    startingRoute = startingRoute.slice(0, -1);
-  }
-  if (!/^(utils|nolodash)(\/|$)/.exec(startingRoute)) {
-    // Just forward any unknown top-level routes to the default landing page.
-    // This also forwards the `/` route to utils/ as well.
-    startingRoute = 'utils';
-  }
+  const startingRoute = fetchAndNormalizeCurrentHashPath();
 
   const [page, setPage] = React.useState(startingRoute);
 
   React.useEffect(() => {
-    window.history.replaceState(undefined, undefined, '#!/' + page);
-  }, [page]);
+    const onPopState = () => {
+      setPage(fetchAndNormalizeCurrentHashPath());
+    };
 
-  return [page, setPage];
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [setPage]);
+
+  function setPageAndAddHistoryEvent(newPage) {
+    if (newPage === page) return;
+    window.history.pushState(undefined, undefined, '#!/' + newPage);
+    setPage(newPage);
+  }
+
+  return [page, setPageAndAddHistoryEvent];
+}
+
+function fetchAndNormalizeCurrentHashPath() {
+  let hashRoute = (window.location.hash ?? '').split('#!/')[1] ?? '';
+  if (hashRoute.endsWith('/')) {
+    // Remove trailing slash
+    hashRoute = hashRoute.slice(0, -1);
+  }
+  if (!/^(utils|nolodash)(\/|$)/.exec(hashRoute)) {
+    // Just forward any unknown top-level routes to the default landing page.
+    // This also forwards the `/` route to utils/ as well.
+    hashRoute = 'utils';
+  }
+
+  return hashRoute;
 }
 
 export default App;
