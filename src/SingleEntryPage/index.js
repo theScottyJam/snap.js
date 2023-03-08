@@ -74,12 +74,14 @@ function NotFound({ setPage, page }) {
 }
 
 function BackButton({ setPage, page }) {
+  const path = extractTopLevelPageFromRoute(page) ?? 'utils';
   return (
-    <button
+    <a
+      href={'#!/' + path}
       className={style.backButton}
-      onClick={() => setPage(extractTopLevelPageFromRoute(page) ?? 'utils')}
+      onClick={() => setPage(path)}
     >
-      Back to overview
-    </button>
+      Back to Overview
+    </a>
   );
 }

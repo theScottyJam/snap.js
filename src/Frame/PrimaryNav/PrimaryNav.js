@@ -16,11 +16,12 @@ export default function PrimaryNav({ page, setPage }) {
 
 function Link({ children, page, target, setPage }) {
   return (
-    <button
-      className={style.link({ active: page.startsWith(target) })}
+    <a
+      href={'#!/' + target}
       onClick={() => setPage(target)}
+      className={style.link({ active: page.startsWith(target) })}
     >
       {children}
-    </button>
+    </a>
   );
 }

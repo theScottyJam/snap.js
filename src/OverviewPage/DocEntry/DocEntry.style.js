@@ -14,6 +14,7 @@ style.fnSignature = css`
   padding: 2px 4px;
   cursor: pointer;
   font-size: 0.9rem;
+  text-decoration: unset;
 `;
 
 style.summary = css`

@@ -1,20 +1,17 @@
 import ReactMarkdown from 'react-markdown';
 import style from './DocEntry.style';
+import { extractTopLevelPageFromRoute } from '../../shared';
 
 export default function DocEntry({ entry, page, setPage }) {
   const { fnSignature, summary } = entry.manifest;
-  const onClick = () => {
-    // DocEntry's can only be interacted with on a top-level page.
-    if (page.includes('/')) {
-      return;
-    }
-    setPage([page, entry.name].join('/'));
-  };
+  const path = [extractTopLevelPageFromRoute(page), entry.name].join('/');
   return (
     <div className={style.docEntry}>
-      <code className={style.fnSignature} onClick={onClick}>
-        {fnSignature}
-      </code>
+      <a href={'#!/' + path} className={style.fnSignature}>
+        <code onClick={() => { setPage(path); }}>
+          {fnSignature}
+        </code>
+      </a>
       <ReactMarkdown className={style.summary}>{summary}</ReactMarkdown>
     </div>
   );

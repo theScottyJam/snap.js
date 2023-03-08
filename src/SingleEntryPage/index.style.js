@@ -11,6 +11,7 @@ style.backButton = css`
   padding: 5px 10px;
   font-size: 1rem;
   cursor: pointer;
+  text-decoration: unset;
 `;
 
 style.entryHeader = css`
