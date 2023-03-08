@@ -11,8 +11,15 @@ function tryReadFile(fileName, { fallbackValue }) {
   }
 }
 
+function getSubDirectories(path) {
+  return fs.readdirSync(path, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+}
+
 function buildContentFile({ sourcePath, destPath }) {
-  const entryInfo = JSON.parse(fs.readFileSync(`${sourcePath}/info.json`, 'utf-8'))
+  const infoFilePath = `${sourcePath}/info.json`;
+  const entryInfo = JSON.parse(fs.readFileSync(infoFilePath, 'utf-8'))
 
   const entries = entryInfo.map(({categoryHeading, entries}) => {
     const loadedEntries = entries.map(name => {
@@ -32,6 +39,13 @@ function buildContentFile({ sourcePath, destPath }) {
     })
     return { categoryHeading, entries: loadedEntries }
   })
+
+  const allRegisteredDirectories = new Set(entryInfo.flatMap(category => category.entries));
+  for (const directory of getSubDirectories(sourcePath)) {
+    if (!allRegisteredDirectories.has(directory)) {
+      throw new Error(`The directory ${sourcePath}/${directory} exists, but it is not registered in ${infoFilePath}.`)
+    }
+  }
 
   fs.writeFileSync(destPath, JSON.stringify(entries), 'utf-8')
 }

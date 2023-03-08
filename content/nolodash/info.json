@@ -55,6 +55,7 @@
       "unionWith",
       "uniq",
       "uniqBy",
+      "uniqWith",
       "unzip",
       "unzipWith",
       "without",
