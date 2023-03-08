@@ -8,7 +8,11 @@ export default function DocEntry({ entry, page, setPage }) {
   return (
     <div className={style.docEntry}>
       <a href={'#!/' + path} className={style.fnSignature}>
-        <code onClick={() => { setPage(path); }}>
+        <code
+          onClick={() => {
+            setPage(path);
+          }}
+        >
           {fnSignature}
         </code>
       </a>
