@@ -3,6 +3,8 @@ import { css } from '@emotion/css';
 let style = {};
 export default style;
 
+const FILTER_BOX_HEIGHT = 28;
+
 style.content = css`
   label: content;
   margin: 50px auto 80px;
@@ -23,4 +25,50 @@ style.categoryName = css`
   color: #eee;
   padding: 4px 8px 3px;
   display: inline-block;
+`;
+
+style.filterBox = css`
+  label: filter-box;
+  display: flex;
+  justify-content: center;
+  margin-top: 55px;
+  margin-bottom: 5px;
+  font-size: 1rem;
+`;
+
+style.filterBoxInner = css`
+  label: filter-box-inner;
+  display: inline-flex;
+  flex-flow: row;
+  padding: 4px;
+  border: 1px solid black;
+  &:focus-within {
+    border: 2px solid #00a;
+    padding: 3px;
+  }
+`;
+
+style.filterBoxInput = css`
+  label: filter-box-input;
+  height: ${FILTER_BOX_HEIGHT}px;
+  font-size: 1rem;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  width: 300px;
+`;
+
+style.filterBoxIcon = css`
+  label: filter-box-icon;
+  display: inline-block;
+  width: ${FILTER_BOX_HEIGHT}px;
+  height: ${FILTER_BOX_HEIGHT}px;
+  margin-top: 1px;
+`;
+
+style.noResults = css`
+  label: no-results;
+  display: inline-block;
+  margin-top: 1em;
+  color: #444;
 `;

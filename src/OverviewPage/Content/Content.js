@@ -2,17 +2,31 @@ import React from 'react';
 import style from './Content.style';
 import DocEntry from '../DocEntry';
 import { extractTopLevelPageFromRoute } from '../../shared';
+import { ReactComponent as SearchIcon } from './searchIcon.svg';
 
 export default function Content({ page, setPage, content }) {
-  let topLevelPage = extractTopLevelPageFromRoute(page);
+  const [filterText, setFilterText] = React.useState('');
+  const topLevelPage = extractTopLevelPageFromRoute(page);
   if (topLevelPage === null) {
     throw new Error('Invalid route');
   }
 
+  const doesPageHaveFilterBox = topLevelPage === 'nolodash';
+
+  const filteredPageContent = doesPageHaveFilterBox
+    ? filterContent(content[topLevelPage], filterText)
+    : content[topLevelPage];
+
   return (
     <div className={style.content}>
       <PageSummary topLevelPage={topLevelPage} />
-      {content[topLevelPage].map(({ categoryHeading, entries }) => (
+      {doesPageHaveFilterBox && (
+        <FilterBox filterText={filterText} setFilterText={setFilterText} />
+      )}
+      {filteredPageContent.length === 0 && content[topLevelPage].length > 0 && (
+        <i className={style.noResults}>No Results</i>
+      )}
+      {filteredPageContent.map(({ categoryHeading, entries }) => (
         <Category
           key={categoryHeading}
           heading={categoryHeading}
@@ -63,7 +77,7 @@ function PageSummary({ topLevelPage }) {
           JavaScript.
         </p>
         <p>
-          If you ever see, in any of the examples, a built-in function that you
+          If you ever see in any of the examples a built-in function that you
           wish to learn more about, please search{' '}
           <a href="https://developer.mozilla.org/en-US/">MDN</a> for an in-depth
           explanation about that particular function.
@@ -83,4 +97,61 @@ function PageSummary({ topLevelPage }) {
   } else {
     return null;
   }
+}
+
+function FilterBox({ filterText, setFilterText }) {
+  return (
+    <div className={style.filterBox}>
+      <div className={style.filterBoxInner}>
+        <input
+          className={style.filterBoxInput}
+          type="text"
+          onChange={e => setFilterText(e.target.value)}
+          value={filterText}
+          placeholder="Search"
+        />
+        <SearchIcon className={style.filterBoxIcon} viewBox="0 0 50 50" />
+      </div>
+    </div>
+  );
+}
+
+function filterContent(pageContent, filterText) {
+  filterText = filterText
+    .trim()
+    .replace(/^_\.?/, '')
+    .replace(/\(\s*\)?$/, '')
+    .toLowerCase();
+
+  // Bit of performance gain if there is no filter text in the box. Probably unnecessary.
+  if (filterText === '') return pageContent;
+
+  return pageContent.flatMap(categoryInfo => {
+    const filteredEntries = categoryInfo.entries.filter(entry =>
+      matchesViaFuzzySearch(filterText, entry.name.toLowerCase())
+    );
+    return filteredEntries.length > 0
+      ? [{ ...categoryInfo, entries: filteredEntries }]
+      : [];
+  });
+}
+
+/** Checks if the search term `searchInput` would match against `target` when using
+ * a fuzzy-search algorithm.
+ * Pre-condition: Both inputs should be lower-cased and trimmed, if necessary.
+ */
+function matchesViaFuzzySearch(searchInput, target) {
+  if (searchInput.length === 0) return true;
+
+  let index = 0;
+  for (const char of target) {
+    if (searchInput[index] === char) {
+      index++;
+      if (index === searchInput.length) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
