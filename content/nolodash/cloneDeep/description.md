@@ -9,7 +9,6 @@ Using `structuredClone()` (or `_.cloneDeep()`) can be useful for simpler scenari
 
 For a complete reference to the algorithm's limitations, please refer to the [structured clone algorithm page](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm) on MDN.
 
-
 If `structuredClone()` doesn't suit your needs (because, e.g., maybe you have userland instances that you wish to clone), you'll have to build up your own cloning algorithm by hand, according to your use-case. Here's a simple version to get you started - it shows examples of how you would deep-clone a handful of different types of data. It's up to you to add or remove functionality as needed. Note that this version does not support circular references - if you need to support that, you'll additionally need to keep around a stack of each value you've visited, to make sure you're not going in a loop.
 
 ```javascript

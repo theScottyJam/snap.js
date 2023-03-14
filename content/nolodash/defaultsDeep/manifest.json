@@ -1,5 +1,5 @@
 {
-  "fnSignature": "_.defaults(object, ...sources)",
+  "fnSignature": "_.defaultsDeep(object, ...sources)",
   "lodashLink": "https://lodash.com/docs/4.17.15#defaultsDeep",
   "summary": "This method is like `_.defaults` except that it recursively assigns default properties."
 }
