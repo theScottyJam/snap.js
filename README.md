@@ -2,6 +2,8 @@
 
 The Copy-Paste Library.
 
+View the built website [over here](https://thescottyjam.github.io/snap.js/#!/nolodash).
+
 ## Project Structure
 
 The documentation is stored as markdown files, found inside of the content/ directory. Before deployment, a script is run, that's combine everything in `content/`, into a couple of json files, which will be used by the webpage to populate itself.
