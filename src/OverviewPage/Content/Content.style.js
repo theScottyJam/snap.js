@@ -38,13 +38,16 @@ style.filterBox = css`
 
 style.filterBoxInner = css`
   label: filter-box-inner;
-  display: inline-flex;
+  display: flex;
   flex-flow: row;
   padding: 4px;
   border: 1px solid black;
   &:focus-within {
     border: 2px solid #00a;
     padding: 3px;
+  }
+  @media (max-width: 400px) {
+    flex: 1;
   }
 `;
 
@@ -56,6 +59,10 @@ style.filterBoxInput = css`
   border: 0;
   outline: 0;
   width: 300px;
+  @media (max-width: 400px) {
+    width: unset;
+    flex: 1;
+  }
 `;
 
 style.filterBoxIcon = css`
