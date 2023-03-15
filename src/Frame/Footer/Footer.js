@@ -11,7 +11,8 @@ export default function Footer() {
         >
           Github
         </a>
-        . All code samples presented are under the{' '}
+        .<br className={style.breakWhenSmall} /> All code samples presented are
+        under the{' '}
         <a href="https://opensource.org/licenses/MIT" rel="noreferrer">
           MIT license
         </a>
