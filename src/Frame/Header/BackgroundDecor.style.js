@@ -12,6 +12,10 @@ style.square1 = css`
   top: 30px;
   transform: rotate(25deg);
   background: rgb(0, 135, 135);
+  @media (max-width: 600px) {
+    top: 25px;
+    right: 25px;
+  }
 `;
 
 style.square2 = css`
@@ -23,6 +27,10 @@ style.square2 = css`
   top: 80px;
   transform: rotate(-37deg);
   background: rgb(0, 135, 135);
+  @media (max-width: 600px) {
+    top: 110px;
+    right: 70px;
+  }
 `;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#polka-dot
@@ -36,6 +44,9 @@ style.dotted = css`
   transform: rotate(35deg);
   background-image: radial-gradient(rgba(0, 0, 0, 0.4) 10%, transparent 16%);
   background-size: 15px 15px;
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 // Gradient adapted from https://projects.verou.me/css3patterns/#waves
@@ -67,8 +78,8 @@ style.squiggle = css`
   background-color: transparent;
   background-size: 60px 80px;
   transform: rotate(-15deg);
-  @media (max-width: 470px) {
-    display: none;
+  @media (max-width: 600px) {
+    left: -15px;
   }
 `;
 
@@ -83,7 +94,7 @@ style.dottedLine = css`
   background-image: radial-gradient(rgba(0, 137, 137, 1) 8%, transparent 10%);
   background-size: 30px 40px;
   background-position: 0 0, 10px 10px;
-  @media (max-width: 470px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `;
