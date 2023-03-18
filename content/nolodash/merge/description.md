@@ -14,7 +14,7 @@ const result = {
 Otherwise, the following `merge()` function can be used to roughly mirror Lodash's `_.merge()`.
 
 ```javascript
-const isObject = value => value !== null && typeof value === 'object';
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 // A "plain" object is an object who's a direct instance of Object
 // (or, who has a null prototype).
@@ -57,7 +57,7 @@ Note that the Lodash implementation would pick both own and inherited properties
 If all you want to do is deeply merge some plain objects, and you don't need to worry about odd scenarios, like "what happens when I merge an array with a number", or, "how does a Map instance get merged with a plain object", then an implementation like this should be sufficient.
 
 ```javascript
-const isObject = value => value !== null && typeof value === 'object';
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 // NOTE: This mutates `object`.
 // It also may mutate anything that gets attached to `object` during the merge.

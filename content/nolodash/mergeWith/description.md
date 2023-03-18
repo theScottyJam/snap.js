@@ -1,5 +1,5 @@
 ```javascript
-const isObject = value => value !== null && typeof value === 'object';
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 // A "plain" object is an object who's a direct instance of Object
 // (or, who has a null prototype).

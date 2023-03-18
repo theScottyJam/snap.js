@@ -81,7 +81,7 @@ const result = {
 Finally, if you don't feel any of these patterns will fit your use-case very well, you can use the following helper function, which mimics `_.defaultsDeep()`.
 
 ```javascript
-const isObject = value => value !== null && typeof value === 'object';
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 // NOTE: This mutates `object`.
 function defaultsDeep(object, ...sources) {

@@ -12,7 +12,7 @@ For a complete reference to the algorithm's limitations, please refer to the [st
 If `structuredClone()` doesn't suit your needs (because, e.g., maybe you have userland instances that you wish to clone), you'll have to build up your own cloning algorithm by hand, according to your use-case. Here's a simple version to get you started - it shows examples of how you would deep-clone a handful of different types of data. It's up to you to add or remove functionality as needed. Note that this version does not support circular references - if you need to support that, you'll additionally need to keep around a stack of each value you've visited, to make sure you're not going in a loop.
 
 ```javascript
-const isObject = value => typeof value === 'object' && value !== null;
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 function cloneDeep(value) {
   if (!isObject(value)) {

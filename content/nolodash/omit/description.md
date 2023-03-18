@@ -40,7 +40,7 @@ There is an early [Object.omit() proposal](https://github.com/tc39/proposal-obje
 If you need a version of the omit function that can omit nested properties, you can use this:
 
 ```javascript
-const isObject = value => typeof value === 'object' && value !== null;
+const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 function omit(object, keys) {
   const newObject = Array.isArray(object) ? [ ...object ] : { ...object };
