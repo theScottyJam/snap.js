@@ -1,5 +1,5 @@
-function fragment(children = []) {
+function fragment(...children) {
   const newFragment = new DocumentFragment();
-  newFragment.append(...children);
+  newFragment.append(...children.flat());
   return newFragment;
 }
