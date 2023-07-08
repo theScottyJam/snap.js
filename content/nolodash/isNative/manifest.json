@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isNative(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isNative",
+  "summary": "Checks if `value` is a pristine native function."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isWeakMap(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isWeakMap",
+  "summary": "Checks if `value` is classified as a `WeakMap` object."
+}

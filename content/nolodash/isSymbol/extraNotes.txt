@@ -1,0 +1,1 @@
+I decided to omit information about checking if a value is a non-subclassed Symbol, because as far as I can tell, it's not possible to subclass symbol objects.

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isArguments(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isArguments",
+  "summary": "Checks if `value` is likely an `arguments` object."
+}

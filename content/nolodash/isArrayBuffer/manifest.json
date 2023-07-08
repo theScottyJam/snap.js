@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isArrayBuffer(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isArrayBuffer",
+  "summary": "Checks if `value` is classified as an `ArrayBuffer` object."
+}

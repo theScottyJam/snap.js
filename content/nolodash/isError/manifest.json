@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isError(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isError",
+  "summary": "Checks if value is an `Error`, `EvalError`, `RangeError`, `ReferenceError`, `SyntaxError`, `TypeError`, or `URIError` object."
+}

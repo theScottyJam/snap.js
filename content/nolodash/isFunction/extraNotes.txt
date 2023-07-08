@@ -1,0 +1,1 @@
+I decided to omit information about checking if a value is a non-subclassed function, because that's not a very useful check. It would mean classes, like `Map`, would be considered a function but subclasses of classes, like `TypeError`, would not, which is just odd.

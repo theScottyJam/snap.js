@@ -77,7 +77,34 @@
   {
     "categoryHeading": "Lang",
     "entries": [
-      "cloneDeep"
+      "cloneDeep",
+      "isArguments",
+      "isArray",
+      "isArrayBuffer",
+      "isArrayLike",
+      "isArrayLikeObject",
+      "isBoolean",
+      "isBuffer",
+      "isDate",
+      "isElement",
+      "isError",
+      "isFunction",
+      "isMap",
+      "isNaN",
+      "isNative",
+      "isNil",
+      "isNumber",
+      "isObject",
+      "isObjectLike",
+      "isPlainObject",
+      "isRegExp",
+      "isSet",
+      "isString",
+      "isSymbol",
+      "isTypedArray",
+      "isUndefined",
+      "isWeakMap",
+      "isWeakSet"
     ]
   },
   {

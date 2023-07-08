@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isNaN(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isMap",
+  "summary": "Checks if `value` is NaN. **Note:** This method is based on `Number.isNaN` and is not the same as global `isNaN` which returns `true` for `undefined` and other non-number values."
+}

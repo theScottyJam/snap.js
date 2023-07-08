@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isArrayLikeObject(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isArrayLikeObject",
+  "summary": "This method is like `_.isArrayLike` except that it also checks if `value` is an object."
+}

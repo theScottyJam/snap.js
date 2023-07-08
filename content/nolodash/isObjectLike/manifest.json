@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isObjectLike(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isObjectLike",
+  "summary": "Checks if `value` is object-like. A value is object-like if it's not `null` and has a `typeof` result of \"object\"."
+}

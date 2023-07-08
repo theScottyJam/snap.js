@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isPlainObject(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isPlainObject",
+  "summary": "Checks if `value` is a plain object, that is, an object created by the `Object` constructor or one with a `[[Prototype]]` of `null`."
+}

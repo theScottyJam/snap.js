@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isObject(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isObject",
+  "summary": "Checks if `value` is the language type of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)"
+}

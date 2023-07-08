@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isSymbol(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isSymbol",
+  "summary": "Checks if `value` is classified as a `symbol` primitive or object."
+}

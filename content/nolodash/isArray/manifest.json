@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isArray(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isArray",
+  "summary": "Checks if `value` is classified as an `Array` object."
+}

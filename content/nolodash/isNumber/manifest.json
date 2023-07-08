@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isNumber(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isNumber",
+  "summary": "Checks if `value` is classified as a `Number` primitive or object. **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are classified as numbers, use the `_.isFinite` method."
+}
