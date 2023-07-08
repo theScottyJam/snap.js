@@ -6,7 +6,7 @@ View the built website [over here](https://thescottyjam.github.io/snap.js/#!/nol
 
 ## Project Structure
 
-The documentation is stored as markdown files, found inside of the content/ directory. Before deployment, a script is run, that's combine everything in `content/`, into a couple of json files, which will be used by the webpage to populate itself.
+The website content is stored as markdown files found inside of the content/ directory. Before deployment, a script is run, that's combine everything in `content/` into a couple of json files, which will be used by the webpage to populate itself.
 
 The rest of the source code is found inside of src/. It's not intended to be the cleanest code, but it does the job.
 
