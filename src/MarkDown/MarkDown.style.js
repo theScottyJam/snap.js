@@ -3,8 +3,8 @@ import { css } from '@emotion/css';
 let style = {};
 export default style;
 
-style.description = css`
-  label: description;
+style.markdown = css`
+  label: markdown;
   font-size: 0.9rem;
   line-height: 1.5em;
   & h1 {

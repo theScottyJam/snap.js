@@ -1,0 +1,4 @@
+{
+  "fnSignature": "pipe(value, ...fns)",
+  "summary": "Pipes a value through a series of functions."
+}

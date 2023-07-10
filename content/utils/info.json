@@ -12,6 +12,10 @@
     "entries": ["truncate", "trim", "trimLeft", "trimRight"]
   },
   {
+    "categoryHeading": "Function Helpers",
+    "entries": ["memoize", "pipe"]
+  },
+  {
     "categoryHeading": "Helper Functions for Randomness",
     "entries": ["randomInt", "randomChoice", "shuffle"]
   },
@@ -21,6 +25,6 @@
   },
   {
     "categoryHeading": "Miscellaneous Helpers",
-    "entries": ["memoize", "createEventEmitter", "addToDate"]
+    "entries": ["createEventEmitter", "addToDate"]
   }
 ]

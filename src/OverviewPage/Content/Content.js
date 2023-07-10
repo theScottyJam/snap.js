@@ -3,6 +3,8 @@ import style from './Content.style';
 import DocEntry from '../DocEntry';
 import { extractTopLevelPageFromRoute } from '../../shared';
 import { ReactComponent as SearchIcon } from './searchIcon.svg';
+import MarkDown from '../../MarkDown/MarkDown.js';
+import { nolodashFaq } from './nolodashFaq.js';
 
 export default function Content({ page, setPage, content }) {
   const [filterText, setFilterText] = React.useState('');
@@ -92,6 +94,12 @@ function PageSummary({ topLevelPage }) {
           </a>
           .
         </p>
+        <details>
+          <summary>
+            <strong>FAQ</strong>
+          </summary>
+          <MarkDown>{nolodashFaq}</MarkDown>
+        </details>
       </>
     );
   } else {
