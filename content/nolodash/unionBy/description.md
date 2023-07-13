@@ -1,4 +1,4 @@
-We will use a vanilla JavaScript implementation of `_.uniqBy()` to solve this problem.
+We will use a plain JavaScript implementation of `_.uniqBy()` to solve this problem.
 
 ```javascript
 function uniqBy(array, iteratee) {

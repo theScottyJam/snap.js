@@ -2,7 +2,7 @@
 structuredClone(value)
 ```
 
-Using `structuredClone()` (or `_.cloneDeep()`) can be useful for simpler scenarios, but they both also have severe limitations in their capabilities that you should be aware of. For example:
+`_.cloneDeep()` is loosely based off of the structured clone algorithm, the same algorithm that is provided to you natively with the `structuredClone()` function. The structured clone algorithm can be useful for simpler scenarios, but it has severe limitations that you should be aware of:
 * many objects, such as `ArrayBuffer` instances, will have ownership of their data transferred to their clone, rendering the original unusable. A complete list of transferable objects can be found [on MDN's website](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects#supported_objects).
 * Some values, like functions, can not be cloned.
 * Some objects loose data when they get cloned. This includes the prototypes of most objects (making it impossible to properly clone instances of any userland class), getters and setters, some data stored on regular expression instances, etc.

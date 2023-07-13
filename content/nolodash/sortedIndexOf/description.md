@@ -1,4 +1,4 @@
-We will use a vanilla JavaScript implementation of `_.sortedIndex()` to help define `sortedIndexOf()`.
+We will use a plain JavaScript implementation of `_.sortedIndex()` to help define `sortedIndexOf()`.
 
 ```javascript
 function sortedIndex(array, value, _range) {

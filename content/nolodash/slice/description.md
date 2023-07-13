@@ -2,7 +2,7 @@
 array.slice(start, end);
 ```
 
-One benefit of Lodash's implementation of `.slice()`, is that it'll always return a dense array (as opposed to a [sparse one](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections#sparse_arrays)). The same behavior can be achieved in vanilla JavaScript by simply spreading the array into another one.
+One benefit of Lodash's implementation of `.slice()`, is that it'll always return a dense array (as opposed to a [sparse one](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections#sparse_arrays)). The same behavior can be achieved in plain JavaScript by simply spreading the array into another one.
 
 ```javascript
 const sparseArray = [2,,3,,4]; // [2, <empty>, 3, <empty>, 4]

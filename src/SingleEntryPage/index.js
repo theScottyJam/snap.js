@@ -58,7 +58,7 @@ function NolodashSingleEntryPage({ pageData, setPage, page }) {
       {src && <Code src={src} />}
       <Description
         summary={summary}
-        description={'# The Vanilla JavaScript Equivalent\n\n' + description}
+        description={'# Plain JavaScript\n\n' + description}
       />
     </div>
   );

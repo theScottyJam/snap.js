@@ -1,4 +1,4 @@
-We will use a vanilla JavaScript implementation of `_.mean()` to solve this problem.
+We will use a plain JavaScript implementation of `_.mean()` to solve this problem.
 
 ```javascript
 function mean(array) {

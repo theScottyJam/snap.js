@@ -1,7 +1,7 @@
 Using `_.transform()` really isn't any different from using the built-in `array.reduce()` method, except for a couple of minor things.
 
-1. With `array.reduce()`, you need to always return the accumulator
-2. If you're dealing with objects, you need to use `Object.entries(yourObject)` to turn it into an array of tuples first.
+1. If you're dealing with objects, you need to use `Object.entries(yourObject)` to turn it into an array of tuples first.
+2. With `array.reduce()`, you need to always return the accumulator
 
 What this looks like in practice, using an example from Lodash's website.
 

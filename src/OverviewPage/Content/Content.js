@@ -75,7 +75,7 @@ function PageSummary({ topLevelPage }) {
         <p>
           This is intended to be a complete catalog of all the functions that{' '}
           <a href="https://lodash.com">Lodash</a> provides, along with a
-          description of how one would go about doing the same thing in vanilla
+          description of how one would go about doing the same thing in plain
           JavaScript.
         </p>
         <p>

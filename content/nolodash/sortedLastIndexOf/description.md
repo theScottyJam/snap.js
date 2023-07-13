@@ -1,4 +1,4 @@
-We will use a vanilla JavaScript implementation of `_.sortedLastIndex()` to help define `sortedLastIndexOf()`.
+We will use a plain JavaScript implementation of `_.sortedLastIndex()` to help define `sortedLastIndexOf()`.
 
 ```javascript
 function sortedLastIndex(array, value, _range) {

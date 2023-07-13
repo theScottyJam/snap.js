@@ -1,4 +1,4 @@
-It's recommended to avoid this function. Building objects via dynamic string paths may (or may not) be indicative of a deeper issue with how the problem is being approached. But, if you really do need support for this sort of thing, it can be done, with the help of the vanilla JavaScript implementation of `_.set()` and `_.zip()`.
+It's recommended to avoid this function. Building objects via dynamic string paths may (or may not) be indicative of a deeper issue with how the problem is being approached. But, if you really do need support for this sort of thing, it can be done, with the help of the plain JavaScript implementation of `_.set()` and `_.zip()`.
 
 ```javascript
 function set(object, path, value) {
