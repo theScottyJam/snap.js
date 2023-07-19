@@ -1,5 +1,5 @@
 {
-  "fnSignature": "_.findKey(object, predicate?)",
-  "lodashLink": "https://lodash.com/docs/4.17.15#findKey",
-  "summary": "This method is like `_.find` except that it returns the key of the first element predicate returns truthy for instead of the element itself."
+  "fnSignature": "_.findLastKey(object, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#findLastKey",
+  "summary": "This method is like `_.findKey` except that it iterates over elements of a collection in the opposite order."
 }
