@@ -155,5 +155,12 @@
       "values",
       "valuesIn"
     ]
+  },
+  {
+    "categoryHeading": "String",
+    "entries": [
+      "escape",
+      "unescape"
+    ]
   }
 ]
