@@ -31,3 +31,15 @@ Other available commands:
 
 - `npm run predeploy` runs prettier and tests
 - `npm run deploy` auto-runs predeploy and publishes this webpage.
+
+## The spirit of a Lodash doc entry
+
+To get a good idea of the vibe I'm shooting for with thesee Lodash doc entries, take a look at the FAQ section on the [Lodash Replacements page](https://thescottyjam.github.io/snap.js/#!/nolodash). In short, these are the guidelines (not rules) that I've been following:
+
+* Ask yourself "what problem is this Lodash function trying to solve", then ask yourself how you would solve this problem if you weren't using Lodash. This may make your solution behave very differently from Lodash's solution, and that's fine - just make a note of important differences. (For unimportant differences, favor keeping parity with Lodash's API - i.e. don't run with a different function signature for your version of the utility function if there's no real reason to do so). In some cases, your solution might not even be a utility function, sometimes the way to solve a problem is to follow a certain pattern as you code, or to use syntax the language provides for you, etc. Sometimes there's multiple solutions that have different pros and cons, and it may be best to explain all of these solutions.
+* If two solutions have the same big-O, show the one that's more maintainable. In other words, don't micro-optimize. If two solutions have different big-Os, still favor showing the one that's more maintainable, but maybe leave a note about how there's room to improve its performance, or you could even show both solutions, letting the user pick the one that suits them best.
+* Lodash's implementations don't always follow modern best practices. Some examples:
+  * They like to overload their functions to have many different behaviors depending on the types of data you pass in (to a degree, this is fine, but sometimes its taken too far). It may be best to think of these as different problems being solved in the same function, which means you'd need to provide a list of solution for each problem being solved.
+  * They have a habbit of making parameters optional that really shouldn't be optional. If you can't think of a sensible reason for someone to purposefully omit a parameter, then don't bother supporting that "use case" in your non-lodash replacement.
+  * If you give Lodash a bad parameter, they like to try to coerce it into something usable instead of throwing an error. Don't bother supporting this in your non-lodash replacement functions. The end-user is encouraged to modify these helper functions to fit their project's style, and that could be mean "don't do any explicit handling of bad parameters as that's too much noise in the codebase" or "throw runtime errors on bad parameters" or "add TypeScript type definitions". This website's job is to just provide the solutions in their simplist form so that it's easy to build on top of them if needed.
+  * Some Lodash functions should simply not be used. In cases like this, explain why its a bad idea to use the given function, then provide a non-lodash replacement anyways.
