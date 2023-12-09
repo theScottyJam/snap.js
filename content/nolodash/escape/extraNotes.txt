@@ -1,0 +1,1 @@
+I'm choosing to name the escapeHtmlChars() because browsers already supply an escape() function, and I don't want to encourage shadowinging it. Besides, escapeHtmlChars() is much clearer anyways.

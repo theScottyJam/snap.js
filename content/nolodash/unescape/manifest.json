@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.unescape(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#unescape",
+  "summary": "The inverse of _.escape; this method converts the HTML entities &amp;, &lt;, &gt;, &quot;, and &#39; in string to their corresponding characters."
+}

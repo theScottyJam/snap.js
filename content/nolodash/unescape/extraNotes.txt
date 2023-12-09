@@ -1,0 +1,1 @@
+I'm choosing to name this unescapeHtmlChars() because browsers already supply an unescape() function, and I don't want to encourage shadowinging it. Besides, unescapeHtmlChars() is much clearer anyways.

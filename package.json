@@ -29,8 +29,7 @@
     "deploy": "gh-pages -d build",
     "start": "node ./buildContent.js && react-scripts start",
     "build": "node ./buildContent.js && react-scripts build",
-    "test-watch": "node ./buildContent.js && react-scripts test",
-    "test": "react-scripts test --watchAll=false",
+    "test": "node ./buildContent.js && react-scripts test --watchAll=false",
     "build-content": "node ./buildContent.js",
     "lint-fix": "prettier --write '{src,content}/**/(*.js|.json|.css|.md)'",
     "eject": "react-scripts eject"
