@@ -20,7 +20,7 @@ export const nolodashFaq = `
 
   If all you want to do is the most common scenario of searching for something in an array based off of a predicate function and \`fromIndex\` integer you provide, then only about 30 lines of those 1,000 lines are relevant to your use case (and those 30 lines could easily be simplified to less). If you need to search through an object instead, it only takes minor tweaks to those 30 lines of code to support that use-case. It's the use-cases that aren't as commonly used that make up for the bulk of the weight, e.g. if you never pass in an object as your predicate, you're still going to drag in the entire deep-comparison algorithm it uses for this use-case, and that whole algorithm will just be sitting there as dead code.
 
-  If you heavily rely on Lodash, then the fact that their functions don't tree-shake very well won't be a major issue for you since you'll be directly depending on most of the package anyways. It's just important to be aware that tree-shaking, in general, doesn't mesh well with the way the Lodash library was designed, which means any argument that states that you can just depend on one or two functions then tree-shaking it doesn't really hold water.
+  If you heavily rely on Lodash, then the fact that their functions don't tree-shake very well won't be a major issue for you since you'll be directly depending on most of the package anyways. It's just important to be aware that tree-shaking, in general, doesn't mesh well with the way the Lodash library was designed, which means any argument that states that you can just depend on one or two functions then tree-shake it doesn't really hold water.
 
 **Why copy-paste from this webpage instead of from Lodash's source code directly? That way you get Lodash's exact behavior.**
 
@@ -30,7 +30,7 @@ export const nolodashFaq = `
   * This website doesn't just provide copy-paste solutions. It also explains ways to tailor the solution to your needs ([example](#!/nolodash/cloneDeep)), and sometimes shows multiple solutions ([example](#!/nolodash/isMap)). It'll also explain modern best-practices and explain why some of Lodash's behaviors may not always be the smartest to mimic ([example](#!/nolodash/forInRight)).
   * The goal is to achieve Lodash's _documented_ behaviors, not the exact behaviors down to the smallest edge cases. In other words, think about the reason someone might reach for a Lodash function - this website is striving to provide alternative solutions people could reach for instead, if they so choose.
 
-**This is all nice and all, but one major reason I like Lodash is because it offers a fluent API, making it easy to chain your method calls together.**
+**This is nice and all, but one major reason I like Lodash is because it offers a fluent API, making it easy to chain your method calls together.**
 
   The EcmaScript committee is working on fixing this with [the pipeline proposal](https://github.com/tc39/proposal-pipeline-operator), allowing any function to be chained in a fluent-like way. In the mean time, it's not too difficult to hand-roll [your own pipe function](#!/utils/pipe) to get a similar benefit.
 
@@ -44,7 +44,7 @@ export const nolodashFaq = `
 
 **But I don't want to maintain a bunch of copy-pasted utility functions.**
 
-  If you're doing so much copy-pasting from this webpage that the burden of maintaining your copies utilities is a concern to you, then you're probably overusing this webpage.
+  If you're doing so much copy-pasting from this webpage that the burden of maintaining your copied utilities is a concern to you, then you're probably overusing this webpage.
 
 **What about Ramda?**
 
