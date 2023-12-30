@@ -1,4 +1,4 @@
-Lodash's documentation makes it sound like they're checking if the value is specifically an instance of a set of built-in errors, but in reality, they're considering any [non-plain object]('https://lodash.com/docs/4.17.15#isPlainObject') that has `message` and `name` properties that are strings to be errors. So, the following would return `true` despite not being an error.
+Lodash's documentation makes it sound like they're checking if the value is specifically an instance of a set of built-in errors, but in reality, they're considering any [non-plain object](https://lodash.com/docs/4.17.15#isPlainObject) that has `message` and `name` properties that are strings to be errors. So, the following would return `true` despite not being an error.
 
 ```javascript
 class NotAnError {
@@ -22,7 +22,7 @@ And if you want to check if a value is a specific error type (like `Error`, `Typ
 Object.getPrototypeOf(value) === TypeError.prototype;
 ```
 
-Both of the above type-detection mechanisms have a couple of flaws:
+For the vast majority of scenarios the above should be good enough, but those solutions do technically have a couple of flaws:
 1. they don't work with cross-realm values. For example, if you receive an instance of an `Error` from across an iframe boundary, that instance's prototype would link to the iframe's `Error` class, not your `Error` class, and both of the above checks would fail to recognize it as a `Error`.
 2. They will state that `Object.create(Error.prototype)` is an `Error`, but it's not. It's just a regular object who's prototype has been set to `Error.prototype`.
 

@@ -1,0 +1,3 @@
+```javascript
+Number.isFinite(value);
+```

@@ -2,7 +2,7 @@
 typeof value === 'function';
 ```
 
-Note that `typeof Function.prototype` is also `'function'`. To exclude `Function.prototype`, you can use a helper function like this:
+Note that `typeof Function.prototype` is also `'function'`. While it may be overkill, you can use a helper function like the following to exclude `Function.prototype`.
 
 ```javascript
 function isFunction(value) {

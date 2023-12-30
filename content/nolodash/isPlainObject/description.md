@@ -1,14 +1,16 @@
 To check if your value is a "plain object" like `{ x: 2 }`
 
 ```javascript
-[null, Object.prototype].includes(Object.getPrototypeOf(value));
+value != null && [null, Object.prototype].includes(Object.getPrototypeOf(value));
 ```
+
+The above should be good enough for the vast majority of use-cases.
 
 The above type-detection mechanisms has the flaw that it does not work with cross-realm values. For example, if you receive an object from across an iframe boundary, that object's prototype would link to the iframe's `Object`, not your `Object`, and the above checks would fail to recognize it as a plain object. A cross-realm compatible solution could look something like this (depending how spoof-proof you want it to be):
 
 ```javascript
 function isPlainObject(value) {
-  if (value === null || value === undefined) {
+  if (value == null) {
     return false;
   }
 
@@ -52,8 +54,6 @@ class SpecialClass {
 
 _.isPlainObject(new SpecialClass()); // true
 ```
-
-If you're in need of a plain-object check for your API, it might be worth seeing if there are alternative API designs that you could run with that don't depend on behaviors that can't be implemented reliably in JavaScript.
 
 Some very early JavaScript proposals may provide support for cross-realm type checking:
 * [istypes](https://github.com/jasnell/proposal-istypes)

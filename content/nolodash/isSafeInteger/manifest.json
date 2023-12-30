@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isSafeInteger(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isSafeInteger",
+  "summary": "Checks if `value` is a safe integer. An integer is safe if it's an IEEE-754 double precision number which isn't the result of a rounded unsafe integer."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isEqualWith(value, other, [customizer])",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isEqualWith",
+  "summary": "This method is like `_.isEqual` except that it accepts `customizer` which is invoked to compare values. If `customizer` returns `undefined`, comparisons are handled by the method instead."
+}

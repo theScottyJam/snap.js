@@ -13,5 +13,5 @@ value === null || value === undefined;
 There's also some who like using the nullish coalescing operator (`??`) to get similar behavior.
 
 ```javascript
-value ?? null === null;
+(value ?? null) === null;
 ```

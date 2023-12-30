@@ -12,7 +12,7 @@ isTypedArray(new Int8Array()); // true
 isTypedArray(new Uint32Array()); // true
 ```
 
-The above type-detection mechanisms have a couple of flaws:
+For the vast majority of scenarios the above should be good enough, but it does technically have a couple of flaws:
 1. they don't work with cross-realm values. For example, if you receive an instance of an `Int8Array` from across an iframe boundary, that instance's prototype would link to the iframe's `TypedArray` class, not your `TypedArray` class, and both of the above checks would fail to recognize it as a typed array.
 2. They will state that `Object.create(TypedArray.prototype)` is a `TypedArray`, but it's not. It's just a regular object who's prototype has been set to `TypedArray.prototype`.
 

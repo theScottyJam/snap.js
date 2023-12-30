@@ -9,7 +9,7 @@ function escapeHtmlChars(string) {
 }
 ```
 
-Please be careful when using functions like this as improper usage can result in XSS vunerabilities. The following is a quicker guideline on how this escapeHtmlChars() function should and should not be used.
+Please be careful when using functions like this as improper usage can result in XSS vunerabilities. The following is a quick guideline on how this escapeHtmlChars() function should and should not be used.
 
 ```javascript
 // ✓ - It is safe to use escaped user input between most HTML tags.

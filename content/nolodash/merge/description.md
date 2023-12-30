@@ -52,7 +52,16 @@ function merge(object, ...sources) {
 }
 ```
 
-Note that the Lodash implementation would pick both own and inherited properties from the default objects, while this implementation does not. In practice, this shouldn't matter much because 1. Generally, your default objects won't have inherited fields, and 2. Even if they did, if those inherited fields are set up "properly" (i.e. the same way the class syntax automatically does for you), they should also be non-enumerable, and Lodash's `_.merge()` does not pick non-enumerable fields from the defaults object.
+The Lodash implementation would pick both own and inherited properties from the default objects, while this implementation does not. In practice, this shouldn't matter much because 1. Generally, your default objects won't have inherited fields, and 2. Even if they did, if those inherited fields are set up "properly" (i.e. the same way the class syntax automatically does for you), they should also be non-enumerable, and Lodash's `_.merge()` does not pick non-enumerable fields from the defaults object.
+
+The implementation above also does not support circular references. There's a handful of different ways you could support circular references depending on your needs:
+* Don't bother checking for them at all (what the above implementation does)
+* Check for them on the source objects and throw an error if you encounter one (another good option)
+* When traversing a `source` object, stop before using a source node that you've seen before (what `lodash` was probably trying to do).
+* When traversing a `source` object, if you encounter a node in `source` that you have seen before, merge its immediate properties but do not recurse into it anymore (what `lodash` does).
+* When traversing a `source` object, stop if you find yourself trying to merge a source node to the same target node a second time. (This is arguably the most correct algorithm)
+
+In practice, it's not common to need support for circular references, so you will probably be fine just leaving out support or throwing an error if you detect a circular reference.
 
 If all you want to do is deeply merge some plain objects, and you don't need to worry about odd scenarios, like "what happens when I merge an array with a number", or, "how does a Map instance get merged with a plain object", then an implementation like this should be sufficient.
 

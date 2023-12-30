@@ -4,6 +4,8 @@ To check if your value is an instance of `Set`:
 value instanceof Set;
 ```
 
+The above should be good enough for the vast majority of use-cases.
+
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript

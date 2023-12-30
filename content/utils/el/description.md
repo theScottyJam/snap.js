@@ -14,7 +14,7 @@
 
 # Examples
 
-```
+```javascript
 el('div', { id: 'my-div' }, [
   el('span', {}, 'Hello'),
   'World!',
@@ -36,3 +36,7 @@ el('div', { id: 'my-div' }, [
 </div>
 */
 ```
+
+# Additional Information
+
+While `el()` can be useful for quick-and-dirty HTML-building, for more complicated content you may want to consider custom elements with HTML templates. [The following MDN guide can help get you started with this style of programming](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots).

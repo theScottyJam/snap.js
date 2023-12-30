@@ -4,6 +4,8 @@ To check if a value is a boolean primitive:
 typeof value === 'boolean';
 ```
 
+The above should be good enough for the vast majority of use-cases.
+
 Lodash will also check if the value is a boolean object. In practice, such objects should never be found in your codebase, and if someone ever tries to hand such an object to you you really ought to treat it the same way you would treat any other bad input (throw an error, or if you aren't explicitly trying to check for bad inputs just let your library fall over, the same way it would with any other bad input).
 
 To check if something is specifically a boolean object (and not a primitive), use the following:

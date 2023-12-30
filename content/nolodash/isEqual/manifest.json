@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.isEqual(value, other)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#isEqual",
+  "summary": "Performs a deep comparison between two values to determine if they are equivalent."
+}

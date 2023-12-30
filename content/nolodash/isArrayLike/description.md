@@ -1,13 +1,11 @@
-Lodash implements the "is-array-like" algorithm as follows:
+An equivalent to Lodash's "is-array-like" algorithm is as follows:
 
 ```javascript
 function isArrayLike(value) {
   return (
     typeof value !== 'function' &&
-    value?.length !== undefined &&
-    Number.isInteger(value.length) &&
-    value.length >= 0 &&
-    value.length <= Number.MAX_SAFE_INTEGER
+    Number.isInteger(value?.length) &&
+    value.length >= 0
   );
 }
 ```

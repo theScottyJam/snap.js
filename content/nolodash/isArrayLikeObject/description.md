@@ -1,16 +1,22 @@
-Lodash implements the "is-array-like-object" algorithm as follows:
+An equivalent to Lodash's "is-array-like-object" algorithm is as follows:
 
 ```javascript
 function isArrayLikeObject(value) {
+  return isArrayLike(value) && isObject(value);
+}
+
+// -- helpers --
+
+function isArrayLike(value) {
   return (
-    // Intentionally not including `typeof value === 'function'`.
-    // Lodash does not consider functions to be an array-like object.
-    typeof value === 'object' &&
-    value !== null &&
-    Number.isInteger(value.length) &&
-    value.length >= 0 &&
-    value.length <= Number.MAX_SAFE_INTEGER
+    typeof value !== 'function' &&
+    Number.isInteger(value?.length) &&
+    value.length >= 0
   );
+}
+
+function isObject(value) {
+  return value === Object(value);
 }
 ```
 
