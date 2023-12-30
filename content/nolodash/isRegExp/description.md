@@ -47,8 +47,6 @@ function isRegExp(value) {
 }
 ```
 
-Note that the above code sample requires using an `instanceof` check against an `Error` subclass, a useful ability that [some transpilers do not support](https://stackoverflow.com/questions/33870684/why-doesnt-instanceof-work-on-instances-of-error-subclasses-under-babel-node) (including TypeScript's transpiler). If you run into issues, either consider adapting this code sample (e.g. [attaching unique properties to `Error` instances](https://stackoverflow.com/questions/1433558/handling-specific-errors-in-javascript-think-exceptions/67449268#67449268) instead of subclassing), or consider updating your transpilation settings so you target something newer than ES5.
-
 If you additionally need to ensure your are not receiving a `RegExp` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
 ```javascript
