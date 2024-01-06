@@ -11,20 +11,20 @@ describe('sortBy() supporting only one iteratee', () => {
 
   it('sorts using the iteratee function', () => {
     const users = [
-      { 'user': 'fred', 'age': 48 },
-      { 'user': 'barney', 'age': 36 },
-      { 'user': 'fred', 'age': 40 },
-      { 'user': 'barney', 'age': 34 },
+      { user: 'fred', age: 48 },
+      { user: 'barney', age: 36 },
+      { user: 'fred', age: 40 },
+      { user: 'barney', age: 34 },
     ];
-     
+
     const result = sortBy(users, o => o.user);
 
     expect(result).toEqual([
-      { 'user': 'barney', 'age': 36 },
-      { 'user': 'barney', 'age': 34 },
-      { 'user': 'fred', 'age': 48 },
-      { 'user': 'fred', 'age': 40 },
-    ])
+      { user: 'barney', age: 36 },
+      { user: 'barney', age: 34 },
+      { user: 'fred', age: 48 },
+      { user: 'fred', age: 40 },
+    ]);
   });
 });
 
@@ -43,20 +43,19 @@ describe('sortBy() supporting multiple iteratees', () => {
 
   it('sorts using the iteratee functions', () => {
     const users = [
-      { 'user': 'fred', 'age': 48 },
-      { 'user': 'barney', 'age': 36 },
-      { 'user': 'fred', 'age': 40 },
-      { 'user': 'barney', 'age': 34 },
+      { user: 'fred', age: 48 },
+      { user: 'barney', age: 36 },
+      { user: 'fred', age: 40 },
+      { user: 'barney', age: 34 },
     ];
-     
+
     const result = sortBy(users, [o => o.user, o => o.age]);
 
     expect(result).toEqual([
-      { 'user': 'barney', 'age': 34 },
-      { 'user': 'barney', 'age': 36 },
-      { 'user': 'fred', 'age': 40 },
-      { 'user': 'fred', 'age': 48 },
-    ])
+      { user: 'barney', age: 34 },
+      { user: 'barney', age: 36 },
+      { user: 'fred', age: 40 },
+      { user: 'fred', age: 48 },
+    ]);
   });
 });
-
