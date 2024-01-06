@@ -69,6 +69,37 @@
     ]
   },
   {
+    "categoryHeading": "Collection",
+    "entries": [
+      "countBy",
+      "every",
+      "filter",
+      "find",
+      "findLast",
+      "flatMap",
+      "flatMapDeep",
+      "flatMapDepth",
+      "forEach",
+      "forEachRight",
+      "groupBy",
+      "includes",
+      "invokeMap",
+      "keyBy",
+      "map",
+      "orderBy",
+      "partition",
+      "reduce",
+      "reduceRight",
+      "reject",
+      "sample",
+      "sampleSize",
+      "shuffle",
+      "size",
+      "some",
+      "sortBy"
+    ]
+  },
+  {
     "categoryHeading": "Date",
     "entries": [
       "now"

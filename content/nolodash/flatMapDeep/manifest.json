@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.flatMapDeep(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#flatMapDeep",
+  "summary": "This method is like `_.flatMap` except that it recursively flattens the mapped results."
+}

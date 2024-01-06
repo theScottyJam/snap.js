@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.includes(collection, value, fromIndex?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#includes",
+  "summary": "Checks if value is in collection."
+}

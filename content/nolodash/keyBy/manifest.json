@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.keyBy(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#keyBy",
+  "summary": "Creates an object composed of keys generated from the results of running each element of `collection` thru `iteratee`. The corresponding value of each key is the last element responsible for generating the key."
+}

@@ -16,13 +16,13 @@ describe('isArrayLike()', () => {
   });
 
   it('considers an arguments object to be array-like', () => {
-    (function() {
+    (function () {
       expect(isArrayLike(arguments)).toBe(true);
     })();
   });
 
   it('does not consider a function to be array-like', () => {
-    expect(isArrayLike(function() {})).toBe(false);
+    expect(isArrayLike(function () {})).toBe(false);
   });
 
   it('considers a value missing a length property to not be array-like', () => {

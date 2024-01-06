@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.orderBy(collection, iteratees, orders)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#orderBy",
+  "summary": "This method is like `_.sortBy` except that it allows specifying the sort orders of the iteratees to sort by. You can specify an order of \"desc\" for descending or \"asc\" for ascending sort order of corresponding values."
+}

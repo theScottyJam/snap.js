@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.some(collection)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#some",
+  "summary": "Checks if `predicate` returns truthy for any element of `collection`."
+}

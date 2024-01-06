@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.find(collection, predicate?, fromIndex?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#find",
+  "summary": "Iterates over elements of `collection`, returning the first element `predicate` returns truthy for."
+}

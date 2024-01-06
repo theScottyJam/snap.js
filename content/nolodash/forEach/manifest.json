@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.forEach(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#forEach",
+  "summary": "Iterates over elements of collection and invokes iteratee for each element."
+}

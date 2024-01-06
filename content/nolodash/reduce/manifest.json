@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.reduce(collection, iteratee, accumulator?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#reduce",
+  "summary": "Reduces collection to a value which is the accumulated result of running each element in collection thru iteratee, where each successive invocation is supplied the return value of the previous."
+}

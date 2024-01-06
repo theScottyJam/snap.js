@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.reject(collection, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#reject",
+  "summary": "The opposite of `_.filter`; this method returns the elements of `collection` that `predicate` does **not** return truthy for."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.filter(collection, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#filter",
+  "summary": "Iterates over elements of `collection`, returning an array of all elements `predicate` returns truthy for."
+}

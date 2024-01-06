@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.invokeMap(collection, path, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#invokeMap",
+  "summary": "Invokes the method at path of each element in collection, returning an array of the results of each invoked method."
+}

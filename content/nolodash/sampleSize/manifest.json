@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sample(collection)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sample",
+  "summary": "Gets a random element from `collection`."
+}

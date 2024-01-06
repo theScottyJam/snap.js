@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.map(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#map",
+  "summary": "Creates an array of values by running each element in `collection` thru `iteratee`. "
+}

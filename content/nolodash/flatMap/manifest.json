@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.flatMap(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#flatMap",
+  "summary": "Creates a flattened array of values by running each element in `collection` thru `iteratee` and flattening the mapped results."
+}

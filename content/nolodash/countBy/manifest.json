@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.countBy(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#countBy",
+  "summary": "Creates an object composed of keys generated from the results of running each element of `collection` thru `iteratee`. The corresponding value of each key is the number of times the key was returned by `iteratee`."
+}

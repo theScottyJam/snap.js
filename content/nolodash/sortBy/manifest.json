@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.sortBy(collection, iteratees)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sortBy",
+  "summary": "Creates an array of elements, sorted in ascending order by the results of running each element in a collection thru each iteratee."
+}

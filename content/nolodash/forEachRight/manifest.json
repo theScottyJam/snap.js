@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.forEachRight(collection, iteratee?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#forEachRight",
+  "summary": "This method is like `_.forEach` except that it iterates over elements of `collection` from right to left."
+}

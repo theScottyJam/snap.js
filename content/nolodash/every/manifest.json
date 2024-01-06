@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.every(collection, predicate?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#every",
+  "summary": "Checks if `predicate` returns truthy for all elements of `collection`."
+}

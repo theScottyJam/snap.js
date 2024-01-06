@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.reduceRight(collection, iteratee, accumulator?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#reduceRight",
+  "summary": "This method is like `_.reduce` except that it iterates over elements of `collection` from right to left."
+}
