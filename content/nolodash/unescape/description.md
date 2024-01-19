@@ -2,7 +2,7 @@ If you wish to unescape all HTML-encoded characters and you're in a browser envi
 
 ```javascript
 function unescapeHtmlChars(string) {
-  const doc = new DOMParser().parseFromString(input, 'text/html');
+  const doc = new DOMParser().parseFromString(string, 'text/html');
   return doc.documentElement.textContent;
 }
 ```
