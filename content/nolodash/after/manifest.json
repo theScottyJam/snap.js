@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.after(n, func)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#after",
+  "summary": "The opposite of `_.before`; this method creates a function that invokes `func` once it's called `n` or more times."
+}

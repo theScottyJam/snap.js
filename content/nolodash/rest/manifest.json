@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.rest(func, start?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#rest",
+  "summary": "Creates a function that invokes `func` with the `this` binding of the created function and arguments from `start` and beyond provided as an array."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.negate(predicate)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#negate",
+  "summary": "Creates a function that negates the result of the predicate `func`."
+}

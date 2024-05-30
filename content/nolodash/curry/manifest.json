@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.curry(func, arity?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#curry",
+  "summary": "Creates a function that invokes the method at `object[key]` with `partials` prepended to the arguments it receives. This method differs from `_.bind` by allowing bound functions to reference methods that may be redefined or don't yet exist."
+}

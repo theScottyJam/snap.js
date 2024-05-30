@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.delay(func, wait, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#delay",
+  "summary": "Invokes `func` after `wait` milliseconds. Any additional arguments are provided to `func` when it's invoked."
+}

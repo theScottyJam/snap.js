@@ -106,6 +106,24 @@
     ]
   },
   {
+    "categoryHeading": "Function",
+    "entries": [
+      "after",
+      "ary",
+      "before",
+      "bind",
+      "bindKey",
+      "curry",
+      "delay",
+      "flip",
+      "negate",
+      "once",
+      "overArgs",
+      "rest",
+      "spread"
+    ]
+  },
+  {
     "categoryHeading": "Lang",
     "entries": [
       "cloneDeep",
