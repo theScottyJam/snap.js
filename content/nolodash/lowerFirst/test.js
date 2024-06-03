@@ -1,5 +1,5 @@
 describe('lowerFirst()', () => {
-  function lowerFirst([first='', ...rest]) {
+  function lowerFirst([first = '', ...rest]) {
     return first.toLowerCase() + rest.join('');
   }
 

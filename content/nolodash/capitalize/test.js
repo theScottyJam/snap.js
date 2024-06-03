@@ -1,5 +1,5 @@
 describe('capitalize()', () => {
-  function capitalize([first='', ...rest]) {
+  function capitalize([first = '', ...rest]) {
     return first.toUpperCase() + rest.join('').toLowerCase();
   }
 

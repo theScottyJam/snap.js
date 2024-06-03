@@ -12,4 +12,3 @@ describe('lowerCase()', () => {
     expect(lowerCase('')).toEqual('');
   });
 });
-

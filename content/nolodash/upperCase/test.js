@@ -12,4 +12,3 @@ describe('upperCase()', () => {
     expect(upperCase('')).toEqual('');
   });
 });
-

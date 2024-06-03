@@ -12,4 +12,3 @@ describe('snakeCase()', () => {
     expect(snakeCase('')).toEqual('');
   });
 });
-
