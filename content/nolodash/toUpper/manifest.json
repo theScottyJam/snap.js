@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toUpper(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toUpper",
+  "summary": "Converts string, as a whole, to upper case."
+}

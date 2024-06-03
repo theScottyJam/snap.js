@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.lowerFirst(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#lowerFirst",
+  "summary": "Converts the first character of `string` to lower case."
+}

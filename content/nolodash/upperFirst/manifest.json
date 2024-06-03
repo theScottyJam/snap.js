@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.upperFirst(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#upperFirst",
+  "summary": "Converts the first character of `string` to upper case."
+}

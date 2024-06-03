@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.snakeCase(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#snakeCase",
+  "summary": "Converts `string` to snake case."
+}

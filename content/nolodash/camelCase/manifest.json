@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.camelCase(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#camelCase",
+  "summary": "Converts `string` to camel case."
+}

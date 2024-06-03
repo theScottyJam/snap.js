@@ -242,9 +242,19 @@
   {
     "categoryHeading": "String",
     "entries": [
+      "camelCase",
+      "capitalize",
       "deburr",
       "escape",
-      "unescape"
+      "lowerCase",
+      "lowerFirst",
+      "snakeCase",
+      "toLower",
+      "toUpper",
+      "unescape",
+      "upperCase",
+      "upperFirst",
+      "words"
     ]
   }
 ]
