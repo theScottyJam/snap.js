@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.deburr(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#deburr",
+  "summary": "Deburrs `string` by converting [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement#Character_table) and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A) letters to basic Latin letters and [removing combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks)."
+}

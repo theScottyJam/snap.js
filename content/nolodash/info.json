@@ -242,6 +242,7 @@
   {
     "categoryHeading": "String",
     "entries": [
+      "deburr",
       "escape",
       "unescape"
     ]
