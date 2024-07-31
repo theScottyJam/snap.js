@@ -74,19 +74,17 @@ export const SourceViewerSection = defineElement('SourceViewerSection', sourceCo
   `;
 });
 
+const isSectionHeading = line => line.match(/=====+ (.*) =====+/)?.[1]; // If matches, returns the section heading text
+const skipWhitespaceLines = lineBuffer => {
+  while (lineBuffer.currentLine()?.match(/^ *$/)) {
+    lineBuffer.next();
+  }
+};
+
 export function renderFrameworkSourceViewerContent(sourceCode) {
   const lineBuffer = new LineBuffer(sourceCode.split('\n'));
-  const isBlankLine = line => line.match(/^ *$/);
   const isStartPragma = line => doesLineHavePragma(line, 'START');
-  const isTopLevelOpeningJsDocToken = line => line === '/**';
-  const isHiddenLine = line => doesLineHavePragma(line, 'HIDE-NEXT');
-  const isSectionHeading = line => line.match(/=====+ (.*) =====+/)?.[1]; // If matches, returns the section heading text
   const hasClosingCommentToken = line => line.includes('*/');
-  const skipWhitespaceLines = lineBuffer => {
-    while (lineBuffer.currentLine()?.match(/^ *$/)) {
-      lineBuffer.next();
-    }
-  };
 
   // Jump to `//# START` pragma
   lineBuffer.grabLinesUntilPast({ isStartPragma });
@@ -96,34 +94,26 @@ export function renderFrameworkSourceViewerContent(sourceCode) {
   let lineNumb = 1;
   while (!lineBuffer.atEnd()) {
     if (!inTopLevelJsDocs) {
-      // Render chunk of code
-      const { section, stopReason } = lineBuffer.grabLinesUntil({ isTopLevelOpeningJsDocToken, isSectionHeading, isHiddenLine });
-      if (section.length > 0) {
-        if (isBlankLine(section.at(-1))) section.pop();
+      const { lines, stopReason } = gatherCodeLines({ lineBuffer, lineNumb })
+      if (lines.length > 0) {
         contentNode.append(html`
           <div class="code-viewer">
-            ${new CodeViewer(section.join('\n'), { theme: 'dark', lineNumb })}
+            ${new CodeViewer(lines.join('\n'), { theme: 'dark', lineNumb })}
           </div>
         `);
       }
-      lineNumb += section.length;
+      lineNumb += lines.length;
+      if (stopReason === 'isTopLevelOpeningJsDocToken') {
+        inTopLevelJsDocs = true;
+        lineBuffer.next(); // Go past opening comment
+      }
       if (stopReason === 'isSectionHeading') {
         const sectionHeaderText = isSectionHeading(lineBuffer.currentLine());
         contentNode.append(renderSectionHeader(sectionHeaderText));
         lineBuffer.next(); // Go past section header
         skipWhitespaceLines(lineBuffer);
-      } else if (stopReason === 'isHiddenLine') {
-        lineBuffer.next(); // Skip the line with the pragma
-        lineBuffer.next(); // Skip the line that is supposed to be hidden
-        skipWhitespaceLines(lineBuffer);
-      } else if (stopReason === 'isTopLevelOpeningJsDocToken' || stopReason === 'END') {
-        lineBuffer.next(); // Go past opening comment
-        inTopLevelJsDocs = true;
-      } else {
-        throw new Error('Unreachable branch');
       }
     } else {
-      // Render jsdoc comments
       const { section, stopReason } = lineBuffer.grabLinesUntilPast({ hasClosingCommentToken });
       assert(stopReason !== 'END');
       contentNode.append(renderJsDocs({ lines: section, lineBeingAnnotated: lineBuffer.currentLine() }));
@@ -131,7 +121,32 @@ export function renderFrameworkSourceViewerContent(sourceCode) {
     }
   }
 
-  return contentNode
+  return contentNode;
+}
+
+function gatherCodeLines({ lineBuffer }) {
+  const isBlankLine = line => line.match(/^ *$/);
+  const isTopLevelOpeningJsDocToken = line => line === '/**';
+  const isHiddenLine = line => doesLineHavePragma(line, 'HIDE-NEXT');
+
+  let lines = [];
+  while (true) {
+    const { section, stopReason } = lineBuffer.grabLinesUntil({ isTopLevelOpeningJsDocToken, isSectionHeading, isHiddenLine });
+    lines.push(...section);
+
+    if (stopReason === 'isHiddenLine') {
+      lineBuffer.next(); // Skip the line with the pragma
+      lineBuffer.next(); // Skip the line that is supposed to be hidden
+      skipWhitespaceLines(lineBuffer);
+      continue;
+    }
+
+    if (lines.length > 0 && isBlankLine(lines.at(-1))) {
+      lines.pop();
+    }
+
+    return { lines, stopReason };
+  }
 }
 
 function renderSectionHeader(headerText) {
