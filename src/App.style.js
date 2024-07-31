@@ -20,6 +20,13 @@ const deviceSize = {
   forReallySmallDevices: 400,
 };
 
+style.notFound = css`
+  margin-left: 20px;
+  color: #a00;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+`;
+
 style.popup = transitionPhaseName => css`
   label: popup;
   padding-left: ${padding.forNormalDevices}px;

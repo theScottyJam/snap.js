@@ -4,6 +4,7 @@ import { parentPage } from './shared';
 import Frame from './Frame';
 import OverviewPage from './OverviewPage';
 import SingleEntryPage from './SingleEntryPage';
+import { FrameworkPage } from './FrameworkPage';
 import style from './App.style.js';
 
 function App() {
@@ -28,10 +29,18 @@ function App() {
         setPage={setPage}
         content={content}
       />
-      <Frame page={page} setPage={setPage}>
-        <OverviewPage page={page} setPage={setPage} content={content} />
-      </Frame>
+      <Frame page={page} setPage={setPage}>{
+        page === 'framework' ? <FrameworkPage />
+          : page === 'notFound' ? <NotFound />
+          : <OverviewPage page={page} setPage={setPage} content={content} />
+      }</Frame>
     </>
+  );
+}
+
+function NotFound() {
+  return (
+    <p className={style.notFound}>Page not found.</p>
   );
 }
 
@@ -118,10 +127,11 @@ function fetchAndNormalizeCurrentHashPath() {
     // Remove trailing slash
     hashRoute = hashRoute.slice(0, -1);
   }
-  if (!/^(utils|nolodash)(\/|$)/.exec(hashRoute)) {
-    // Just forward any unknown top-level routes to the default landing page.
-    // This also forwards the `/` route to utils/ as well.
+
+  if (hashRoute === '') {
     hashRoute = 'utils';
+  } else if (!/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute)) {
+    hashRoute = 'notFound';
   }
 
   return hashRoute;

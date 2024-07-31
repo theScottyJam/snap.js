@@ -13,6 +13,16 @@
     <title>Snap.js</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400&family=Questrial&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <script src="%PUBLIC_URL%/thirdParty/prism/prism.js" data-manual></script>
+    <script src="%PUBLIC_URL%/thirdParty/prism/line-number-plugin.js"></script>
+    <!-- Pre-download these CSS files so we can show content styled with these stylesheets at a moment's notice. -->
+    <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/light-theme.css">
+    <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/dark-theme.css">
+    <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/line-number-plugin.css">
+    <script>
+      globalThis.PUBLIC_URL = '%PUBLIC_URL%';
+    </script>
+    <script type="module" src="%PUBLIC_URL%/FrameworkPage/FrameworkPage.js"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

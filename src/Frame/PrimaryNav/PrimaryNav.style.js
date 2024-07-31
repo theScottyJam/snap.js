@@ -5,7 +5,17 @@ export default style;
 
 style.primaryNav = css`
   label: primaryNav;
-  margin-left: 12px;
+  padding-top: 12px;
+  padding-left: 6px;
+  padding-bottom: 12px;
+  display: flex;
+  @media screen and (max-width: 600px) {
+    flex-flow: column;
+    gap: 12px;
+    background: #eee;
+    text-align: center;
+    box-shadow: 0 -10px 10px -10px rgba(0, 0, 0, 0.1) inset;
+  }
 `;
 
 const nonActiveLinkMixin = css`
@@ -21,7 +31,7 @@ style.link = ({ active }) => css`
   background: none;
   font-size: 0.9rem;
   padding: 1px 6px;
-  margin: 12px 12px;
+  margin: 0px 6px;
   letter-spacing: 0.1em;
   font-weight: bold;
 

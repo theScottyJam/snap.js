@@ -10,6 +10,9 @@ export default function PrimaryNav({ page, setPage }) {
       <Link page={page} setPage={setPage} target="nolodash">
         Lodash Replacements
       </Link>
+      <Link page={page} setPage={setPage} target="framework">
+        Snap Framework
+      </Link>
     </div>
   );
 }
