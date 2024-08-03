@@ -494,8 +494,11 @@ function renderExtractedJsDescriptionText(text) {
       // If it is a {@link...}
       pattern.lastIndex = patternMatch.index + patternMatch[0].length;
       const linkText = patternMatch[1];
+      // contentNode.append(html`
+      //   <a href="javascript:void(0)" ${set({ textContent: linkText })}></a>
+      // `);
       contentNode.append(html`
-        <a href="javascript:void(0)" ${set({ textContent: linkText })}></a>
+        <code ${set({ textContent: linkText })}></code>
       `);
     } else if (patternMatch?.[2] !== undefined) {
       // If it is a `...` (back-tick region)
