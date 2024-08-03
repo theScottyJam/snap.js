@@ -114,12 +114,20 @@ const features = [
   {
     header: 'Reactive',
     tabName: 'EchoBox.js',
+    // renderDescription: () => html`
+    //   <!-- // <-- Fix links -->
+    //   <p>
+    //     Reactivity is handled by signals - stateful objects that emit events when updated.
+    //     No need to fuss with
+    //     <a href="javascript:void(0)">caching</a>/<a href="javascript:void(0)">memoization</a>/<a href="javascript:void(0)">a&nbsp;special&nbsp;compiler</a>
+    //     to avoid unnecessary rerenders - your component never rerenders.
+    //   </p>
+    // `,
     renderDescription: () => html`
-      <!-- // <-- Fix links -->
       <p>
         Reactivity is handled by signals - stateful objects that emit events when updated.
         No need to fuss with
-        <a href="javascript:void(0)">caching</a>/<a href="javascript:void(0)">memoization</a>/<a href="javascript:void(0)">a&nbsp;special&nbsp;compiler</a>
+        caching/memoization/a&nbsp;special&nbsp;compiler
         to avoid unnecessary rerenders - your component never rerenders.
       </p>
     `,
@@ -168,10 +176,17 @@ const features = [
   }, {
     header: 'Encapsulate your CSS',
     tabName: 'Card.js',
+    // <-- fix links
+    // renderDescription: () => html`
+    //   <p>
+    //     Use <a href="javascript:void(0)">defineElement()</a> to generate a
+    //     <a href="javascript:void(0)">native element (custom web component)</a> that encapsulates your CSS.
+    //   </p>
+    // `,
     renderDescription: () => html`
       <p>
-        Use <a href="javascript:void(0)">defineElement()</a> to generate a
-        <a href="javascript:void(0)">native element (custom web component)</a> that encapsulates your CSS.
+        Use <code>defineElement()</code> to generate a
+        native element (custom web component) that encapsulates your CSS.
       </p>
     `,
     code: [
