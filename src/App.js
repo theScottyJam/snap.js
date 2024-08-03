@@ -29,19 +29,21 @@ function App() {
         setPage={setPage}
         content={content}
       />
-      <Frame page={page} setPage={setPage}>{
-        page === 'framework' ? <FrameworkPage />
-          : page === 'notFound' ? <NotFound />
-          : <OverviewPage page={page} setPage={setPage} content={content} />
-      }</Frame>
+      <Frame page={page} setPage={setPage}>
+        {page === 'framework' ? (
+          <FrameworkPage />
+        ) : page === 'notFound' ? (
+          <NotFound />
+        ) : (
+          <OverviewPage page={page} setPage={setPage} content={content} />
+        )}
+      </Frame>
     </>
   );
 }
 
 function NotFound() {
-  return (
-    <p className={style.notFound}>Page not found.</p>
-  );
+  return <p className={style.notFound}>Page not found.</p>;
 }
 
 function PopupBackdrop({ show, onClick }) {
