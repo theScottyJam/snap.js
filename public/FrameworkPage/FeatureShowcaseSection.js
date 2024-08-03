@@ -311,5 +311,7 @@ const style = `
     background-color: #272822;
     border-radius: 0 8px 8px 8px;
     box-shadow: 0 8px 8px -4px rgba(0,0,0,.6), 0 2px 2px 2px rgba(0,0,0,.1);
+    padding: 1em;
+    box-sizing: border-box;
   }
 `;

@@ -11,7 +11,7 @@ export default function PrimaryNav({ page, setPage }) {
         Lodash Replacements
       </Link>
       <Link page={page} setPage={setPage} target="framework">
-        Snap Framework
+        Snap Framework (beta)
       </Link>
     </div>
   );

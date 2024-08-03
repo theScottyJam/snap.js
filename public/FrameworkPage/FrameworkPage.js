@@ -6,7 +6,7 @@ import { FootprintComparisonSection } from './FootprintComparisonSection.js';
 import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { PUBLIC_URL } from './shared.js';
 import { headerStyleMixin } from './sharedStyles.js';
-import { OverviewRegion } from './OverviewRegion.js';
+import { OverviewSection } from './OverviewSection.js';
 
 export class FrameworkPage extends HTMLElement {
   constructor() {
@@ -21,13 +21,21 @@ export class FrameworkPage extends HTMLElement {
     const snapFrameworkText$ = new Signal(undefined);
     const loadFailed$ = new Signal(false);
 
+    const getTextResponse = resp => {
+      if (!resp.ok) {
+        throw new Error(`Failed to load a required resource - error code: ${resp.code}`);
+      }
+      return resp.text();
+    };
+
     const abortController = new AbortController();
-    fetch(`${PUBLIC_URL}/FrameworkPage/snapFramework.js`, { siganl: abortController.signal })
-      .then(async resp => {
-        if (!resp.ok) {
-          throw new Error('Failed to load the required snapFramework.js file.');
-        }
-        snapFrameworkText$.set(await resp.text());
+    Promise.all([
+      fetch(`${PUBLIC_URL}/FrameworkPage/snapFramework.js`, { siganl: abortController.signal })
+        .then(getTextResponse),
+      fetch(`${PUBLIC_URL}/FrameworkPage/snapFramework.min.js`, { siganl: abortController.signal })
+        .then(getTextResponse),
+    ]).then(async ([fullText, minifiedText]) => {
+        snapFrameworkText$.set({ fullText, minifiedText });
       })
       .catch(error => {
         loadFailed$.set(true);
@@ -82,15 +90,14 @@ function renderLoadFailed() {
   `;
 }
 
-function renderPageContents(snapFrameworkText) {
+function renderPageContents({ fullText, minifiedText }) {
   return html`
-    ${new OverviewRegion()}
+    ${new OverviewSection()}
     <h2 class="header">— SMALL —</h2>
     ${new FootprintComparisonSection()}
     <h2 class="header powerful-header">— POWERFUL —</h2>
     ${new FeatureShowcaseSection()}
-    <h2 class="header hackable-header">— HACKABLE —</h2>
-    ${new SourceViewerSection(snapFrameworkText)}
+    ${new SourceViewerSection({ fullText, minifiedText })}
   `;
 }
 
@@ -115,11 +122,7 @@ const style = `
     font-size: 1.4rem;
     text-align: center;
     letter-spacing: 0.2em;
-    margin-top: 3em;
+    margin-top: 3.25em;
     margin-bottom: 1.5em;
-  }
-
-  .header:first-of-type {
-    margin-top: 2em;
   }
 `;

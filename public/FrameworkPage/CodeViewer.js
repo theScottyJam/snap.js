@@ -1,4 +1,4 @@
-import { defineElement, Signal, html, set, useSignals } from "./snapFramework.js";
+import { defineElement, Signal, html, set, useSignals } from './snapFramework.js';
 import { assert } from './util.js';
 import { PUBLIC_URL, Prism } from './shared.js';
 
@@ -46,10 +46,16 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modifi
 
 const style = `
   :host pre {
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    text-wrap: wrap;
     white-space: pre-wrap;
-    /* We set the background ourselves on parent elements instead */
+    /* We let the containers this element goes in choose the background, instead of having the theme choose. */
     background: none;
+  }
+
+  :host pre > code {
+    white-space: pre-wrap;
   }
 
   .theme-modified-light {
