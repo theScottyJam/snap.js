@@ -4,7 +4,7 @@ import { PUBLIC_URL, Prism } from './shared.js';
 
 // <-- I don't think the "modified-light" theme is used anymore.
 export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modified-light', lineNumb = null } = {}) => {
-  const text$ = Signal.from(text$_);
+  const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   assert(['modified-light', 'light', 'dark'].includes(theme));
   let codeContainerEl;
 

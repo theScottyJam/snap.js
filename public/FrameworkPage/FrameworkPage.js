@@ -47,15 +47,15 @@ export class FrameworkPage extends HTMLElement {
     return html`
       ${renderChoice([
         {
-          when$: snapFrameworkText$,
+          signalWhen: snapFrameworkText$,
           render: () => renderPageContents(snapFrameworkText$.get()),
         },
         {
-          when$: loadFailed$,
+          signalWhen: loadFailed$,
           render: renderLoadFailed,
         },
         {
-          when$: new Signal(true),
+          signalWhen: new Signal(true),
           render: renderLoading
         },
       ])}
