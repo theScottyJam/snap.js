@@ -76,11 +76,11 @@ export const SourceViewerSection = defineElement('SourceViewerSection', ({ fullT
     <div class="documented-code" ${el => documentedCodeRef.set(el)}>
       ${renderChoice([
         {
-          when$: useSignals([viewMode$], viewMode => viewMode === 'normal'),
+          signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
           render: () => renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode: viewMode$.get() }),
         },
         {
-          when$: useSignals([viewMode$], viewMode => viewMode === 'minified'),
+          signalWhen: useSignals([viewMode$], viewMode => viewMode === 'minified'),
           render: () => renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode: viewMode$.get() }),
         },
       ])}
@@ -330,16 +330,22 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, order }) {
 function renderBulletPointList(lineBuffer) {
   const bulletPoints = [];
 
-  // A multi-line bullet point will typically look like this:
-  // /** description
-  //  * * point 1
-  //  *   more info about point 1
-  //  * * point 2
+  // A multi-line bullet point will typically look like this ("|" representing the start of the line):
+  // |/** description
+  // | * * point 1
+  // | *   more info about point 1
+  // | * * point 2
   //
-  // Note the triple space that exists on the continuation line.
+  // After the comment syntax has been stripped, it'll look like this ("|" representing the start of the line):
+  // |description
+  // |* point 1
+  // |  more info about point 1
+  // |* point 2
+  //
+  // Note the double space that exists on the continuation line.
   // This is what we use to decide if the line should be
   // treated as a continuation or not.
-  const isBulletPointContinuationLine = line => line.match(/^ {3}/);
+  const isBulletPointContinuationLine = line => line.match(/^ {2}/);
 
   while (!lineBuffer.atEnd()) {
     const currentLine = lineBuffer.currentLine();
@@ -357,7 +363,7 @@ function renderBulletPointList(lineBuffer) {
   return html`
     <ul>
       ${renderEach(
-        Signal.from(bulletPoints.map((bulletedText, i) => [i, bulletedText])),
+        new Signal(bulletPoints.map((bulletedText, i) => [i, bulletedText])),
         bulletedText => {
           return html`<li>${renderExtractedJsDescriptionText(bulletedText)}</ul>`
         },
@@ -375,16 +381,22 @@ function renderBulletPointList(lineBuffer) {
 function renderParamList(lineBuffer) {
   const paramDescriptions = [];
 
-  // A multi-line param will typically look like this:
-  // /** description
-  //  * @param param1 some description
-  //  *   more info about param1
-  //  * @param param2 some description
+  // A multi-line param will typically look like this ("|" representing the start of the line):
+  // |/** description
+  // | * @param param1 some description
+  // | *   more info about param1
+  // | * @param param2 some description
   //
-  // Note the triple space that exists on the continuation line.
+  // After the comment syntax has been stripped, it'll look like this ("|" representing the start of the line):
+  // |description
+  // |@param param1 some description
+  // |  more info about param1
+  // |@param param2 some description
+  //
+  // Note the double space that exists on the continuation line.
   // This is what we use to decide if the line should be
   // treated as a continuation or not.
-  const isParamContinuationLine = line => line.match(/^ {3}/);
+  const isParamContinuationLine = line => line.match(/^ {2}/);
 
   while (!lineBuffer.atEnd()) {
     const currentLine = lineBuffer.currentLine();
@@ -403,7 +415,7 @@ function renderParamList(lineBuffer) {
     <p><strong>Parameters:</strong></p>
     <ul>
       ${renderEach(
-        Signal.from(paramDescriptions.map((paramInfo, i) => [i, paramInfo])),
+        new Signal(paramDescriptions.map((paramInfo, i) => [i, paramInfo])),
         ({ name, description }) => {
           return html`
             <li>

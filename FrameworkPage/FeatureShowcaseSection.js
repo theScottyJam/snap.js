@@ -22,7 +22,7 @@ function renderCodeSamples({ selectedFeature$ }) {
   return html`
     <div class="code-sample-areas-container">
       ${renderEach(
-        Signal.from(features.map((feature, i) => [i, feature])),
+        new Signal(features.map((feature, i) => [i, feature])),
         (feature, i) => renderCodeSample({ feature, index: i, selectedFeature$ }),
       )}
     </div>
@@ -56,7 +56,7 @@ function renderFeatureList({ selectedFeature$ }) {
   return html`
     <div class="feature-list">
       ${renderEach(
-        Signal.from(features.map((feature, i) => [i, feature])),
+        new Signal(features.map((feature, i) => [i, feature])),
         (feature, i) => html`
           ${renderFeatureItem({
             featureIndex: i,
@@ -106,7 +106,7 @@ const features = [
       '// Defines a "Text" component.',
       'function renderText(text) {',
       '  return html`',
-      '    <p ${set({ innerText: text })}></p>',
+      '    <p ${set({ textContent: text })}></p>',
       '  `;',
       '}',
     ].join('\n'),
@@ -133,17 +133,17 @@ const features = [
     `,
     code: [
       'export function renderEchoBox() {',
-      '  // The initial value of the signal is an empty string',
-      "  const input$ = new Signal('');",
+      '  // The initial value of this signal is an empty string',
+      "  const signalInput = new Signal('');",
       '',
       '  // Each textbox keystroke will update the signal,',
       "  // which in turn will update the p tag's contents",
       '  return html`',
       '    <input type="text" ${set({',
-      '      onchange: event => input$.set(event.target.value),',
+      '      onchange: event => signalInput.set(event.target.value),',
       '    })}>',
       '',
-      '    <p ${set({ textContent: input$ })}></p>',
+      '    <p ${set({ textContent: signalInput })}></p>',
       '  `;',
       '}',
     ].join('\n'),
@@ -158,10 +158,10 @@ const features = [
     `,
     code: [
       'export function renderCounter() {',
-      '  const value$ = new Signal(0);',
+      '  const signalValue = new Signal(0);',
       '',
       '  const intervalId = setInterval(() => {',
-      '    value$.set(value$.get() + 1);',
+      '    signalValue.set(signalValue.get() + 1);',
       '  }, 1000);',
       '',
       '  // The useCleanup() hook will call the provided listener',
@@ -169,7 +169,7 @@ const features = [
       '  useCleanup(() => clearInterval(intervalId));',
       '',
       '  return html`',
-      '    <p ${set({ textContent: value$ })}></p>',
+      '    <p ${set({ textContent: signalValue })}></p>',
       '  `;',
       '}',
     ].join('\n'),

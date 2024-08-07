@@ -17,7 +17,7 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
       </button>
       <!--
       The exact measurement I got when I last checked after minifying
-      with minify-js.com and gzipping it with the "gzip" CLI tool was 1449 bytes.
+      with minify-js.com and gzipping it with the "gzip" CLI tool was 1429 bytes.
       -->
       ${renderComparisonSquare('Snap Framework', 'Less than 1,500 bytes', 'minified + compressed', {
         iconUrl: `${PUBLIC_URL}/assets/file.svg`,
@@ -27,7 +27,7 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
       <p class="vs">VS.</p>
       ${renderChoice(
         comparisons.map((renderComparison, i) => ({
-          when$: useSignals([currentComparison$], currentComparison => currentComparison === i),
+          signalWhen: useSignals([currentComparison$], currentComparison => currentComparison === i),
           render: renderComparison,
         }))
       )}

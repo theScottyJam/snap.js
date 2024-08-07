@@ -1,22 +1,28 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-// Top-level jsdocs will be parsed and displayed in their own special sections on the webpage.
-// The parsing isn't very exact, but should be good enough for this use-case. It does mean if
-// changes are made to those jsdoc comments, it's important to verify that it still renders as expected
-// in the webpage.
+// Top-level jsdocs will be parsed and displayed in their own special sections
+// on the webpage. The parsing isn't very exact, but should be good enough for
+// this use-case. It does mean if changes are made to those jsdoc comments, it's
+// important to verify that it still renders as expected in the webpage.
 
-// The `===== <section text> =====` style comments will be captured and rendered in a special way as well.
-// Any whitespace after it will be ignored when viewing it on the webpage.
-// This text will be left alone in the downloadable version.
+// The `===== <section text> =====` style comments will be captured and rendered
+// in a special way as well. Any whitespace after it will be ignored when
+// viewing it on the webpage. This text will be left alone in the downloadable
+// version.
 
 // The comments that start with a "#" are pragmas that control how this
 // file will be parsed and displayed on the website.
 // Available pragmas:
 //   START: Everything above the START pragma is ignored
-//   IGNORE-NEXT: The next line will be ignored in the website's main display, but it will be included as part of the download.
-//     Any whitespace that follows will also be ignored.
-//   COLLAPSE-EXAMPLES: Any examples that follow in this jsdoc comment should be collapsed - you must click to view them.
-//     This pragma must be placed directly before an '@example' annotation.
+//   IGNORE-NEXT: The next line will be ignored in the website's main display,
+//     but it will be included as part of the download. Any whitespace that
+//     follows will also be ignored.
+//   COLLAPSE-EXAMPLES: Any examples that follow in this jsdoc comment should be
+//     collapsed - you must click to view them. This pragma must be placed
+//     directly before an '@example' annotation.
+
+// Keep the maximum line width to 80 characters - it needs to be easy to read on
+// half a screen on the webpage.
 
 //# START
 // Snap Framework beta version
@@ -24,42 +30,41 @@
 // ==================== Reactivity ====================
 
 /**
- * An event emitter with state. You can provide initial state to it when constructing it,
- * then `.get()` or `.set(...)` that piece of state at any point in time.
- * Others can choose to `.subscribe()` to the signal to listen for state changes,
- * and then later`.unsubscribe()` as needed.
+ * An event emitter with state. You can provide initial state to it when
+ * constructing it, then `.get()` or `.set(...)` that piece of state at any
+ * point in time. Others can choose to `.subscribe()` to the signal to listen
+ * for state changes, and then later`.unsubscribe()` as needed.
  * 
- * `.subscribe()`/`.unsubscribe()` are considered to be lower-level - typically you would instead
- * use the {@link useSignals} hook which takes care of unsubscribing for you.
+ * `.subscribe()`/`.unsubscribe()` are considered to be lower-level - typically
+ * you would instead use the {@link useSignals} hook which takes care of
+ * unsubscribing for you.
  *
- * Variables and properties that hold signals will, by convention, be named with a "$" suffix.
- * If they can hold either a signal or a normal value, you can still use the "$" suffix to indicate that
- * it supports holding a signal.
- * 
- * This is a stand-alone class that isn't dependent on anything else, which means you
- * can easily copy-paste it into other projects if you just want the signal functionality.
+ * This is a stand-alone class that isn't dependent on anything else, which
+ * means you can easily copy-paste it into other projects if you just want the
+ * signal functionality.
  *
  * @example
  * function renderEchoBox() {
- *   const text$ = new Signal('');
+ *   const signalText = new Signal('');
  *   return html`
  *     <input type="text" ${set({
- *       onChange: event => text$.set(event.target.value)
+ *       onChange: event => signalText.set(event.target.value),
  *     })}/>
- *     <p ${set({ textContent: text$ })}></p>
+ *     <p ${set({ textContent: signalText })}></p>
  *   `;
  * }
  *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using Signal without the rest of the framework</caption>
- * const enemyHealth$ = new Signal(10)
+ * const signalEnemyHealth = new Signal(10);
+ * console.info(`Enemy health starting at ${signalEnemyHealth.get()}`);
  * 
  * export function attack() {
- *   enemyHealth.set(enemyHealth$.get() - 1);
+ *   enemyHealth.set(signalEnemyHealth.get() - 1);
  * }
  * 
- * enemyHealth$.subscribe(() => {
- *   if (enemyHealth$.get() === 0) {
+ * signalEnemyHealth.subscribe(enemyHealth => {
+ *   if (enemyHealth <= 0) {
  *     console.info('Enemy killed!');
  *   }
  * });
@@ -69,29 +74,23 @@ export class Signal {
   #listeners = new Set()
 
   /**
-   * Creates a new signal with an optional initial value.
-   * If an initial value is not provided, it will, by default, be set to `undefined`.
+   * Creates a new signal with an optional initial value. If an initial value is
+   * not provided, The signal's value will be initialized as `undefined`.
    */
   constructor(value = undefined) {
     this.#value = value;
   }
 
-  /**
-   * Wraps the argument in a signal. If it is already a signal, it'll simply be returned.
-   * This is useful as a way to allow components to accept either a signal or a non-signal as a parameter
-   * and treat them both the same.
-   */
-  static from(maybeSignal) {
-    return maybeSignal instanceof Signal ? maybeSignal : new Signal(maybeSignal);
-  }
-
-  /** The provided callback will be called each time the signal value changes. */
+  /** The callback `fn` will be called each time the signal value changes. */
   subscribe(fn) {
     console.assert(!this.#listeners.has(fn));
     this.#listeners.add(fn);
   }
 
-  /** Unsubscribe this callback from this signal, so it will not be called anymore when the signal value changes. */
+  /**
+   * Unsubscribe the callback `fn` from this signal so it will not be called
+   * anymore when the signal value changes.
+   */
   unsubscribe(fn) {
     console.assert(this.#listeners.has(fn));
     this.#listeners.delete(fn);
@@ -103,8 +102,8 @@ export class Signal {
   }
 
   /**
-   * Updates the signal's current value and notifies anyone listening for updates.
-   * If the new value is the same as the old one, nothing will happen.
+   * Updates the signal's current value and notifies anyone listening for
+   * updates. If the new value is the same as the old one, nothing will happen.
    */
   set(newValue) {
     if (this.#value === newValue) return;
@@ -116,43 +115,46 @@ export class Signal {
 }
 
 /**
- * `useSignals()` is a hook that allows you to subscribe to multiple signals at once.
- * Because it's a hook, it's capable of automatically cleaning up and removing
- * your signal listeners when your component unmounts.
+ * `useSignals()` is a hook that allows you to subscribe to multiple signals at
+ * once. Because it's a hook, it's capable of automatically cleaning up after
+ * itself when your component unmounts, making sure to detach all subscriptions
+ * from the signals.
  * 
- * The first argument is a list of signals you want to watch, and the second
- * argument is a callback that will be fired immediately, as well as each time
- * any of those signals gets updated. The callback takes, as arguments,
- * the current values of each signal being listened to.
+ * @param dependentSignals A list of signals you want to watch.
+ * @param onChange A callback that will be fired immediately, as well as each
+ *   time any of those signals gets updated. The callback takes, as parameters,
+ *   the current values of each signal being listened to.
  * 
- * `useSignals()` will return a signal that holds the last value that the
- * callback returned. Each time the callback returns a different value,
- * the returned signal will be updated. This allows you to easily derive
- * a new signal from existing signals. You may also choose to
- * ignore this capability and simply use `useSignals()` as a way to trigger
- * side-effects whenever a signal changes.
+ * @returns A signal that holds the last value that the `onChange` callback
+ *   returned. Each time the callback returns a different value, the signal
+ *   will be updated. This allows you to easily derive a new signal from
+ *   existing signals. You may also choose to ignore this capability and simply
+ *   use `useSignals()` as a way to trigger side-effects whenever a signal
+ *   changes.
  * 
  * @example <caption>Using useSignals() to derive a new signal</caption>
- * function renderLogo({ src, width$, height$ }) {
+ * function renderLogo({ src, signalWidth, signalHeight }) {
  *   return html`
- *     <img $(set({
+ *     <img ${set({
  *       src,
- *       style: useSignals([width$, height$], (width, height) => {
+ *       style: useSignals([signalWidth, signalHeight], (width, height) => {
  *         return `width=${width}px; height=${height}px`;
  *       })
- *     }))>
+ *     })}>
  *   `;
  * }
  * 
  * @example <caption>Using useSignals() to trigger side-effects</caption>
- * function renderBomb({ show$ }) {
+ * function renderBomb({ signalShow }) {
  *   const bombEl = html`<img src="./bomb.png" style="display: block">`;
  * 
  *   let intervalId = undefined;
- *   useSignals([show$], show => {
+ *   useSignals([signalShow], show => {
  *     if (show) {
  *       intervalId = setInterval(() => {
- *         bombEl.style.display = bombEl.style.display === 'none' ? 'block' : 'none';
+ *         bombEl.style.display = (
+ *           bombEl.style.display === 'none' ? 'block' : 'none'
+ *         );
  *       }, 1000);
  *     } else if (intervalId !== undefined) {
  *       clearInterval(intervalId);
@@ -160,8 +162,7 @@ export class Signal {
  *     }
  *   });
  * 
- *   // useCleanup() is another hook that will call its
- *   // callback when the component is being unmounted.
+ *   // This callback will be called when the component is being unmounted.
  *   useCleanup(() => {
  *     if (intervalId !== undefined) {
  *       clearInterval(intervalId);
@@ -171,38 +172,40 @@ export class Signal {
  *   return bombEl;
  * }
  */
-export function useSignals(dependentSignals, deriveValue) {
-  console.assert(dependentSignals.every(signal => signal instanceof Signal));
-  const signal$ = new Signal(undefined);
+export function useSignals(dependentSignals, onChange) {
+  const derivedSignal = new Signal(undefined);
 
   const onDependentSignalChange = () => {
-    const updatedValue = deriveValue(...dependentSignals.map(signal$ => signal$.get()));
-    signal$.set(updatedValue);
+    const updatedValue = onChange(
+      ...dependentSignals.map(dependentSignal => dependentSignal.get())
+    );
+    derivedSignal.set(updatedValue);
   };
 
-  for (const depSignal$ of dependentSignals) {
-    depSignal$.subscribe(onDependentSignalChange);
+  for (const dependentSignal of dependentSignals) {
+    dependentSignal.subscribe(onDependentSignalChange);
   }
   onDependentSignalChange();
 
   useCleanup(() => {
-    for (const depSignal$ of dependentSignals) {
-      depSignal$.unsubscribe(onDependentSignalChange);
+    for (const dependentSignal of dependentSignals) {
+      dependentSignal.unsubscribe(onDependentSignalChange);
     }
   });
 
-  return signal$;
+  return derivedSignal;
 }
 
 // ==================== Core Tools ====================
 
 /**
- * The Context class allows you to implicitly pass parameters through the call stack.
- * It can be used as an alternative to "prop-drilling", and it is what powers {@link useCleanup}
- * which in turn powers life-cycles.
+ * The Context class allows you to implicitly pass around parameters.
+ * It can be used as an alternative to "prop-drilling", and it is what powers
+ * {@link useCleanup} which in turn powers life-cycles.
  * 
- * This is a stand-alone class that isn't dependent on anything else, which means you
- * can copy-paste it into any project and use it as-is if wanted, without copying the whole Snap Framework.
+ * This is a stand-alone class that isn't dependent on anything else, which
+ * means you can copy-paste it into any project and use it as-is, without
+ * copying the whole Snap Framework.
  * 
  * @example
  * const theme = new Context();
@@ -231,8 +234,8 @@ export function useSignals(dependentSignals, deriveValue) {
  *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Nesting calls to .provide()</caption>
- * // Setting the log level to 'NONE' for the duration of the provided callback.
  * const logLevel = new Context();
+ * // Setting the log level to 'NONE' for the duration of the provided callback.
  * logLevel.provide('NONE', doMath);
  * 
  * function doMath() {
@@ -242,7 +245,8 @@ export function useSignals(dependentSignals, deriveValue) {
  *     console.log('doMath() called');
  *   }
  * 
- *   // Updating the log level to be 'VERBOSE' for the duration of this callback.
+ *   // Updating the log level to be 'VERBOSE' for the
+ *   // duration of this callback.
  *   logLevel.provide('VERBOSE', () => calcSum(2, 3));
  * 
  *   // At this point, the log level is set back to 'NONE'
@@ -260,25 +264,14 @@ export function useSignals(dependentSignals, deriveValue) {
  *   }}
  *   console.info('Result:', x + y);
  * }
- * 
- * @example <caption>Using Context without the rest of the framework</caption>
- * const logLevel = new Context();
- * // Setting the log level to 'VERBOSE' for the duration of the provided callback.
- * logLevel.provide('VERBOSE', () => calcSum(2, 3));
- * 
- * function calcSum(x, y) {
- *   // Because 'VERBOSE' was provided as the log-level,
- *   // we will enter this branch and log out the arguments.
- *   if (logLevel.get() === 'VERBOSE') {
- *     console.log('Summing', x, 'with', y);
- *   }}
- *   console.info('Result:', x + y);
- * }
  */
 export class Context {
   #stack = [];
 
-  /** Calls `callback` and provide `value` to it for the duration of the callback. */
+  /**
+   * Calls `callback` and provide `value` to it
+   * for the duration of the callback.
+   */
   provide(value, callback) {
     this.#stack.push(value);
     try {
@@ -292,25 +285,30 @@ export class Context {
   get() {
     console.assert(
       this.#stack.length > 0,
-      'Attempted to use a context object that does not have a value provided (via .provide()).'
+      'Attempted to use a context object that does not have ' +
+      'a value provided to it (via .provide()).'
     );
     return this.#stack.at(-1);
   }
 }
 
 /**
- * The primary purpose of `defineElement()` is to encapsulate the CSS of a component or group of components.
+ * The primary purpose of `defineElement()` is to encapsulate the CSS of a
+ * component or group of components.
  * 
  * @param name The name of this custom element.
- * @param init A component function. It will receive a "this" argument that is a reference to the custom element
- *   class instance, which you can then use to call methods or attach fields to the instance.
- *   There is a dedicated `api` field provided to you that is intended to be a safe place to attach arbitrary
- *   fields without worrying about conflicting with current or yet-to-be-added built-in methods.
- *   Remember that, to receive a "this" parameter, you must use a non-arrow function. Arrow functions
- *   trap the "this" parameter from its surrounding scope while normal functions do not.
+ * @param init A component function. It will receive a "this" argument that is
+ *   a reference to the custom element class instance, which you can then use to
+ *   call methods or attach fields to the instance. There is a dedicated `api`
+ *   field provided on the "this" object that is intended to be a safe place to
+ *   attach arbitrary fields without worrying about conflicting with current or
+ *   yet-to-be-added built-in methods. Remember that to receive a "this"
+ *   parameter, you must use a non-arrow function. Arrow functions trap the
+ *   "this" parameter from its surrounding scope while normal functions do not.
  * 
- * This is a stand-alone function that isn't dependent on anything else, which means you
- * can copy-paste it into any project and use it as-is if wanted, without copying the whole Snap Framework.
+ * This is a stand-alone function that isn't dependent on anything else, which
+ * means you can copy-paste it into any project and use it as-is, without
+ * copying the whole Snap Framework.
  * 
  * @example
  * export const ExampleApp = defineElement('ExampleApp', ({ text }) => {
@@ -337,11 +335,11 @@ export class Context {
  * 
  * @example <caption>Using slots to create container-like custom elements.</caption>
  * const ExampleApp = defineElement('ExampleApp', () => {
- *   // The CSS is able to target the "children" html property
- *   // because of how the ColoredBackgroundRegion custom element is slotting it.
+ *   // The CSS is able to target the "children" html property because
+ *   // of how the Colored custom element is slotting it.
  *   return html`
  *     <h1>This is an example app!</h1>
- *     ${new ColoredBackgroundRegion({
+ *     ${new Colored({
  *       children: html`
  *         <p>This is the app's contents</p>
  *       `,
@@ -355,9 +353,11 @@ export class Context {
  *   `;
  * });
  * 
- * // Note the use of the non-arrow function, which permits the use of "this".
- * export const ColoredBackgroundRegion = defineElement('ColoredBackgroundRegion', function({ children }) {
- *   // Adds the children element to the custom element instance, which allowed it to be slotted.
+ * // Note the use of the non-arrow function,
+ * // which permits the use of "this".
+ * export const Colored = defineElement('Colored', function({ children }) {
+ *   // Adds the children element to the custom element instance,
+ *   // which allows it to be slotted.
  *   this.append(children);
  * 
  *   // The <slot/> element indicates where the child should get slotted.
@@ -379,7 +379,7 @@ export class Context {
  * const ExampleApp = defineElement('ExampleApp', () => {
  *   return html`
  *     <h1>This is an example app!</h1>
- *     ${new ColoredBackgroundRegions({
+ *     ${new Colored({
  *       children: html`
  *         <p slot="child1">This goes in the first slot.</p>
  *         <p slot="child2">This goes in the second slot.</p>
@@ -394,7 +394,7 @@ export class Context {
  *   `;
  * });
  * 
- * export const ColoredBackgroundRegions = defineElement('ColoredBackgroundRegions', function({ children }) {
+ * export const Colored = defineElement('Colored', function({ children }) {
  *   this.append(children);
  * 
  *   return html`
@@ -408,7 +408,9 @@ export class Context {
  * });
  * 
  * @example <caption>Attaching properties to the "api" field.</caption>
- * export const ProfileCard = defineElement('ProfileCard', function({ name, address, src }) {
+ * export const ProfileCard = defineElement('ProfileCard', function(params) {
+ *   const { name, address, src } = params;
+ *
  *   let textEl;
  *   this.api.getSizeOfText = () => {
  *     return textEl.getBoundingClientRect();
@@ -430,9 +432,6 @@ export class Context {
  */
 export function defineElement(name, init) {
   return class CustomElement extends HTMLElement {
-    // Sets the class name, so its a more meaningful name than "CustomElement".
-    static name = name;
-
     // A dedicated spot where init() can put public fields if wanted
     // without worrying about it conflicting with any built-in APIs.
     api = {};
@@ -455,10 +454,13 @@ export function defineElement(name, init) {
 const onUninitContext = new Context();
 
 /**
- * Use this to bootstrap a root framework component. This is what allows your components to
- * use hooks such as {@link useCleanup}.
+ * Use this to bootstrap a root framework component. This is what allows your
+ * components to use hooks such as {@link useCleanup}.
  * 
- * It will return an object containing two properties:
+ * @param callback This callback will be auto-called. While it is running,
+ *   lifecycle hooks will be available to be used.
+ * 
+ * @returns an object containing two properties:
  * * value: Contains the return value of your callback.
  * * uninit: If you ever need to remove the component from the DOM,
  *     call this to allow the components to clean themselves up.
@@ -466,11 +468,14 @@ const onUninitContext = new Context();
  *     can just ignore this function.
  * 
  * @example <caption>Rendering an app root</caption>
- * // Hooks such as useCleanup() are available to this component
- * // because it was rendered via withLifecycle().
- * // However, useCleanup() will never call its callback,
- * // because the component will never be cleaned up
- * // (the uninit function returned from withLifecycle() is never being called).
+ * // Hooks such as useCleanup() are available to this component and descendent
+ * // components it renders (such as `renderAppContent()`) because it was
+ * // rendered via withLifecycle().
+ * //
+ * // Note that in this specific example, these root components are never
+ * // uninitialized (because the uninit function returned by withLifecycle()
+ * // is never called), which means any callback given to the useCleanup()
+ * // hook would effectively be ignored.
  * function renderApp() {
  *   return html`
  *     <h1>Hello App!</h1>
@@ -487,7 +492,7 @@ const onUninitContext = new Context();
  * @example <caption>Rendering an element that may be removed in the future</caption>
  * function renderWidget() {
  *   useCleanup(() => {
- *     console.log('This will get called as the component is being cleaned up.');
+ *     console.log('This will be called as the component is being cleaned up.');
  *   });
  * 
  *   const el = html`
@@ -518,27 +523,30 @@ const onUninitContext = new Context();
  *   showingWidget = !showingWidget;
  * }
  * 
- * document.getElementById('toggle-widget').addEventListener('click', toggleWidget);
+ * document.getElementById('toggle-widget')
+ *   .addEventListener('click', toggleWidget);
+ *
  * toggleWidget();
  */
 export function withLifecycle(callback) {
-  const uninitialized$ = new Signal(false);
-  const value = onUninitContext.provide(uninitialized$, callback);
+  const signalUninitialized = new Signal(false);
+  const value = onUninitContext.provide(signalUninitialized, callback);
 
-  const uninit = () => uninitialized$.set(true);
+  const uninit = () => signalUninitialized.set(true);
   return { uninit, value };
 }
 
 /**
- * The `useCleanup()` hook will call the provided callback as the component is unmounting.
+ * The `useCleanup()` hook will call the provided callback as the component
+ * is unmounting.
  * 
  * @example
  * function renderTimer({ initialValue }) {
- *   const timeLeft$ = new Signal(initialValue);
+ *   const signalTimeLeft = new Signal(initialValue);
  * 
  *   const intervalId = setInterval(() => {
- *     timeLeft$.set(timeLeft$.get() - 1);
- *     if (timeLeft$.get() === 0) {
+ *     signalTimeLeft.set(signalTimeLeft.get() - 1);
+ *     if (signalTimeLeft.get() === 0) {
  *       clearInterval(intervalId);
  *     }
  *   }, 1000);
@@ -549,7 +557,7 @@ export function withLifecycle(callback) {
  *   useCleanup(() => clearInterval(intervalId));
  * 
  *   return html`
- *     <p ${set({ textContent: timeLeft$ })}></p>
+ *     <p ${set({ textContent: signalTimeLeft })}></p>
  *   `;
  * }
  */
@@ -562,22 +570,25 @@ export function useCleanup(listener) {
 /**
  * A template tag for generating HTML nodes.
  * 
- * If you interpolate a function into an element, that function will get called with
- * a reference to the element as a parameter.
+ * If you interpolate HTML elements or fragments, they will be inserted at that
+ * location.
  * 
- * You can also interpolate another HTML node or fragment to insert it
- * at that location.
+ * If you interpolate a function inside of an element tag, that function will
+ * get called with a reference to the element as a parameter.
  * 
- * To set properties on an element in your template, use the {@link set} helper function.
+ * To set properties on an element in your template, use the {@link set} helper
+ * function.
  * 
- * There's one important restriction: never set an id on an element directly.
- * If you need to set an id, you can do so after-the-fact, e.g. through {@link set}.
- * The way this HTML template tag is able to find elements and provide them to interpolated functions
- * is by temporarily setting an id field on those elements, and if you attempt to also set an id field, that can
- * create a conflict.
+ * There's one important restriction: never set the id attribute on an element
+ * in your HTML template string. If you need to set an id, you can do so
+ * after-the-fact, by using {@link set} or some other method. The way this HTML
+ * template tag is able to find elements and provide them to interpolated
+ * functions is by temporarily setting an id attribute on those elements, and if
+ * you attempt to also set an id attribute, that can create a conflict.
  * 
- * This is a stand-alone function that isn't dependent on anything else, which means you
- * can copy-paste it into any project and use it as-is if wanted, without copying the whole Snap Framework.
+ * This is a stand-alone function that isn't dependent on anything else, which
+ * means you can copy-paste it into any project and use it as-is, without
+ * copying the whole Snap Framework.
  * 
  * @example <caption>Interpolating nested HTML elements</caption>
  * function renderApp() {
@@ -610,7 +621,7 @@ export function useCleanup(listener) {
  * 
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Setting an ID</caption>
- * // Wrong - may cause issues if you interpolate a callback into the same element.
+ * // Wrong - may cause issues if you interpolate a callback into this element.
  * html`
  *   <p id="hello-world">
  *     Hello World!
@@ -633,7 +644,10 @@ export function useCleanup(listener) {
  */
 export function html(strings, ...values) {
   const isFunctionThatIsNotAClass = value => {
-    return value !== null && Object.getPrototypeOf(value) === Function.prototype;
+    return (
+      value !== null &&
+      Object.getPrototypeOf(value) === Function.prototype
+    );
   };
   
   const isElementOrFragment = node => {
@@ -641,31 +655,37 @@ export function html(strings, ...values) {
   };
 
   const baseElementId = String(Math.random()).split('.')[1];
-  const getValueId = elNum => `autogenerated-id-${baseElementId}-${elNum}`;
+  const getIdAtIndex = index => `autogenerated-id-${baseElementId}-${index}`;
 
+  // Build the HTML string
   let htmlString = strings[0];
   for (const [i, string] of strings.slice(1).entries()) {
     const value = values[i];
     if (isFunctionThatIsNotAClass(value)) {
-      htmlString += `id="${getValueId(i)}"`;
+      htmlString += `id="${getIdAtIndex(i)}"`;
     } else if (isElementOrFragment(value)) {
-      htmlString += `<template id="${getValueId(i)}" data-info="child placeholder"></template>`;
+      htmlString += (
+        `<template id="${getIdAtIndex(i)}" data-info="child placeholder">` +
+        '</template>'
+      );
     } else {
       throw new Error('Invalid value interpolated into the html tag.');
     }
     htmlString += string;
   }
 
+  // Convert the HTML string into an element tree
   const templateEl = document.createElement('template');
   templateEl.innerHTML = htmlString;
 
+  // Apply interpolated values to the element tree
   for (const [i, value] of values.entries()) {
     if (isFunctionThatIsNotAClass(value)) {
-      const el = templateEl.content.getElementById(getValueId(i));
+      const el = templateEl.content.getElementById(getIdAtIndex(i));
       el.removeAttribute('id');
       value(el);
     } else if (isElementOrFragment(value)) {
-      const placeholderEl = templateEl.content.getElementById(getValueId(i));
+      const placeholderEl = templateEl.content.getElementById(getIdAtIndex(i));
       placeholderEl.parentNode.insertBefore(value, placeholderEl);
       placeholderEl.parentNode.removeChild(placeholderEl);
     }
@@ -676,24 +696,28 @@ export function html(strings, ...values) {
 
 /**
  * Sets properties on an element. If signals are provided, it will
- * automatically subscribe to those signals and auto-update the associated properties
- * whenever the signal is changed.
+ * automatically subscribe to those signals and auto-update the associated
+ * properties whenever the signal is changed.
  * 
- * @param fields an object that maps property names to values (or signals)
- * @param getRef (optional) a callback that will be called with a reference to the element being updated.
+ * @param fields an object that maps property names to values
+ *   (or signals with values)
+ * @param getRef (optional) a callback that will be called with a reference
+ *   to the element being updated.
  * 
- * @returns a hook that expects an element as an argument. Most of the time you won't call this hook yourself,
+ * @returns a hook that expects an element as an argument.
+ *   Most of the time you won't call this hook yourself,
  *   instead, you would interpolate it in the {@link html} template tag.
  * 
  * @example
- * function renderButton({ text, color$, onClick }) {
+ * function renderButton({ text, signalColor, onClick }) {
  *   return html`
  *     <button ${set({
- *       // The text of the button tag will be set to the value of this text parameter.
+ *       // The text of the button tag will be set to the
+ *       // value of the text argument.
  *       textContent: text,
- *       // The text color will be set to this signal's current value.
- *       // If the signal's value changes, the button's text color will change as well.
- *       color: color$,
+ *       // The text color will be set to this signal's current value. If the
+ *       // signal's value changes, the button's text color will change as well.
+ *       color: signalColor,
  *       // You can easily attach event handlers as well, since those are
  *       // just properties on the element
  *       onclick: onClick,
@@ -735,10 +759,11 @@ export function html(strings, ...values) {
  */
 export const set = (fields, getRef = undefined) => el => {
   for (const [key, maybeSignal] of Object.entries(fields)) {
-    const signal$ = Signal.from(maybeSignal);
-    useSignals([signal$], value => {
-      el[key] = value;
-    });
+    const signal = maybeSignal instanceof Signal
+      ? maybeSignal
+      : new Signal(maybeSignal);
+
+    useSignals([signal], value => { el[key] = value });
   }
 
   getRef?.(el);
@@ -748,7 +773,7 @@ export const set = (fields, getRef = undefined) => el => {
 // ==================== Flow Control ====================
 
 /**
- * This is similar to doing a for loop in a template.
+ * This is similar to doing a for loop, but inside of a template.
  * 
  * Given a signal holding a array of entries, `renderChild()` will render
  * one node per entry in the array. Each entry in the signal's array should
@@ -758,29 +783,40 @@ export const set = (fields, getRef = undefined) => el => {
  * should return a new HTML node to be rendered.
  * 
  * The singal's entry keys are used to uniquely identify that particular entry,
- * so if the contents of the array is updated, it can figure out, by comparing keys,
- * if elements need to moved, destroyed, or created.
+ * so if the contents of the array is updated, it can figure out,
+ * by comparing keys, if elements need to moved, destroyed, or created.
  * 
  * @example
- * function renderTodoItems(todos$) {
+ * function renderTodoItems(signalTodos) {
  *   return html`
  *     <div class="todo-list">
  *       ${renderEach(
- *         // Derive a new signal from signals$.
+ *         // Derive a new signal from signalTodos.
  *         // This new signal will use the todo item's id as the key.
- *         useSignals(todos$, todos => todos.map(todo => [todo.id, todo]))
+ *         useSignals(signalTodos, todos => todos.map(todo => [todo.id, todo]))
  *         (todo, todoId) => returnTodoItem(todo),
  *       )}
  *     </div>
  *   `;
  * }
  */
-export function renderEach(entries$, initChild) {
-  // Maps keys to { range: <Range>, onUninit: <EventEmitter> }.
+export function renderEach(signalEntries, initChild) {
+  // Maps entry keys to an object of the shape:
+  //   {
+  //     markStart: <reference to an HTML comment node>,
+  //     markEnd: <reference to an HTML comment node>,
+  //     uninit: <function to trigger uninitialization>,
+  //   }
   let currentlyRenderedLookup = new Map();
 
+  // These HTML comments will book-end everything being rendered.
+  // This helps us know what's our to manage and what we shouldn't touch.
   const renderEachStartMarker = document.createComment('start renderEach()');
   const renderEachEndMarker = document.createComment('end renderEach()');
+
+  // This fragment contains what will be rendered initially.
+  // Remember that once a fragment is attached to the DOM, it'll
+  // be emptied, rendering this fragment unusable afterwards.
   const initialRenderFragment = document.createDocumentFragment();
   initialRenderFragment.append(renderEachStartMarker, renderEachEndMarker);
 
@@ -790,15 +826,16 @@ export function renderEach(entries$, initChild) {
     }
   });
 
-  useSignals([entries$], entries => {
+  useSignals([signalEntries], entries => {
     const updatedFragment = document.createDocumentFragment();
     for (const [key, initParams] of entries) {
       if (!currentlyRenderedLookup.has(key)) {
         // Add a new child
-        const markStart = document.createComment('start renderEach child marker');
-        const markEnd = document.createComment('end renderEach child marker');
+        const markStart = document.createComment('start renderEach child');
+        const markEnd = document.createComment('end renderEach child');
 
-        const { uninit, value: childNode } = withLifecycle(() => initChild(initParams, key));
+        const renderChild = () => initChild(initParams, key);
+        const { uninit, value: childNode } = withLifecycle(renderChild);
 
         updatedFragment.append(markStart, childNode, markEnd);
         currentlyRenderedLookup.set(key, { markStart, markEnd, uninit })
@@ -821,43 +858,48 @@ export function renderEach(entries$, initChild) {
       }
     }
 
+    // detach the existing content from the DOM
     const renderEachRange = document.createRange();
     renderEachRange.setStartAfter(renderEachStartMarker);
     renderEachRange.setEndBefore(renderEachEndMarker);
     renderEachRange.deleteContents();
 
-    renderEachEndMarker.parentNode.insertBefore(updatedFragment, renderEachEndMarker);
+    // insert the updated content
+    renderEachEndMarker.parentNode.insertBefore(
+      updatedFragment,
+      renderEachEndMarker
+    );
   });
 
   return initialRenderFragment;
 }
 
 /**
- * This is similar to doing an if-else chain in a template.
+ * This is similar to doing an if-else chain, but inside of a template.
  * 
  * This will find the first matching condition from a list of conditions
  * then render the associated element. If no matches were found, nothing will render.
  * 
- * @param conditions A list of objects. Each object should have two properties - `when$`,
+ * @param conditions A list of objects. Each object should have two properties - `signalWhen`,
  *   which holds a signal containing a boolean which decides if this element should render or not,
- *   and `render()`, which when called should return an element to render.
+ *   and `render()`, which should return an element to render.
  * 
  * @example
  * function renderContent() {
  *   return html`
  *     ${renderChoice([
  *       {
- *         when$: usingDesktopView$,
+ *         signalWhen: signalIsDesktopView,
  *         render: () => renderDesktopViewContent(),
  *       },
  *       {
- *         when$: usingTabletView$,
+ *         signalWhen: signalIsTabletView,
  *         render: () => renderTabletViewContent(),
  *       },
  *       {
- *         // This signal is always true, making this branch act like an "else" -
- *         // it will render if the above two conditions were false.
- *         when$: Signal(true),
+ *         // This signal is always true, making this branch act like an
+ *         // "else" - it will render if the above two conditions are false.
+ *         signalWhen: new Signal(true),
  *         render: () => renderMobileViewContent(),
  *       },
  *     ])}
@@ -865,33 +907,33 @@ export function renderEach(entries$, initChild) {
  * }
  */
 export function renderChoice(conditions) {
-  const indexToRender$ = useSignals(
-    conditions.map(condition => condition.when$),
+  const signalIndexToRender = useSignals(
+    conditions.map(condition => condition.signalWhen),
     (...whens) => {
       const index = whens.findIndex(when => when);
       return index === -1 ? [] : [[index, index]];
     },
   );
 
-  return renderEach(indexToRender$, indexToRender => {
+  return renderEach(signalIndexToRender, indexToRender => {
     return conditions[indexToRender].render();
   });
 }
 
 /**
- * A shorthand for `renderChoice()` when you only have one condition that's deciding if
- * something should render or not.
+ * A shorthand for `renderChoice()` when you only have one condition that's
+ * deciding if something should render or not.
  * 
  * @example
  * function renderProfile(user) {
  *   return html`
  *     <p ${set({ textContent: user.name })}></p>
- *     ${renderIf(user.dateOfBirth$, () => html`
- *       <p ${set({ textContent: user.dateOfBirth$.get() })}></p>
+ *     ${renderIf(user.signalDateOfBirth, () => html`
+ *       <p ${set({ textContent: user.signalDateOfBirth })}></p>
  *     `)}
  *   `;
  * }
  */
-export function renderIf(when$, render) {
-  return renderChoice([{ when$, render }]);
+export function renderIf(signalWhen, render) {
+  return renderChoice([{ signalWhen, render }]);
 }
