@@ -20,6 +20,12 @@
 //   COLLAPSE-EXAMPLES: Any examples that follow in this jsdoc comment should be
 //     collapsed - you must click to view them. This pragma must be placed
 //     directly before an '@example' annotation.
+//   COMPLETE-EXAMPLE-START/COMPLETE-EXAMPLE-END: Indicates content that should
+//     only be rendered when you're viewing a complete, runnable example. If
+//     you're viewing the concise version of the example, this content will
+//     be hidden.
+//   AUTO-OPEN: For debugging purposes - place this on an example to cause it
+//     to be auto-opened, making it easier to develop the example.
 
 // Keep the maximum line width to 80 characters - it needs to be easy to read on
 // half a screen on the webpage.
@@ -44,23 +50,35 @@
  * signal functionality.
  *
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderEchoBox() {
  *   const signalText = new Signal('');
  *   return html`
  *     <input type="text" ${set({
- *       onChange: event => signalText.set(event.target.value),
+ *       oninput: event => signalText.set(event.target.value),
  *     })}/>
  *     <p ${set({ textContent: signalText })}></p>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(renderEchoBox).value);
+ * //# COMPLETE-EXAMPLE-END
  *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using Signal without the rest of the framework</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * const signalEnemyHealth = new Signal(10);
  * console.info(`Enemy health starting at ${signalEnemyHealth.get()}`);
  * 
  * export function attack() {
- *   enemyHealth.set(signalEnemyHealth.get() - 1);
+ *   signalEnemyHealth.set(signalEnemyHealth.get() - 1);
  * }
  * 
  * signalEnemyHealth.subscribe(enemyHealth => {
@@ -68,6 +86,12 @@
  *     console.info('Enemy killed!');
  *   }
  * });
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * for (let i = 0; i < 10; i++) {
+ *   attack();
+ * }
+ * //# COMPLETE-EXAMPLE-END
  */
 export class Signal {
   #value;
@@ -133,32 +157,64 @@ export class Signal {
  *   changes.
  * 
  * @example <caption>Using useSignals() to derive a new signal</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import {
+ *   Signal, useSignals, withLifecycle, html, set,
+ * } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderLogo({ src, signalWidth, signalHeight }) {
  *   return html`
  *     <img ${set({
  *       src,
  *       style: useSignals([signalWidth, signalHeight], (width, height) => {
- *         return `width=${width}px; height=${height}px`;
+ *         return `width: ${width}px; height: ${height}px`;
  *       })
  *     })}>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const params = {
+ *   src: '%ASSETS%/snap-logo.png',
+ *   signalWidth: new Signal(64),
+ *   signalHeight: new Signal(64),
+ * };
+ *
+ * document.body.append(withLifecycle(() => renderLogo(params)).value);
+ *
+ * const randNumb = max => Math.floor(Math.random() * max);
+ * setInterval(() => {
+ *   params.signalWidth.set(randNumb(128));
+ *   params.signalHeight.set(randNumb(128));
+ * }, 1000)
+ * //# COMPLETE-EXAMPLE-END
  * 
  * @example <caption>Using useSignals() to trigger side-effects</caption>
- * function renderBomb({ signalShow }) {
- *   const bombEl = html`<img src="./bomb.png" style="display: block">`;
+ * //# COMPLETE-EXAMPLE-START
+ * import {
+ *   Signal, useSignals, withLifecycle, useCleanup, html, set,
+ * } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
+ * function renderBomb({ signalAnimate }) {
+ *   const fragment = html`
+ *     <img src="%ASSETS%/bomb.svg" style="visibility: visible">
+ *   `;
+ *   const bombEl = fragment.querySelector('img');
  * 
  *   let intervalId = undefined;
- *   useSignals([signalShow], show => {
- *     if (show) {
+ *   useSignals([signalAnimate], animate => {
+ *     if (animate) {
  *       intervalId = setInterval(() => {
- *         bombEl.style.display = (
- *           bombEl.style.display === 'none' ? 'block' : 'none'
+ *         bombEl.style.visibility = (
+ *           bombEl.style.visibility === 'visible' ? 'hidden' : 'visible'
  *         );
- *       }, 1000);
+ *       }, 250);
  *     } else if (intervalId !== undefined) {
  *       clearInterval(intervalId);
  *       intervalId = undefined;
+ *       bombEl.style.visibility = 'visible';
  *     }
  *   });
  * 
@@ -169,8 +225,35 @@ export class Signal {
  *     }
  *   });
  * 
- *   return bombEl;
+ *   return fragment;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * function renderExample() {
+ *   const signalAnimate = new Signal(false);
+ *   return html`
+ *     ${renderBomb({ signalAnimate })}
+ *     <button ${set({
+ *       onclick: () => signalAnimate.set(!signalAnimate.get()),
+ *     })}>
+ *       Toggle Animation
+ *     </button>
+ *   `;
+ * }
+ * 
+ * const renderedResult = withLifecycle(renderExample);
+ * document.body.append(renderedResult.value);
+ * 
+ * // Provide a button to self-destruct the content,
+ * // mostly as a way to demonstrate that the cleanup hook works.
+ * const selfDestructFragment = html`<button>Self Destruct!</button>`;
+ * const selfDestructEl = selfDestructFragment.querySelector('button');
+ * selfDestructEl.addEventListener('click', () => {
+ *   renderedResult.uninit();
+ *   document.body.innerHTML = '';
+ * });
+ * document.body.append(selfDestructFragment);
+ * //# COMPLETE-EXAMPLE-END
  */
 export function useSignals(dependentSignals, onChange) {
   const derivedSignal = new Signal(undefined);
@@ -203,18 +286,25 @@ export function useSignals(dependentSignals, onChange) {
  * It can be used as an alternative to "prop-drilling", and it is what powers
  * {@link useCleanup} which in turn powers life-cycles.
  * 
+ * Data is provided via the `.provide()` function, and later retrieved via
+ * `.get()`.
+ * 
  * This is a stand-alone class that isn't dependent on anything else, which
  * means you can copy-paste it into any project and use it as-is, without
  * copying the whole Snap Framework.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Context, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * const theme = new Context();
  * 
  * function renderApp() {
- *   const themeOpts = { mainColor: 'blue' };
+ *   const themeOpts = { mainColor: 'lightblue' };
  *   // The themeOpts object will be available to everyone while
  *   // the callback given to theme.provide() is running.
- *   theme.provide(themeOpts, () => {
+ *   return theme.provide(themeOpts, () => {
  *     return html`
  *       <h1>Hello Theming!</h1>
  *       ${renderContent()}
@@ -231,9 +321,17 @@ export function useSignals(dependentSignals, onChange) {
  *     </p>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(renderApp).value);
+ * //# COMPLETE-EXAMPLE-END
  *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Nesting calls to .provide()</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { Context } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * const logLevel = new Context();
  * // Setting the log level to 'NONE' for the duration of the provided callback.
  * logLevel.provide('NONE', doMath);
@@ -261,7 +359,7 @@ export function useSignals(dependentSignals, onChange) {
  *   // we will enter this branch and log out the arguments.
  *   if (logLevel.get() === 'VERBOSE') {
  *     console.log('Summing', x, 'with', y);
- *   }}
+ *   }
  *   console.info('Result:', x + y);
  * }
  */
@@ -269,8 +367,8 @@ export class Context {
   #stack = [];
 
   /**
-   * Calls `callback` and provide `value` to it
-   * for the duration of the callback.
+   * Calls `callback` and provide `value` to it for the duration of the
+   * callback. Whatever the callback returns will be returned by this function.
    */
   provide(value, callback) {
     this.#stack.push(value);
@@ -311,6 +409,10 @@ export class Context {
  * copying the whole Snap Framework.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { defineElement, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * export const ExampleApp = defineElement('ExampleApp', ({ text }) => {
  *   return html`
  *     ${renderHeader()}
@@ -332,8 +434,18 @@ export class Context {
  *     color: blue;
  *   }
  * `;
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const renderExampleApp = () => new ExampleApp({ text: 'Example Text' });
+ * document.body.append(withLifecycle(renderExampleApp).value);
+ * document.body.append(html`<p>This is not affected by the CSS</p>`);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * @example <caption>Using slots to create container-like custom elements.</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { defineElement, withLifecycle, html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * const ExampleApp = defineElement('ExampleApp', () => {
  *   // The CSS is able to target the "children" html property because
  *   // of how the Colored custom element is slotting it.
@@ -347,7 +459,7 @@ export class Context {
  * 
  *     <style>
  *       h1, p {
- *         color: blue;
+ *         font-style: italic;
  *       }
  *     </style>
  *   `;
@@ -373,9 +485,17 @@ export class Context {
  *     </style>
  *   `;
  * });
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(() => new ExampleApp()).value);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using multiple slots</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { defineElement, withLifecycle, html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * const ExampleApp = defineElement('ExampleApp', () => {
  *   return html`
  *     <h1>This is an example app!</h1>
@@ -388,7 +508,7 @@ export class Context {
  * 
  *     <style>
  *       h1, p {
- *         color: blue;
+ *         font-style: italic;
  *       }
  *     </style>
  *   `;
@@ -401,13 +521,21 @@ export class Context {
  *     <div style="background: yellow">
  *       <slot name="child1"/>
  *     </div>
- *     <div style="background: green">
+ *     <div style="background: pink">
  *       <slot name="child2"/>
  *     </div>
  *   `;
  * });
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(() => new ExampleApp()).value);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * @example <caption>Attaching properties to the "api" field.</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { defineElement, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * export const ProfileCard = defineElement('ProfileCard', function(params) {
  *   const { name, address, src } = params;
  *
@@ -425,10 +553,18 @@ export class Context {
  *   `;
  * });
  * 
- * const profileCard = new ProfileCard();
- * document.body.append(profileCard);
+ * const profileInfo = {
+ *   name: 'Cookie Monster',
+ *   address: 'sesame street',
+ *   src: '%ASSETS%/profile.svg',
+ * };
+ * 
+ * const profileEl = withLifecycle(() => new ProfileCard(profileInfo)).value;
+ * 
+ * document.body.append(profileEl);
+ * 
  * // Logs out the dimensions of the text portion of the profile card.
- * console.log(profileCard.api.getSizeOfText());  
+ * console.log(profileEl.api.getSizeOfText());
  */
 export function defineElement(name, init) {
   return class CustomElement extends HTMLElement {
@@ -468,6 +604,10 @@ const onUninitContext = new Context();
  *     can just ignore this function.
  * 
  * @example <caption>Rendering an app root</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, useCleanup, html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * // Hooks such as useCleanup() are available to this component and descendent
  * // components it renders (such as `renderAppContent()`) because it was
  * // rendered via withLifecycle().
@@ -482,30 +622,54 @@ const onUninitContext = new Context();
  *     ${renderAppContent()}
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ *
+ * function renderAppContent() {
+ *   useCleanup(() => {
+ *     // It's possible to register cleanup hooks,
+ *     // but under this current setup, they won't be
+ *     // called, because it never uninitializes.
+ *   });
+ *
+ *   return html`<p>Dummy app content</p>`;
+ * }
+ * //# COMPLETE-EXAMPLE-END
  * 
  * // Only grabbing the .el property and ignoring the uninit property
  * // because we don't need it.
- * const el = withLifecycle(renderApp).el;
+ * const el = withLifecycle(renderApp).value;
  * document.body.append(el);
  * 
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Rendering an element that may be removed in the future</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, useCleanup, html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * document.body.append(html`
+ *   <button ${el => el.id = 'toggle-widget'}>Toggle Widget</button>
+ *   <div ${el => el.id = 'widget-container'}></div>
+ * `);
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderWidget() {
  *   useCleanup(() => {
  *     console.log('This will be called as the component is being cleaned up.');
  *   });
  * 
- *   const el = html`
- *     <p style="background: red">This widget can be added or removed!</p>
+ *   const fragment = html`
+ *     <p style="background: pink">This widget can be added or removed!</p>
  *   `;
  * 
+ *   const el = fragment.querySelector('p');
  *   const intervalId = setInterval(() => {
- *     el.style.background = el.style.background === 'red' ? 'blue' : 'red';
+ *     el.style.background = el.style.background === 'pink' ? 'yellow' : 'pink';
  *   }, 1000);
  * 
  *   // The useCleanup() hook will be called when the uninit()
  *   // function returned by withLifecycle() is called.
  *   useCleanup(() => clearInterval(intervalId));
+ * 
+ *   return fragment;
  * }
  * 
  * const widgetContainerEl = document.getElementById('widget-container');
@@ -541,6 +705,10 @@ export function withLifecycle(callback) {
  * is unmounting.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, withLifecycle, useCleanup, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderTimer({ initialValue }) {
  *   const signalTimeLeft = new Signal(initialValue);
  * 
@@ -560,6 +728,17 @@ export function withLifecycle(callback) {
  *     <p ${set({ textContent: signalTimeLeft })}></p>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const renderExample = () => renderTimer({ initialValue: 5 });
+ * const { value: el, uninit } = withLifecycle(renderExample);
+ * document.body.append(el);
+ * document.body.append(html`<button class="stop-timer">Stop Timer</button>`);
+ * document.querySelector('.stop-timer').addEventListener('click', () => {
+ *   uninit();
+ *   document.body.innerHTML = '';
+ * });
+ * //# COMPLETE-EXAMPLE-END
  */
 export function useCleanup(listener) {
   onUninitContext.get().subscribe(listener);
@@ -591,6 +770,10 @@ export function useCleanup(listener) {
  * copying the whole Snap Framework.
  * 
  * @example <caption>Interpolating nested HTML elements</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderApp() {
  *   return html`
  *     <h1>Hello World Example</h1>
@@ -603,8 +786,16 @@ export function useCleanup(listener) {
  *     <p>Hello World!</p>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(renderApp).value);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * @example <caption>Interpolating a callback</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { html } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * let color = 'red';
  * document.body.append(html`
  *   <main>
@@ -621,26 +812,59 @@ export function useCleanup(listener) {
  * 
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Setting an ID</caption>
- * // Wrong - may cause issues if you interpolate a callback into this element.
- * html`
- *   <p id="hello-world">
- *     Hello World!
- *   </p>
- * `
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
  * 
- * // Correct
- * html`
- *   <p ${el => { el.id = 'hello-world' }}>
- *     Hello World!
- *   </p>
- * `
+ * function renderBadExample() {
+ * //# COMPLETE-EXAMPLE-END
+ *   // Wrong - may cause issues if you
+ *   // interpolate a callback into this element.
+ * //# COMPLETE-EXAMPLE-START
+ *   //
+ *   // Technically nothing bad will happen in this specific case, but it's
+ *   // simpler to treat this as a general hard-and-fast rule instead of
+ *   // trying to learn what the exceptions are.
+ * //# COMPLETE-EXAMPLE-END
+ *   return html`
+ *     <p id="bad-example-id">
+ *       Bad Example!
+ *     </p>
+ *   `;
+ * //# COMPLETE-EXAMPLE-START
+ * };
+ * //# COMPLETE-EXAMPLE-END
+ *
+ * //# COMPLETE-EXAMPLE-START
+ * function renderGoodExample1() {
+ * //# COMPLETE-EXAMPLE-END
+ *   // Correct
+ *   return html`
+ *     <p ${el => { el.id = 'good-example-1-id' }}>
+ *       Good Example 1!
+ *     </p>
+ *   `;
+ * //# COMPLETE-EXAMPLE-START
+ * }
+ * //# COMPLETE-EXAMPLE-END
+ *
+ * //# COMPLETE-EXAMPLE-START
+ * function renderGoodExample2() {
+ * //# COMPLETE-EXAMPLE-END
+ *   // Also correct
+ *   return html`
+ *     <p ${set({ id: 'good-example-2-id' })}>
+ *       Good Example 2!
+ *     </p>
+ *   `;
+ * //# COMPLETE-EXAMPLE-START
+ * }
  * 
- * // Also correct
- * html`
- *   <p ${set({ id: 'hello-world' })}>
- *     Hello World!
- *   </p>
- * `
+ * withLifecycle(() => {
+ *   document.body.append(renderBadExample());
+ *   document.body.append(renderGoodExample1());
+ *   document.body.append(renderGoodExample2());
+ * });
+ * //# COMPLETE-EXAMPLE-END
  */
 export function html(strings, ...values) {
   const isFunctionThatIsNotAClass = value => {
@@ -709,23 +933,45 @@ export function html(strings, ...values) {
  *   instead, you would interpolate it in the {@link html} template tag.
  * 
  * @example
- * function renderButton({ text, signalColor, onClick }) {
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
+ * function renderButton({ text, signalDisabled, onClick }) {
  *   return html`
  *     <button ${set({
  *       // The text of the button tag will be set to the
  *       // value of the text argument.
  *       textContent: text,
- *       // The text color will be set to this signal's current value. If the
- *       // signal's value changes, the button's text color will change as well.
- *       color: signalColor,
+ *       // The disable property will be set to this signal's current value. If the
+ *       // signal's value changes, the button's disable status will change as well.
+ *       disabled: signalDisabled,
  *       // You can easily attach event handlers as well, since those are
  *       // just properties on the element
  *       onclick: onClick,
  *     })}></button>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const signalDisabled = new Signal(false);
+ * setInterval(() => {
+ *   signalDisabled.set(!signalDisabled.get());
+ * }, 1000);
+ * 
+ * const renderExample = () => renderButton({
+ *   text: 'Push Me!',
+ *   signalDisabled,
+ *   onClick: () => console.log('I got clicked!'),
+ * });
+ * document.body.append(withLifecycle(renderExample).value);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * @example <caption>using set() on your own components</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderApp() {
  *   // This example shows how you would use set() to adjust properties from
  *   // an element created by another component. In this case, we are
@@ -733,18 +979,30 @@ export function html(strings, ...values) {
  *   // then attaching a style property to it to give it some margin.
  *   return html`
  *     ${set({
- *       style: 'margin: 20px 0px',
+ *       style: 'margin: 20px 40px',
  *     })(renderHeader())}
  *     <p>App Body</p>
  *   `;
  * }
  * 
  * function renderHeader() {
- *   return html`<h1>My Awesome App!</h1>`;
+ *   // The html template tag returns a fragment.
+ *   // Fragments can't be styled, but elements can,
+ *   // so we're grabbing the first element in the fragment,
+ *   // (the h1 tag), and returning that.
+ *   return html`<h1>My Awesome App!</h1>`.firstElementChild;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * document.body.append(withLifecycle(renderApp).value);
+ * //# COMPLETE-EXAMPLE-END
  * 
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using the getRef parameter</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderHeader(text) {
  *   return html`
  *     <h1 ${
@@ -756,6 +1014,11 @@ export function html(strings, ...values) {
  *     }></h1>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const renderExample = () => renderHeader('Example App');
+ * document.body.append(withLifecycle(renderExample).value);
+ * //# COMPLETE-EXAMPLE-END
  */
 export const set = (fields, getRef = undefined) => el => {
   for (const [key, maybeSignal] of Object.entries(fields)) {
@@ -787,18 +1050,67 @@ export const set = (fields, getRef = undefined) => el => {
  * by comparing keys, if elements need to moved, destroyed, or created.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, useSignals, withLifecycle, html, set, renderEach } from '%FRAMEWORK_LOCATION%';
+ * 
+ * function renderApp() {
+ *   const signalTodos = new Signal([]);
+ *   return html`
+ *     ${renderTodoItems(signalTodos)}
+ *     <button ${set({
+ *       onclick: () => {
+ *         const randomItemNumb = Math.floor(Math.random() * 100_000);
+ *         signalTodos.set([
+ *           ...signalTodos.get(),
+ *           { id: randomItemNumb, value: `Todo Item #${randomItemNumb}` },
+ *         ]);
+ *       },
+ *     })}>
+ *       Add random item
+ *     </button>
+ *   `;
+ * }
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderTodoItems(signalTodos) {
  *   return html`
  *     <div class="todo-list">
  *       ${renderEach(
  *         // Derive a new signal from signalTodos.
  *         // This new signal will use the todo item's id as the key.
- *         useSignals(signalTodos, todos => todos.map(todo => [todo.id, todo]))
- *         (todo, todoId) => returnTodoItem(todo),
+ *         useSignals([signalTodos], todos => todos.map(todo => [todo.id, todo])),
+ *         (todo, todoId) => renderTodoItem({ todo, signalTodos }),
  *       )}
  *     </div>
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * function renderTodoItem({ todo, signalTodos }) {
+ *   return html`
+ *     <div style="display: flex; gap: 5px">
+ *       <p ${set({ textContent: todo.value })}></p>
+ *       <button ${set({
+ *         onclick: () => {
+ *           const filteredTodos = signalTodos.get()
+ *             .filter(({ id }) => id !== todo.id);
+ *
+ *           signalTodos.set([todo, ...filteredTodos]);
+ *         },
+ *       })}>Move to top</button>
+ *       <button ${set({
+ *         onclick: () => {
+ *           signalTodos.set(
+ *             signalTodos.get().filter(({ id }) => id !== todo.id)
+ *           );
+ *         },
+ *       })}>Remove</button>
+ *     </div>
+ *   `;
+ * }
+ * 
+ * document.body.append(withLifecycle(renderApp).value);
+ * //# COMPLETE-EXAMPLE-END
  */
 export function renderEach(signalEntries, initChild) {
   // Maps entry keys to an object of the shape:
@@ -885,12 +1197,34 @@ export function renderEach(signalEntries, initChild) {
  *   and `render()`, which should return an element to render.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, withLifecycle, html, renderChoice } from '%FRAMEWORK_LOCATION%';
+ *
+ * // This signal will be set to true when
+ * // the container size is smaller than 300px
+ * const signalIsMobileView = new Signal(false);
+ * const mobileMedia = matchMedia(`(max-width: 300px)`)
+ * mobileMedia.addEventListener('change', event => {
+ *   signalIsMobileView.set(event.matches)
+ * })
+ * signalIsMobileView.set(mobileMedia.matches)
+ * 
+ * // This signal will be set to true when
+ * // the container size is smaller than 500px
+ * const signalIsTabletView = new Signal(false);
+ * const tabletMedia = matchMedia(`(max-width: 500px)`)
+ * tabletMedia.addEventListener('change', event => {
+ *   signalIsTabletView.set(event.matches)
+ * })
+ * signalIsTabletView.set(tabletMedia.matches)
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderContent() {
  *   return html`
  *     ${renderChoice([
  *       {
- *         signalWhen: signalIsDesktopView,
- *         render: () => renderDesktopViewContent(),
+ *         signalWhen: signalIsMobileView,
+ *         render: () => renderMobileViewContent(),
  *       },
  *       {
  *         signalWhen: signalIsTabletView,
@@ -900,11 +1234,26 @@ export function renderEach(signalEntries, initChild) {
  *         // This signal is always true, making this branch act like an
  *         // "else" - it will render if the above two conditions are false.
  *         signalWhen: new Signal(true),
- *         render: () => renderMobileViewContent(),
+ *         render: () => renderDesktopViewContent(),
  *       },
  *     ])}
  *   `;
  * }
+ * //# COMPLETE-EXAMPLE-START
+ * function renderDesktopViewContent() {
+ *   return html`<p>Desktop View</p>`;
+ * }
+ *
+ * function renderTabletViewContent() {
+ *   return html`<p>Tablet View</p>`;
+ * }
+ *
+ * function renderMobileViewContent() {
+ *   return html`<p>Mobile View</p>`;
+ * }
+ * 
+ * document.body.append(withLifecycle(renderContent).value);
+ * //# COMPLETE-EXAMPLE-END
  */
 export function renderChoice(conditions) {
   const signalIndexToRender = useSignals(
@@ -925,6 +1274,10 @@ export function renderChoice(conditions) {
  * deciding if something should render or not.
  * 
  * @example
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, withLifecycle, html, set, renderIf } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
  * function renderProfile(user) {
  *   return html`
  *     <p ${set({ textContent: user.name })}></p>
@@ -933,6 +1286,20 @@ export function renderChoice(conditions) {
  *     `)}
  *   `;
  * }
+ * 
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const profile = {
+ *   name: 'Cookie Monster',
+ *   signalDateOfBirth: new Signal(undefined),
+ * };
+ * 
+ * setTimeout(() => {
+ *   profile.signalDateOfBirth.set('1/1/1966');
+ * }, 2000);
+ * 
+ * document.body.append(withLifecycle(() => renderProfile(profile)).value);
+ * //# COMPLETE-EXAMPLE-END
  */
 export function renderIf(signalWhen, render) {
   return renderChoice([{ signalWhen, render }]);

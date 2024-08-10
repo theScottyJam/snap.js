@@ -3,6 +3,9 @@
 import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
+import { PUBLIC_URL } from './shared.js';
+import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
+import { showPopupWithExample } from './RunnableExamplePopup.js';
 
 function doesLineHavePragma(line, pragma) {
   return line.match(/\/\/# *([a-zA-Z0-9_-]*)/)?.[1] === pragma;
@@ -51,6 +54,11 @@ class LineBuffer {
 
   currentLine() {
     return this.#lines[this.#at];
+  }
+
+  /** For debugging purposes */
+  _getLines() {
+    return this.#lines;
   }
 
   next() {
@@ -436,26 +444,84 @@ function renderParamList(lineBuffer) {
 function renderJsDocsExamples(lineBuffer) {
   const isStartOfExample = line => line.includes('@example');
   const isCollapseExamplesPragma = line => doesLineHavePragma(line, 'COLLAPSE-EXAMPLES');
+  const isStartOfExtraDetails = line => doesLineHavePragma(line, 'COMPLETE-EXAMPLE-START');
+  const isEndOfExtraDetails = line => doesLineHavePragma(line, 'COMPLETE-EXAMPLE-END');
+  const isAutoOpen = line => doesLineHavePragma(line, 'AUTO-OPEN');
   const extractExampleName = line => line.match(/<caption>(.*)<\/caption>/)?.[1];
   
   const contentNode = document.createDocumentFragment();
 
   let currentExampleDescription; // Set to the current example's description, or undefined if it doesn't have one.
   let collapseExamples = false;
+  let inExtraDetails = false;
+  let conciseExample = [];
+  let fullExample = [];
+  let autoOpen = false;
   while (!lineBuffer.atEnd()) {
-    const { section, stopReason } = lineBuffer.grabLinesUntil({ isStartOfExample, isCollapseExamplesPragma });
+    const { section, stopReason } = lineBuffer.grabLinesUntil({
+      isStartOfExample,
+      isCollapseExamplesPragma,
+      isStartOfExtraDetails,
+      isEndOfExtraDetails,
+      isAutoOpen,
+    });
+
+    fullExample.push(...section);
+    if (!inExtraDetails) {
+      conciseExample.push(...section);
+    }
+
+    if (stopReason === 'isStartOfExtraDetails') {
+      assert(inExtraDetails === false);
+      inExtraDetails = true;
+      lineBuffer.next(); // Skip past the pragma
+      continue;
+    }
+
+    if (stopReason === 'isEndOfExtraDetails') {
+      assert(inExtraDetails === true);
+      inExtraDetails = false;
+      lineBuffer.next(); // Skip past the pragma
+      if (!lineBuffer.atEnd()) {
+        continue;
+      }
+    }
+
+    if (stopReason === 'isAutoOpen') {
+      autoOpen = true;
+      lineBuffer.next(); // Skip past the pragma
+      if (!lineBuffer.atEnd()) {
+        continue;
+      }
+    }
+
     if (stopReason === 'isCollapseExamplesPragma') {
       lineBuffer.next(); // Skip past the pragma
       // The pragma can only be placed directly before '@example'.
       assert(isStartOfExample(lineBuffer.currentLine()));
     }
 
-    if (section.length > 0) {
+    if (fullExample.length > 0) {
+      assert(conciseExample.length > 0);
+
+      const conciseExampleStr = conciseExample.join('\n');
+      const fullExampleStr = fullExample.join('\n');
+
       const codeViewerEl = html`
         <div class="example">
-          ${new CodeViewer(section.join('\n'), { theme: 'light' })}
+          ${new CodeViewer(conciseExampleStr, { theme: 'light' })}
+          <button class="show-complete-example" title="Run example" ${set({
+            onclick: () => showPopupWithExample(fullExampleStr),
+          })}>
+            <img ${set({ src: `${PUBLIC_URL}/assets/play.svg`, alt: 'Run example' })}>
+          </button>
         </div>
       `;
+      if (autoOpen) {
+        setTimeout(() => {
+          showPopupWithExample(fullExampleStr);
+        });
+      }
       if (!collapseExamples) {
         contentNode.append(html`
           ${
@@ -483,6 +549,10 @@ function renderJsDocsExamples(lineBuffer) {
       currentExampleDescription = extractExampleName(lineBuffer.currentLine()) ?? undefined;
     }
     lineBuffer.next(); // Move past the `@example` line.
+    conciseExample = [];
+    fullExample = [];
+    autoOpen = false;
+    assert(inExtraDetails === false);
   }
 
   return contentNode;
@@ -629,6 +699,37 @@ const style = `
   .example {
     padding-top: 1em;
     padding-bottom: 1em;
+    /* Causes the "run" button to be positioned relative to this container */
+    position: relative;
+  }
+
+  .show-complete-example {
+    position: absolute;
+    top: 16px;
+    right: 5px;
+    cursor: pointer;
+    opacity: 0;
+    background: none;
+    border: none;
+  }
+
+  .example:hover .show-complete-example {
+    /*
+      Using opacity instead of display or visibility to ensure you can still
+      focus this element by tabbing through the page, and as an easy way to
+      control the darkness of the color.
+    */
+    opacity: 0.6;
+  }
+
+  .show-complete-example:hover {
+    opacity: 0.9;
+    background: ${ICON_BUTTON_BACKGROUND_ON_HOVER};
+  }
+
+  .show-complete-example:focus {
+    opacity: 0.6;
+    outline: ${ICON_BUTTON_OUTLINE_ON_FOCUS};
   }
 
   details {
