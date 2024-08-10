@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 import { PUBLIC_URL } from './shared.js';
-import { headerStyleMixin } from './sharedStyles.js';
+import { headerStyleMixin, ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { defineElement, html, renderChoice, set, Signal, useSignals } from './snapFramework.js';
 
 const randomInt = max => Math.floor(Math.random() * max);
@@ -157,10 +157,10 @@ const style = `
     cursor: pointer;
     opacity: 0.6;
     &:hover {
-      background: #eee;
+      background: ${ICON_BUTTON_BACKGROUND_ON_HOVER};
     }
     &:focus {
-      outline: 1px solid #666;
+      outline: ${ICON_BUTTON_OUTLINE_ON_FOCUS};
     }
     img {
       width: 32px;
