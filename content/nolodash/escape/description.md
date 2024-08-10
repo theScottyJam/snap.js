@@ -52,9 +52,8 @@ document.body.replaceWith(paragraph);
 
 If you find this APIs to be cumbersome to use, you may enjoy [a little helper function](#!/utils/el) to make using it more tolerable.
 
-Or you can define your HTML [in template tags](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots) (The linked guied will additionally show you how to use tamplate tags in conjunction with custom HTML elements).
+Or you can consider installing a third-party tool such as [Handlebars](https://handlebarsjs.com/guide/) for a simple templating library or [Lit](https://lit.dev/) for a mini framework.
 
-Or maybe you really like the looks of building up your HTML as strings, in which case you might consider using a third-party templating system such as [Handlebars](https://handlebarsjs.com/guide/).
+Or if you don't want to add an installation step to your project, you can copy some or all of the [Snap Framework](#!/framework) (The `html` template tag is especially useful for solving this problem).
 
 All of these options will provide ways to auto-escape user-input for you, allowing you to focus more on UI building and less on data sanitization.
-

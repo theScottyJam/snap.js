@@ -3,7 +3,7 @@ import { assert } from './util.js';
 import { PUBLIC_URL, Prism } from './shared.js';
 
 // <-- I don't think the "modified-light" theme is used anymore.
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modified-light', lineNumb = null } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modified-light' } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   assert(['modified-light', 'light', 'dark'].includes(theme));
   let codeContainerEl;
@@ -17,22 +17,14 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modifi
     Prism.highlightAllUnder(codeContainerEl);
   }, 200); // <--
 
-  const updatePreEl = el => {
-    if (lineNumb !== null) {
-      el.classList.add('line-numbers');
-      el.dataset.start = lineNumb;
-    }
-  };
-
   const el = html`
     <div ${el => { codeContainerEl = el }}>
-      <pre ${updatePreEl}><code class="language-javascript" ${set({
+      <pre><code class="language-javascript" ${set({
         textContent: text$,
       })}></code></pre>
     </div>
 
-    <link ${set({ rel: 'stylesheet', href: `${PUBLIC_URL}/thirdParty/prism/${theme === 'modified-light' ? 'light' : theme}-theme.css` })}/>
-    <link ${set({ rel: 'stylesheet', href: `${PUBLIC_URL}/thirdParty/prism/line-number-plugin.css` })}/>
+    <link rel="stylesheet" ${set({ href: `${PUBLIC_URL}/thirdParty/prism/${theme === 'modified-light' ? 'light' : theme}-theme.css` })}/>
     <style ${set({ textContent: style })}></style>
   `;
 

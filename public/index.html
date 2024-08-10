@@ -14,13 +14,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400&family=Questrial&family=Roboto+Mono&display=swap" rel="stylesheet">
     <script src="%PUBLIC_URL%/thirdParty/prism/prism.js" data-manual></script>
-    <script src="%PUBLIC_URL%/thirdParty/prism/line-number-plugin.js"></script>
     <!-- Pre-download these CSS files so we can show content styled with these stylesheets at a moment's notice. -->
     <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/light-theme.css">
     <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/dark-theme.css">
-    <link rel="prefetch" href="%PUBLIC_URL%/thirdParty/prism/line-number-plugin.css">
     <script>
       globalThis.PUBLIC_URL = '%PUBLIC_URL%';
+
+      console.info('%cHey there, you dev-tools snooper', 'font-weight: bold; color: green; background: white; padding: 0.3em; font-size: 1.2rem;');
+      console.info(`%c\
+You may notice that yes, this webpage that hosts the Snap framework is, itself, written in a different framework, React.
+It's ironic and silly, I know - don't judge.
+The webpage was created first, and it was actually created with a very different, more interactive purpose in mind.
+That project was abandoned, then the webpage got repurposed into what you see today - a much more static, informational website.
+
+The website isn't entirely in React, it's actually a hybrid - some of it is in React, some of it is in Snap Framework.
+Maybe someday I'll spend the time to convert the whole thing to the Snap Framework. Or maybe not.
+
+Anyways...
+`, 'font-weight: bold');
+    console.info('%cHave fun snooping around!', 'font-weight: bold; color: green; background: white; padding: 0.3em')
     </script>
     <script type="module" src="%PUBLIC_URL%/FrameworkPage/FrameworkPage.js"></script>
   </head>
