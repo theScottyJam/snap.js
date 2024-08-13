@@ -48,6 +48,9 @@
  * This is a stand-alone class that isn't dependent on anything else, which
  * means you can easily copy-paste it into other projects if you just want the
  * signal functionality.
+ * 
+ * Signals are on the JavaScript standard track!
+ * See {@link https://github.com/tc39/proposal-signals|the Signals proposal}.
  *
  * @example
  * //# COMPLETE-EXAMPLE-START
@@ -900,7 +903,7 @@ export function html(strings, ...values) {
 
   // Convert the HTML string into an element tree
   const templateEl = document.createElement('template');
-  templateEl.innerHTML = htmlString;
+  templateEl.innerHTML = htmlString.trim();
 
   // Apply interpolated values to the element tree
   for (const [i, value] of values.entries()) {
