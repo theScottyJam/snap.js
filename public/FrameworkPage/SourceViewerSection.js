@@ -576,12 +576,19 @@ function renderExtractedJsDescriptionText(text) {
       // If it is a {@link...}
       pattern.lastIndex = patternMatch.index + patternMatch[0].length;
       const linkText = patternMatch[1];
-      // contentNode.append(html`
-      //   <a href="javascript:void(0)" ${set({ textContent: linkText })}></a>
-      // `);
-      contentNode.append(html`
-        <code ${set({ textContent: linkText })}></code>
-      `);
+      if (linkText.startsWith('https://')) {
+        const [url, displayText=url] = linkText.split('|');
+        contentNode.append(html`
+          <a ${set({ href: url, textContent: displayText })}></a>
+        `);
+      } else {
+        // contentNode.append(html`
+        //   <a href="javascript:void(0)" ${set({ textContent: linkText })}></a>
+        // `);
+        contentNode.append(html`
+          <code ${set({ textContent: linkText })}></code>
+        `);
+      }
     } else if (patternMatch?.[2] !== undefined) {
       // If it is a `...` (back-tick region)
       pattern.lastIndex = patternMatch.index + patternMatch[0].length;
@@ -709,7 +716,7 @@ const style = `
     right: 5px;
     cursor: pointer;
     opacity: 0;
-    background: none;
+    background: white;
     border: none;
   }
 

@@ -2,10 +2,9 @@ import { defineElement, Signal, html, set, useSignals } from './snapFramework.js
 import { assert } from './util.js';
 import { PUBLIC_URL, Prism } from './shared.js';
 
-// <-- I don't think the "modified-light" theme is used anymore.
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modified-light' } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light' } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
-  assert(['modified-light', 'light', 'dark'].includes(theme));
+  assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
 
   // Waiting a tad before running the syntax highlighter so the element has a chance
@@ -24,7 +23,7 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'modifi
       })}></code></pre>
     </div>
 
-    <link rel="stylesheet" ${set({ href: `${PUBLIC_URL}/thirdParty/prism/${theme === 'modified-light' ? 'light' : theme}-theme.css` })}/>
+    <link rel="stylesheet" ${set({ href: `${PUBLIC_URL}/thirdParty/prism/${theme}-theme.css` })}/>
     <style ${set({ textContent: style })}></style>
   `;
 
@@ -48,10 +47,5 @@ const style = `
 
   :host pre > code {
     white-space: pre-wrap;
-  }
-
-  .theme-modified-light {
-    border-left: 2px solid #bcc;
-    background: #fafafa;
   }
 `;
