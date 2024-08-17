@@ -14,9 +14,6 @@
 // file will be parsed and displayed on the website.
 // Available pragmas:
 //   START: Everything above the START pragma is ignored
-//   IGNORE-NEXT: The next line will be ignored in the website's main display,
-//     but it will be included as part of the download. Any whitespace that
-//     follows will also be ignored.
 //   COLLAPSE-EXAMPLES: Any examples that follow in this jsdoc comment should be
 //     collapsed - you must click to view them. This pragma must be placed
 //     directly before an '@example' annotation.
@@ -24,6 +21,8 @@
 //     only be rendered when you're viewing a complete, runnable example. If
 //     you're viewing the concise version of the example, this content will
 //     be hidden.
+//   NORMAL-VIEW-ONLY-NEXT: The following line will only be rendered in the normal
+//     view, not the fully documented or minified view.
 //   AUTO-OPEN: For debugging purposes - place this on an example to cause it
 //     to be auto-opened, making it easier to develop the example.
 
@@ -32,6 +31,9 @@
 
 //# START
 // Snap Framework beta version
+//# NORMAL-VIEW-ONLY-NEXT
+// Read the docs: https://thescottyjam.github.io/snap.js/#!/framework/release/1.0
+
 
 // ==================== Reactivity ====================
 
@@ -802,7 +804,7 @@ export function useCleanup(listener) {
  * let color = 'red';
  * document.body.append(html`
  *   <main>
- *     <p ${el => {
+ *     <p style="color: red" ${el => {
  *       setInterval(() => {
  *         color = color === 'red' ? 'blue' : 'red';
  *         el.style.color = color;
@@ -946,8 +948,9 @@ export function html(strings, ...values) {
  *       // The text of the button tag will be set to the
  *       // value of the text argument.
  *       textContent: text,
- *       // The disable property will be set to this signal's current value. If the
- *       // signal's value changes, the button's disable status will change as well.
+ *       // The disable property will be set to this signal's current value.
+ *       // If the signal's value changes, the button's disable status will
+ *       // change as well.
  *       disabled: signalDisabled,
  *       // You can easily attach event handlers as well, since those are
  *       // just properties on the element
@@ -1195,9 +1198,10 @@ export function renderEach(signalEntries, initChild) {
  * This will find the first matching condition from a list of conditions
  * then render the associated element. If no matches were found, nothing will render.
  * 
- * @param conditions A list of objects. Each object should have two properties - `signalWhen`,
- *   which holds a signal containing a boolean which decides if this element should render or not,
- *   and `render()`, which should return an element to render.
+ * @param conditions A list of objects. Each object should have two properties.
+ *   1. `signalWhen`, which holds a signal containing a boolean which decides
+ *   if this element should render or not, and 2. `render()`, which should
+ *   return an element to render.
  * 
  * @example
  * //# COMPLETE-EXAMPLE-START

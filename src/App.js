@@ -132,6 +132,9 @@ function fetchAndNormalizeCurrentHashPath() {
 
   if (hashRoute === '') {
     hashRoute = 'utils';
+  } else if ('framework/release/1.0'.match(/^framework\/release\/1\.0\/?$/)) {
+    window.history.replaceState({}, 'Title', '/snap.js/#!/framework');
+    hashRoute = 'framework';
   } else if (!/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute)) {
     hashRoute = 'notFound';
   }

@@ -2,7 +2,7 @@ import { defineElement, Signal, html, set, useSignals } from './snapFramework.js
 import { assert } from './util.js';
 import { PUBLIC_URL, Prism } from './shared.js';
 
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light' } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
@@ -20,6 +20,7 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light'
     <div ${el => { codeContainerEl = el }}>
       <pre><code class="language-javascript" ${set({
         textContent: text$,
+        style: wrapWithinWords ? 'word-break: break-all' : '',
       })}></code></pre>
     </div>
 
