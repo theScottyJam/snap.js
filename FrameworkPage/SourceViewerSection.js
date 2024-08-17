@@ -8,7 +8,7 @@ import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from '.
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 
 function doesLineHavePragma(line, pragma) {
-  return line.match(/\/\/# *([a-zA-Z0-9_-]*)/)?.[1] === pragma;
+  return line.match(/\/\/# *([a-zA-Z0-9_-]+)/)?.[1] === pragma;
 }
 
 class LineBuffer {
@@ -74,24 +74,17 @@ class LineBuffer {
 
 export const SourceViewerSection = defineElement('SourceViewerSection', ({ fullText, minifiedText }) => {
   const documentedCodeRef = new Signal(undefined);
-  const viewMode$ = new Signal('normal'); // Values can be 'normal' or 'minified'.
+  const viewMode$ = new Signal('normal'); // Values can be 'full-docs', 'normal', or 'minified'.
   return html`
     ${renderControls({
       documentedCodeRef,
       viewMode$,
       updateViewMode: newViewMode => viewMode$.set(newViewMode),
     })}
-    <div class="documented-code" ${el => documentedCodeRef.set(el)}>
-      ${renderChoice([
-        {
-          signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
-          render: () => renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode: viewMode$.get() }),
-        },
-        {
-          signalWhen: useSignals([viewMode$], viewMode => viewMode === 'minified'),
-          render: () => renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode: viewMode$.get() }),
-        },
-      ])}
+    <div ${set({
+      className: useSignals([viewMode$], viewMode => 'documented-code' + (viewMode === 'minified' ? ' minified' : '')),
+    }, el => documentedCodeRef.set(el))}>
+      ${renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode$ })}
     </div>
 
     <style ${set({ textContent: style })}></style>
@@ -103,12 +96,20 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
     <div class="code-controls-container">
       <div></div> <!-- empty space to fill the left side -->
       <div class="code-controls">
-        <div class="view-mode-buttons" style="display: none">
+        <div class="view-mode-buttons">
+          <button class="view-mode-button" ${set({
+            onclick: () => updateViewMode('full-docs'),
+            disabled: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
+          })}>
+            Self-contained docs
+            <span class="more-info-icon" title="All documentation from this webpage will be placed inside of JSDocs. A good starting point if you want to take full ownership of the code.">ⓘ</span>
+          </button>
           <button class="view-mode-button" ${set({
             onclick: () => updateViewMode('normal'),
             disabled: useSignals([viewMode$], viewMode => viewMode === 'normal'),
           })}>
-            Original
+            Classic
+            <span class="more-info-icon" title="Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.">ⓘ</span>
           </button>
           <button class="view-mode-button" ${set({
             onclick: () => updateViewMode('minified'),
@@ -139,13 +140,8 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
 const isSectionHeading = line => line.match(/=====+ (.*) =====+/)?.[1]; // If matches, returns the section heading text
 const hasBulletPoint = line => line.match(/^ *\* ?(.*)/)?.[1]; // If matches, returns the text without the bullet point
 const hasParamAnnotation = line => line.match(/^ *@param ([a-zA-Z0-9_$]+) (.*)/)?.slice(1); // If matches, returns the [paramName, description text]
-const skipWhitespaceLines = lineBuffer => {
-  while (lineBuffer.currentLine()?.match(/^ *$/)) {
-    lineBuffer.next();
-  }
-};
 
-export function renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode }) {
+export function renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode$ }) {
   const lineBuffer = new LineBuffer(fullText.split('\n'));
   const isBlankLine = line => line.match(/^ *$/);
   const isNotBlankLine = line => !line.match(/^ *$/);
@@ -157,33 +153,55 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
 
   const docNodes = [];
   const codeNodes = [];
-  let renderJsDocsNode = undefined;
+  let jsDocsInfo = undefined; // If jsdocs were previously found, this will have the shape { render: ..., lines: ... }
   let inTopLevelJsDocs = false;
-  let order = 0;
+  let rowNumb = 1;
   while (!lineBuffer.atEnd()) {
     if (!inTopLevelJsDocs) {
-      let { lines, stopReason } = gatherCodeLines({ lineBuffer })
-      if (!lines.every(line => isBlankLine(line))) {
-        const explanationOrder = order++;
-        docNodes.push(renderJsDocsNode
-          ? renderJsDocsNode(order++)
-          : html`<div class="explanation" ${set({ style: `order: ${explanationOrder}` })}></div>`
+      let { normalLines, fullDocsLines, stopReason } = gatherCodeLines({ lineBuffer })
+      if (!normalLines.every(line => isBlankLine(line))) {
+        const curRowNumb = rowNumb++;
+
+        docNodes.push(jsDocsInfo !== undefined
+          ? jsDocsInfo.render(curRowNumb)
+          : html`
+            <div class="explanation" ${set({
+              style: useSignals([viewMode$], viewMode => {
+                return viewMode === 'minified' ? 'display: none' : `grid-row: ${curRowNumb}; grid-column: 1`;
+              }),
+            })}></div>
+          `
         );
 
-        let additionalCodeViewerStyle = '';
-        if (viewMode === 'minified') {
-          lines = [];
-        }
+        const jsDocsLines = reformatJsdocsForDisplay(jsDocsInfo?.lines ?? []);
         codeNodes.push(html`
-          <div class="code-viewer" ${set({
-            style: `order: ${order++}${additionalCodeViewerStyle}`
-          })}>
-            ${new CodeViewer(lines.join('\n') + '\n', { theme: 'dark' })}
-          </div>
+          ${renderChoice([
+            {
+              signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
+              render: () => html`
+                <div class="code-viewer" ${set({ style: `grid-row: ${curRowNumb}; grid-column: 2` })}>
+                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
+                </div>
+              `,
+            },
+            {
+              signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
+              render: () => html`
+                <div class="code-viewer" ${set({ style: `grid-row: ${curRowNumb}; grid-column: 2` })}>
+                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
+                </div>
+              `,
+            },
+            {
+              // viewMode === 'minified'
+              signalWhen: new Signal(true),
+              render: () => html``,
+            },
+          ])}
         `);
-        renderJsDocsNode = undefined;
+        jsDocsInfo = undefined;
       } else {
-        assert(renderJsDocsNode === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
+        assert(jsDocsInfo === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
       }
       if (stopReason === 'isTopLevelOpeningJsDocToken') {
         inTopLevelJsDocs = true;
@@ -195,15 +213,23 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
 
         lineBuffer.next(); // Go past section header
         const { section } = lineBuffer.grabLinesUntil({ isNotBlankLine });
+        const curRowNumb = rowNumb++;
 
         docNodes.push(html`
           <h1 class="section-header" ${set({
             textContent: '— ' + sectionHeaderText + ' —',
-            style: `order: ${order++}`,
+            style: `grid-row: ${curRowNumb}; grid-column: 1`,
           })}></h1>
         `);
         codeNodes.push(html`
-          <div class="code-viewer" ${set({ style: `order: ${order++}` })}>
+          <div class="code-viewer" ${
+            set({
+              // eslint-disable-next-line no-loop-func
+              style: useSignals([viewMode$], viewMode => {
+                return `grid-row: ${curRowNumb}; grid-column: 2; display: ${viewMode === 'minified' ? 'none' : 'block'}`;
+              }),
+            })
+          }>
             ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: 'dark' })}
           </div>
         `);
@@ -211,53 +237,88 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
     } else {
       const { section, stopReason } = lineBuffer.grabLinesUntilPast({ hasClosingCommentToken });
       assert(stopReason !== 'END');
-      assert(renderJsDocsNode === undefined, 'two top-level js-doc comments were found in a row, and the webpage is not programmed to know how to render that.');
+      assert(jsDocsInfo === undefined, 'two top-level js-doc comments were found in a row, and the webpage is not programmed to know how to render that.');
       const lineBeingAnnotated = lineBuffer.currentLine();
-      renderJsDocsNode = order => renderJsDocs({ lines: section, lineBeingAnnotated, order });
+      jsDocsInfo = {
+        lines: section,
+        render: rowNumb => renderJsDocs({ lines: section, lineBeingAnnotated, rowNumb }),
+      };
       inTopLevelJsDocs = false;
     }
   }
 
-  assert(renderJsDocsNode === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
+  assert(jsDocsInfo === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
 
   const allNodes = document.createDocumentFragment();
   allNodes.append(
     ...docNodes,
     ...codeNodes,
   );
-  if (viewMode === 'minified') {
-    allNodes.append(html`
-      <div class="code-viewer" ${set({
-        style: `order: ${order++}`
-      })}>
-        ${new CodeViewer(minifiedText, { theme: 'dark' })}
-      </div>
-    `);
-  }
+  
+  const curRowNumb = rowNumb;
+  allNodes.append(html`
+    <div class="code-viewer" ${set({
+      style: useSignals([viewMode$], viewMode => {
+        return `grid-row: 1 / ${curRowNumb}; grid-column: 2; display: ${viewMode === 'minified' ? 'block' : 'none'}`;
+      }),
+    })}>
+      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true })}
+    </div>
+  `);
   return allNodes;
 }
 
 function gatherCodeLines({ lineBuffer }) {
   const isTopLevelOpeningJsDocToken = line => line === '/**';
-  const isHiddenLine = line => doesLineHavePragma(line, 'HIDE-NEXT');
+  const isNormalViewOnlyLineNext = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-NEXT');
 
-  let lines = [];
+  let normalLines = [];
+  let fullDocsLines = [];
   while (true) {
-    const { section, stopReason } = lineBuffer.grabLinesUntil({ isTopLevelOpeningJsDocToken, isSectionHeading, isHiddenLine });
-    lines.push(...section);
+    const { section, stopReason } = lineBuffer.grabLinesUntil({ isTopLevelOpeningJsDocToken, isSectionHeading, isNormalViewOnlyLineNext });
+    normalLines.push(...section);
+    fullDocsLines.push(...section);
 
-    if (stopReason === 'isHiddenLine') {
+    if (stopReason === 'isNormalViewOnlyLineNext') {
       lineBuffer.next(); // Skip the line with the pragma
-      lineBuffer.next(); // Skip the line that is supposed to be hidden
-      skipWhitespaceLines(lineBuffer);
+      normalLines.push(lineBuffer.currentLine());
+      lineBuffer.next();
       continue;
     }
 
-    return { lines, stopReason };
+    return { normalLines, fullDocsLines, stopReason };
   }
 }
 
-function renderJsDocs({ lines: lines_, lineBeingAnnotated, order }) {
+function reformatJsdocsForDisplay(lines) {
+  if (lines.length === 0) {
+    return [];
+  }
+
+  const newLines = ['/**'];
+  let inCompleteExample = false;
+  for (const line of lines) {
+    if (doesLineHavePragma(line, 'COLLAPSE-EXAMPLES') || doesLineHavePragma(line, 'AUTO-OPEN')) {
+      continue;
+    }
+    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-START')) {
+      inCompleteExample = true;
+      continue;
+    }
+    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-END')) {
+      inCompleteExample = false;
+      continue;
+    }
+    if (!inCompleteExample) {
+      newLines.push(line);
+    }
+  }
+
+  newLines.push(' */')
+  return newLines;
+}
+
+function renderJsDocs({ lines: lines_, lineBeingAnnotated, rowNumb }) {
   const stripStarFromLine = line => line.replace(/^ *\* ?/, '');
   const lines = lines_.map(line => stripStarFromLine(line));
 
@@ -323,7 +384,7 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, order }) {
   }
 
   return html`
-    <div class="explanation" ${set({ style: `order: ${order}` })}>
+    <div class="explanation" ${set({ style: `grid-row: ${rowNumb}; grid-column: 1` })}>
       ${contentNode}
     </div>
   `;
@@ -607,6 +668,7 @@ function renderExtractedJsDescriptionText(text) {
 const CODE_BACKGROUND = '#272822';
 const LEFT_REL_SIZE = 2;
 const RIGHT_REL_SIZE = 3;
+const CODE_CONTROL_BORDER_RADIUS = '4px';
 
 const style = `
   :host {
@@ -628,28 +690,14 @@ const style = `
     border-top-left-radius: 8px;
   }
 
-  .view-mode-buttons {
-    display: flex;
-    margin-right: 10px;
-  }
-
-  .view-mode-button {
-    
-  }
-
-  .view-mode-button[disabled] {
-
-  }
-
-  .select-all {
+  .code-controls button {
     background: #555;
     color: #ccc;
     border: none;
     font-size: 1rem;
-    padding: 0.4em;
+    padding: 0.4em 0.6em;
     letter-spacing: 0.08em;
-    border-radius: 1px;
-    &:hover {
+    &:not([disabled]):hover {
       background: #666;
       color: white;
       cursor: pointer;
@@ -657,6 +705,36 @@ const style = `
     &:focus {
       outline: 1px solid #22f;
     }
+  }
+
+  .view-mode-buttons {
+    display: flex;
+    margin-right: 10px;
+  }
+
+  .view-mode-button[disabled] {
+    cursor: unset;
+    background: #888;
+    color: white;
+  }
+
+  .view-mode-button:first-child {
+    border-top-left-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border-bottom-left-radius: ${CODE_CONTROL_BORDER_RADIUS};
+  }
+
+  .view-mode-button:last-child {
+    border-top-right-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border-bottom-right-radius: ${CODE_CONTROL_BORDER_RADIUS};
+  }
+
+  .select-all {
+    border-radius: ${CODE_CONTROL_BORDER_RADIUS};
+  }
+
+  .more-info-icon {
+    font-weight: bold;
+    font-size: 0.8em;
   }
 
   .documented-code {
@@ -691,12 +769,11 @@ const style = `
     font-size: 1.5rem;
     text-align: center;
     margin: 0;
-    padding-top: 0.3em;
-    padding-bottom: 0.3em;
+    padding-bottom: 60px;
   }
 
   .explanation {
-    padding: 30px;
+    padding: 0px 30px 60px;
   }
 
   .example-header {
