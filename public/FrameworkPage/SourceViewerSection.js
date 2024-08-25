@@ -7,6 +7,16 @@ import { PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 
+// This is the point in which we switch to using a single-column layout for the code/docs
+const SMALL_SCREEN_SIZE = '1200px';
+const isSmallScreenSize$ = new Signal(false);
+
+const smallScreenSizeMedia = matchMedia(`(max-width: ${SMALL_SCREEN_SIZE})`);
+smallScreenSizeMedia.addEventListener('change', event => {
+  isSmallScreenSize$.set(event.matches);
+});
+isSmallScreenSize$.set(smallScreenSizeMedia.matches);
+
 function doesLineHavePragma(line, pragma) {
   return line.match(/\/\/# *([a-zA-Z0-9_-]+)/)?.[1] === pragma;
 }
@@ -82,7 +92,7 @@ export const SourceViewerSection = defineElement('SourceViewerSection', ({ fullT
       updateViewMode: newViewMode => viewMode$.set(newViewMode),
     })}
     <div ${set({
-      className: useSignals([viewMode$], viewMode => 'documented-code' + (viewMode === 'minified' ? ' minified' : '')),
+      className: useSignals([viewMode$], viewMode => 'documented-code-grid' + (viewMode === 'minified' ? ' minified' : '')),
     }, el => documentedCodeRef.set(el))}>
       ${renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode$ })}
     </div>
@@ -93,25 +103,25 @@ export const SourceViewerSection = defineElement('SourceViewerSection', ({ fullT
 
 function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
   return html`
-    <div class="code-controls-container">
+    <div class="code-controls-container documented-code-grid">
       <div></div> <!-- empty space to fill the left side -->
       <div class="code-controls">
         <div class="view-mode-buttons">
-          <button class="view-mode-button" ${set({
+          <button ${set({
             onclick: () => updateViewMode('full-docs'),
             disabled: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
           })}>
             Self-contained docs
             <span class="more-info-icon" title="All documentation from this webpage will be placed inside of JSDocs. A good starting point if you want to take full ownership of the code.">ⓘ</span>
           </button>
-          <button class="view-mode-button" ${set({
+          <button ${set({
             onclick: () => updateViewMode('normal'),
             disabled: useSignals([viewMode$], viewMode => viewMode === 'normal'),
           })}>
             Classic
             <span class="more-info-icon" title="Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.">ⓘ</span>
           </button>
-          <button class="view-mode-button" ${set({
+          <button ${set({
             onclick: () => updateViewMode('minified'),
             disabled: useSignals([viewMode$], viewMode => viewMode === 'minified'),
           })}>
@@ -148,6 +158,19 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   const isStartPragma = line => doesLineHavePragma(line, 'START');
   const hasClosingCommentToken = line => line.includes('*/');
 
+  const getGridPosStyleForCodeBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([isSmallScreenSize$], isSmallScreenSize => {
+    const offset = isSectionHeading ? 0 : 1;
+    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + offset : rowNumb_;
+    const colNumb = isSmallScreenSize ? 1 : 2;
+    return `grid-row: ${rowNumb}; grid-column: ${colNumb}`;
+  });
+
+  const getGridPosStyleForDocsBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([viewMode$, isSmallScreenSize$], (viewMode, isSmallScreenSize) => {
+    const offset = isSectionHeading ? 1 : 0;
+    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + offset : rowNumb_;
+    return viewMode === 'minified' ? 'display: none' : `grid-row: ${rowNumb}; grid-column: 1`;
+  });
+
   // Jump to `//# START` pragma
   lineBuffer.grabLinesUntilPast({ isStartPragma });
 
@@ -166,8 +189,8 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
           ? jsDocsInfo.render(curRowNumb)
           : html`
             <div class="explanation" ${set({
-              style: useSignals([viewMode$], viewMode => {
-                return viewMode === 'minified' ? 'display: none' : `grid-row: ${curRowNumb}; grid-column: 1`;
+              style: useSignals([viewMode$, getGridPosStyleForDocsBlock(curRowNumb), isSmallScreenSize$], (viewMode, gridPosStyle, isSmallScreenSize) => {
+                return `display: ${viewMode === 'minified' || isSmallScreenSize ? 'none' : 'unset'}; ${gridPosStyle}`;
               }),
             })}></div>
           `
@@ -179,7 +202,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
             {
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
-                <div class="code-viewer" ${set({ style: `grid-row: ${curRowNumb}; grid-column: 2` })}>
+                <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
                   ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
@@ -187,7 +210,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
             {
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
               render: () => html`
-                <div class="code-viewer" ${set({ style: `grid-row: ${curRowNumb}; grid-column: 2` })}>
+                <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
                   ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
@@ -216,17 +239,17 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         const curRowNumb = rowNumb++;
 
         docNodes.push(html`
-          <h1 class="section-header" ${set({
+          <h1 class="explanation section-header" ${set({
             textContent: '— ' + sectionHeaderText + ' —',
-            style: `grid-row: ${curRowNumb}; grid-column: 1`,
+            style: getGridPosStyleForDocsBlock(curRowNumb, { isSectionHeading: true }),
           })}></h1>
         `);
         codeNodes.push(html`
-          <div class="code-viewer" ${
+          <div class="code-viewer section-header" ${
             set({
               // eslint-disable-next-line no-loop-func
-              style: useSignals([viewMode$], viewMode => {
-                return `grid-row: ${curRowNumb}; grid-column: 2; display: ${viewMode === 'minified' ? 'none' : 'block'}`;
+              style: useSignals([viewMode$, getGridPosStyleForCodeBlock(curRowNumb, { isSectionHeading: true })], (viewMode, gridPosStyle) => {
+                return `display: ${viewMode === 'minified' ? 'none' : 'block'}; ${gridPosStyle}`;
               }),
             })
           }>
@@ -241,13 +264,19 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
       const lineBeingAnnotated = lineBuffer.currentLine();
       jsDocsInfo = {
         lines: section,
-        render: rowNumb => renderJsDocs({ lines: section, lineBeingAnnotated, rowNumb }),
+        render: rowNumb => renderJsDocs({
+          lines: section,
+          lineBeingAnnotated,
+          gridPosStyle$: getGridPosStyleForDocsBlock(rowNumb),
+        }),
       };
       inTopLevelJsDocs = false;
     }
   }
 
   assert(jsDocsInfo === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
+
+  codeNodes.at(-1).querySelector('.code-viewer').classList.add('last');
 
   const allNodes = document.createDocumentFragment();
   allNodes.append(
@@ -318,7 +347,7 @@ function reformatJsdocsForDisplay(lines) {
   return newLines;
 }
 
-function renderJsDocs({ lines: lines_, lineBeingAnnotated, rowNumb }) {
+function renderJsDocs({ lines: lines_, lineBeingAnnotated, gridPosStyle$ }) {
   const stripStarFromLine = line => line.replace(/^ *\* ?/, '');
   const lines = lines_.map(line => stripStarFromLine(line));
 
@@ -384,7 +413,7 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, rowNumb }) {
   }
 
   return html`
-    <div class="explanation" ${set({ style: `grid-row: ${rowNumb}; grid-column: 1` })}>
+    <div class="explanation" ${set({ style: gridPosStyle$ })}>
       ${contentNode}
     </div>
   `;
@@ -665,25 +694,31 @@ function renderExtractedJsDescriptionText(text) {
   return contentNode;
 }
 
+const EXPLANATION_WIDTH = '690px';
 const CODE_BACKGROUND = '#272822';
-const LEFT_REL_SIZE = 2;
-const RIGHT_REL_SIZE = 3;
-const CODE_CONTROL_BORDER_RADIUS = '4px';
+const CODE_CONTROL_BORDER_RADIUS = '8px';
+const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
+const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
+const VERTICAL_SPACING = '60px';
+const SMALL_SCREEN_LEFT_GUTTER_SIZE = '5px';
+const SMALL_SCREEN_RIGHT_GUTTER_SIZE = `calc(100vw - ${EXPLANATION_WIDTH})`;
+const MOBILE_SCREEN_GUTTER_SIZE = '8px';
+const SMALL_SCREEN_BORDER_RADIUS = '10px';
 
 const style = `
   :host {
     margin-top: 30px;
   }
 
-  .code-controls-container {
+  .documented-code-grid {
     display: grid;
-    grid-template-columns: minmax(0, ${LEFT_REL_SIZE}fr) minmax(0, ${RIGHT_REL_SIZE}fr);
+    grid-template-columns: ${EXPLANATION_WIDTH} minmax(0, 1fr);
   }
 
   .code-controls {
     display: flex;
     justify-content: right;
-    margin: 10px;
+    gap: 10px;
     background: ${CODE_BACKGROUND};
     margin: 0;
     padding: 10px;
@@ -691,55 +726,64 @@ const style = `
   }
 
   .code-controls button {
-    background: #555;
-    color: #ccc;
-    border: none;
+    color: ${CODE_CONTROL_BUTTON_MAIN_COLOR};
+    background: ${CODE_BACKGROUND};
     font-size: 1rem;
     padding: 0.4em 0.6em;
     letter-spacing: 0.08em;
-    &:not([disabled]):hover {
-      background: #666;
-      color: white;
-      cursor: pointer;
-    }
-    &:focus {
-      outline: 1px solid #22f;
-    }
+    cursor: pointer;
   }
 
   .view-mode-buttons {
     display: flex;
-    margin-right: 10px;
+    background: ${CODE_BACKGROUND};
+    border-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};
   }
 
-  .view-mode-button[disabled] {
-    cursor: unset;
-    background: #888;
-    color: white;
-  }
-
-  .view-mode-button:first-child {
-    border-top-left-radius: ${CODE_CONTROL_BORDER_RADIUS};
-    border-bottom-left-radius: ${CODE_CONTROL_BORDER_RADIUS};
-  }
-
-  .view-mode-button:last-child {
-    border-top-right-radius: ${CODE_CONTROL_BORDER_RADIUS};
-    border-bottom-right-radius: ${CODE_CONTROL_BORDER_RADIUS};
+  .view-mode-buttons button {
+    border-radius: ${CODE_CONTROL_INNER_BORDER_RADIUS};
+    border: none;
+    margin: 3px;
+    padding: 0.4em 0.6em;
+    &[disabled] {
+      background: #555;
+    }
+    &:not([disabled]) {
+      cursor: pointer;
+    }
+    &:not([disabled]):hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.07);
+    }
   }
 
   .select-all {
     border-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};
+    /* This allows the ::after pseudo-element to be absolutely positioned inside of the button. */
+    position: relative;
+
+    &:not([disabled]):hover {
+      color: white;
+      border: 1px solid white;
+      outline: 1px solid #aaa;
+    }
+    &:focus::after {
+      content: '';
+      position: absolute;
+      border-radius: ${CODE_CONTROL_INNER_BORDER_RADIUS};
+      border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      top: 1px;
+    }
   }
 
   .more-info-icon {
     font-weight: bold;
     font-size: 0.8em;
-  }
-
-  .documented-code {
-    display: grid;
-    grid-template-columns: minmax(0, ${LEFT_REL_SIZE}fr) minmax(0, ${RIGHT_REL_SIZE}fr);
   }
 
   .code-viewer {
@@ -765,15 +809,14 @@ const style = `
     color: #333;
   }
 
-  .section-header {
+  .explanation.section-header {
     font-size: 1.5rem;
     text-align: center;
     margin: 0;
-    padding-bottom: 60px;
   }
 
   .explanation {
-    padding: 0px 30px 60px;
+    padding: 0px 20px ${VERTICAL_SPACING};
   }
 
   .example-header {
@@ -783,6 +826,7 @@ const style = `
   .example {
     padding-top: 1em;
     padding-bottom: 1em;
+    font-size: 0.93em;
     /* Causes the "run" button to be positioned relative to this container */
     position: relative;
   }
@@ -825,5 +869,106 @@ const style = `
     display: block;
     margin-top: 0.5em;
     margin-bottom: 1.5em;
+  }
+
+  @media screen and (max-width: 1480px) {
+    .code-viewer {
+      font-size: 0.8em;
+    }
+  }
+
+  @media screen and (max-width: 1330px) {
+    .code-controls {
+      flex-flow: column;
+      align-items: flex-end;
+    }
+  }
+
+  /* // <-- The lifecycle section header is incorrectly rendered - bad bottom-padding (margin?) and bottom-right border radius */
+  @media screen and (max-width: ${SMALL_SCREEN_SIZE}) {
+    .documented-code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :host .explanation {
+      margin-right: ${SMALL_SCREEN_RIGHT_GUTTER_SIZE};
+      border-top-right-radius: ${SMALL_SCREEN_BORDER_RADIUS};
+      border-bottom-right-radius: ${SMALL_SCREEN_BORDER_RADIUS};
+      background: white;
+      padding-top: ${VERTICAL_SPACING};
+      padding-left: calc(${SMALL_SCREEN_LEFT_GUTTER_SIZE} + ${SMALL_SCREEN_BORDER_RADIUS} + 20px);
+      /* Allow the ::before element to be positioned relative to this element */
+      position: relative;
+      &::before {
+        content: '';
+        background: ${CODE_BACKGROUND};
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: calc(0px - ${SMALL_SCREEN_RIGHT_GUTTER_SIZE});
+        bottom: 0;
+        z-index: -1;
+      }
+      &.section-header {
+        border-bottom-right-radius: 0;
+        padding-bottom: 0;
+      }
+      &.section-header + .explanation {
+        border-top-right-radius: 0;
+      }
+    }
+
+    .code-viewer {
+      margin-left: ${SMALL_SCREEN_LEFT_GUTTER_SIZE};
+      border-top-left-radius: ${SMALL_SCREEN_BORDER_RADIUS};
+      border-bottom-left-radius: ${SMALL_SCREEN_BORDER_RADIUS};
+      padding-top: ${SMALL_SCREEN_BORDER_RADIUS};
+      padding-bottom: ${SMALL_SCREEN_BORDER_RADIUS};
+      &:nth-child(1 of .code-viewer) {
+        border-top-left-radius: 0;
+        margin-left: 0;
+      }
+      /* Targets the first heading */
+      &:nth-child(2 of .code-viewer) {
+        margin-left: 0;
+        border-bottom-left-radius: 0;
+      }
+      &.last {
+        border-bottom-left-radius: 0;
+      }
+      &.section-header {
+        border-top-left-radius: 0;
+      }
+      &:has(+ .code-viewer.section-header) {
+        border-bottom-left-radius: 0;
+      }
+    }
+    
+    .code-controls {
+      border-top-left-radius: 0;
+    }
+
+    .code-viewer {
+      font-size: 1em;
+    }
+  }
+
+  @media screen and (max-width: 830px) {
+    .code-viewer {
+      font-size: 0.8em;
+    }
+
+    :host .explanation {
+      margin-right: ${MOBILE_SCREEN_GUTTER_SIZE};
+      padding-left: calc(${MOBILE_SCREEN_GUTTER_SIZE} + ${SMALL_SCREEN_BORDER_RADIUS} + 20px);
+      &::before {
+        right: calc(0px - ${MOBILE_SCREEN_GUTTER_SIZE});
+      }
+    }
+
+    .code-viewer {
+      margin-left: ${MOBILE_SCREEN_GUTTER_SIZE};
+    }
   }
 `;

@@ -1084,7 +1084,9 @@ export const set = (fields, getRef = undefined) => el => {
  *       ${renderEach(
  *         // Derive a new signal from signalTodos.
  *         // This new signal will use the todo item's id as the key.
- *         useSignals([signalTodos], todos => todos.map(todo => [todo.id, todo])),
+ *         useSignals([signalTodos], todos => {
+ *           return todos.map(todo => [todo.id, todo]);
+ *         }),
  *         (todo, todoId) => renderTodoItem({ todo, signalTodos }),
  *       )}
  *     </div>
