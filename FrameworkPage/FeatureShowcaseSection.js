@@ -242,6 +242,7 @@ const features = [
 const LINE_COUNT_OF_LONGEST_EXAMPLE = Math.max(...features.map(feature => feature.code.split('\n').length));
 
 const CODE_PANEL_WIDTH = 700;
+const CODE_PANEL_WIDTH_SMALL_SCREEN = 600;
 
 const style = `
   ${headerStyleMixin}
@@ -328,5 +329,31 @@ const style = `
     box-shadow: 0 8px 8px -4px rgba(0,0,0,.6), 0 2px 2px 2px rgba(0,0,0,.1);
     padding: 1em;
     box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 1330px) {
+    .feature-list {
+      width: 230px;
+    }
+
+    .feature-showcase-region {
+      gap: 20px;
+    }
+
+    .feature-description {
+      width: ${CODE_PANEL_WIDTH_SMALL_SCREEN}px;
+    }
+
+    .code-example-area {
+      font-size: 0.85em;
+    }
+
+    .code-example-area ${customElements.getName(CodeViewer)} {
+      width: ${CODE_PANEL_WIDTH_SMALL_SCREEN}px;
+    }
+
+    .feature {
+      font-size: 0.9em;
+    }
   }
 `;
