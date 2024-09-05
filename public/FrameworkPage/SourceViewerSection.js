@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
+import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals, withLifecycle } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
 import { PUBLIC_URL } from './shared.js';
@@ -16,6 +16,11 @@ smallScreenSizeMedia.addEventListener('change', event => {
   isSmallScreenSize$.set(event.matches);
 });
 isSmallScreenSize$.set(smallScreenSizeMedia.matches);
+
+// <-- inline this logic, this signal is now completely unnecessary
+const darkThemeWhenDesktopSize$ = withLifecycle(() => {
+  return useSignals([], () => 'dark');
+}).value;
 
 function doesLineHavePragma(line, pragma) {
   return line.match(/\/\/# *([a-zA-Z0-9_-]+)/)?.[1] === pragma;
@@ -158,17 +163,17 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   const isStartPragma = line => doesLineHavePragma(line, 'START');
   const hasClosingCommentToken = line => line.includes('*/');
 
+  // <-- Remove isSectionHeading param
   const getGridPosStyleForCodeBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([isSmallScreenSize$], isSmallScreenSize => {
-    const offset = isSectionHeading ? 0 : 1;
-    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + offset : rowNumb_;
+    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + 1 : rowNumb_;
     const colNumb = isSmallScreenSize ? 1 : 2;
     return `grid-row: ${rowNumb}; grid-column: ${colNumb}`;
   });
 
-  const getGridPosStyleForDocsBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([viewMode$, isSmallScreenSize$], (viewMode, isSmallScreenSize) => {
-    const offset = isSectionHeading ? 1 : 0;
-    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + offset : rowNumb_;
-    return viewMode === 'minified' ? 'display: none' : `grid-row: ${rowNumb}; grid-column: 1`;
+  // <-- Remove isSectionHeading param
+  const getGridPosStyleForDocsBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([isSmallScreenSize$], (isSmallScreenSize) => {
+    const rowNumb = isSmallScreenSize ? rowNumb_ * 2 : rowNumb_;
+    return `grid-row: ${rowNumb}; grid-column: 1`;
   });
 
   // Jump to `//# START` pragma
@@ -203,7 +208,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
+                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
                 </div>
               `,
             },
@@ -211,7 +216,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
+                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
                 </div>
               `,
             },
@@ -253,7 +258,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               }),
             })
           }>
-            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: 'dark' })}
+            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
           </div>
         `);
       }
@@ -287,11 +292,16 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   const curRowNumb = rowNumb;
   allNodes.append(html`
     <div class="code-viewer" ${set({
-      style: useSignals([viewMode$], viewMode => {
-        return `grid-row: 1 / ${curRowNumb}; grid-column: 2; display: ${viewMode === 'minified' ? 'block' : 'none'}`;
+      style: useSignals([viewMode$, isSmallScreenSize$], (viewMode, isSmallScreenSize) => {
+        const displayStyle = `display: ${viewMode === 'minified' ? 'block' : 'none'}`;
+        if (isSmallScreenSize) {
+          return `grid-row: 1; grid-column: 1; ${displayStyle}`;
+        } else {
+          return `grid-row: 1 / ${curRowNumb}; grid-column: 2; ${displayStyle}`;
+        }
       }),
     })}>
-      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true })}
+      ${new CodeViewer(minifiedText, { theme: darkThemeWhenDesktopSize$, wrapWithinWords: true })}
     </div>
   `);
   return allNodes;
@@ -694,16 +704,10 @@ function renderExtractedJsDescriptionText(text) {
   return contentNode;
 }
 
-const EXPLANATION_WIDTH = '690px';
 const CODE_BACKGROUND = '#272822';
 const CODE_CONTROL_BORDER_RADIUS = '8px';
 const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
 const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
-const VERTICAL_SPACING = '60px';
-const SMALL_SCREEN_LEFT_GUTTER_SIZE = '5px';
-const SMALL_SCREEN_RIGHT_GUTTER_SIZE = `calc(100vw - ${EXPLANATION_WIDTH})`;
-const MOBILE_SCREEN_GUTTER_SIZE = '8px';
-const SMALL_SCREEN_BORDER_RADIUS = '10px';
 
 const style = `
   :host {
@@ -712,7 +716,7 @@ const style = `
 
   .documented-code-grid {
     display: grid;
-    grid-template-columns: ${EXPLANATION_WIDTH} minmax(0, 1fr);
+    grid-template-columns: 690px minmax(0, 1fr);
   }
 
   .code-controls {
@@ -816,7 +820,7 @@ const style = `
   }
 
   .explanation {
-    padding: 0px 20px ${VERTICAL_SPACING};
+    padding: 0px 20px 60px;
   }
 
   .example-header {
@@ -884,91 +888,56 @@ const style = `
     }
   }
 
-  /* // <-- The lifecycle section header is incorrectly rendered - bad bottom-padding (margin?) and bottom-right border radius */
   @media screen and (max-width: ${SMALL_SCREEN_SIZE}) {
+    .code-controls {
+      background: unset;
+      flex-flow: unset;
+      align-items: unset;
+    }
+
+    .code-viewer {
+      background: unset;
+    }
+
     .documented-code-grid {
+      background: ${CODE_BACKGROUND};
       display: grid;
       grid-template-columns: minmax(0, 1fr);
     }
 
-    :host .explanation {
-      margin-right: ${SMALL_SCREEN_RIGHT_GUTTER_SIZE};
-      border-top-right-radius: ${SMALL_SCREEN_BORDER_RADIUS};
-      border-bottom-right-radius: ${SMALL_SCREEN_BORDER_RADIUS};
-      background: white;
-      padding-top: ${VERTICAL_SPACING};
-      padding-left: calc(${SMALL_SCREEN_LEFT_GUTTER_SIZE} + ${SMALL_SCREEN_BORDER_RADIUS} + 20px);
-      /* Allow the ::before element to be positioned relative to this element */
-      position: relative;
-      &::before {
-        content: '';
-        background: ${CODE_BACKGROUND};
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: calc(0px - ${SMALL_SCREEN_RIGHT_GUTTER_SIZE});
-        bottom: 0;
-        z-index: -1;
-      }
-      &.section-header {
-        border-bottom-right-radius: 0;
-        padding-bottom: 0;
-      }
-      &.section-header + .explanation {
-        border-top-right-radius: 0;
-      }
+    .explanation:not(.section-header) {
+      background: #eee;
+      box-shadow: 0 8px 8px -4px rgba(0,0,0,.1),
+        0 2px 2px 2px rgba(0,0,0,.02);
+      padding-top: 30px;
+      padding-bottom: 30px;
+      border-radius: 25px / 20px;
+      border: 2px solid #888;
+      width: calc(100% - 80px);
+      box-sizing: border-box;
+      align-self: center;
+      margin: 20px auto;
     }
 
-    .code-viewer {
-      margin-left: ${SMALL_SCREEN_LEFT_GUTTER_SIZE};
-      border-top-left-radius: ${SMALL_SCREEN_BORDER_RADIUS};
-      border-bottom-left-radius: ${SMALL_SCREEN_BORDER_RADIUS};
-      padding-top: ${SMALL_SCREEN_BORDER_RADIUS};
-      padding-bottom: ${SMALL_SCREEN_BORDER_RADIUS};
-      &:nth-child(1 of .code-viewer) {
-        border-top-left-radius: 0;
-        margin-left: 0;
-      }
-      /* Targets the first heading */
-      &:nth-child(2 of .code-viewer) {
-        margin-left: 0;
-        border-bottom-left-radius: 0;
-      }
-      &.last {
-        border-bottom-left-radius: 0;
-      }
-      &.section-header {
-        border-top-left-radius: 0;
-      }
-      &:has(+ .code-viewer.section-header) {
-        border-bottom-left-radius: 0;
-      }
-    }
-    
-    .code-controls {
-      border-top-left-radius: 0;
+    .explanation.section-header {
+      color: white;
     }
 
-    .code-viewer {
-      font-size: 1em;
-    }
-  }
-
-  @media screen and (max-width: 830px) {
-    .code-viewer {
-      font-size: 0.8em;
+    .documented-code-grid.minified .explanation.section-header {
+      padding-top: 30px;
+      padding-bottom: 30px;
     }
 
-    :host .explanation {
-      margin-right: ${MOBILE_SCREEN_GUTTER_SIZE};
-      padding-left: calc(${MOBILE_SCREEN_GUTTER_SIZE} + ${SMALL_SCREEN_BORDER_RADIUS} + 20px);
-      &::before {
-        right: calc(0px - ${MOBILE_SCREEN_GUTTER_SIZE});
-      }
-    }
+    .code-viewer.section-header {
+      /*
+      Hide the text, because we'll render section headings in a different way,
+      but keep it selectable, so if you push "select all" and copy-paste, you'll get the section heading comments.
+      */
+      opacity: 0;
 
-    .code-viewer {
-      margin-left: ${MOBILE_SCREEN_GUTTER_SIZE};
+      /* Make it take up less space */
+      height: 0;
+      padding: 0;
     }
   }
 `;
