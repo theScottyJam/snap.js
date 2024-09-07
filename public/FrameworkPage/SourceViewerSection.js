@@ -17,6 +17,16 @@ smallScreenSizeMedia.addEventListener('change', event => {
 });
 isSmallScreenSize$.set(smallScreenSizeMedia.matches);
 
+// This is used to switch how text is wrapped
+const MOBILE_SCREEN_SIZE = '900px';
+const isMobileScreenSize$ = new Signal(false);
+
+const mobileScreenSizeMedia = matchMedia(`(max-width: ${MOBILE_SCREEN_SIZE})`);
+mobileScreenSizeMedia.addEventListener('change', event => {
+  isMobileScreenSize$.set(event.matches);
+});
+isMobileScreenSize$.set(mobileScreenSizeMedia.matches);
+
 // <-- inline this logic, this signal is now completely unnecessary
 const darkThemeWhenDesktopSize$ = withLifecycle(() => {
   return useSignals([], () => 'dark');
@@ -609,7 +619,13 @@ function renderJsDocsExamples(lineBuffer) {
 
       const codeViewerEl = html`
         <div class="example">
-          ${new CodeViewer(conciseExampleStr, { theme: 'light' })}
+          ${new CodeViewer(conciseExampleStr, {
+            theme: 'light',
+            // Technically, lines shouldn't really be wrapping in desktop view,
+            // because the lines shouldn't get long enough for that to happen.
+            // so it's possible that this could just be set to `true`.
+            disableWrapping$: isMobileScreenSize$
+          })}
           <button class="show-complete-example" title="Run example" ${set({
             onclick: () => showPopupWithExample(fullExampleStr),
           })}>
@@ -716,7 +732,7 @@ const style = `
 
   .documented-code-grid {
     display: grid;
-    grid-template-columns: 690px minmax(0, 1fr);
+    grid-template-columns: 730px minmax(0, 1fr);
   }
 
   .code-controls {
@@ -944,6 +960,18 @@ const style = `
   @media screen and (max-width: 900px) {
     .explanation:not(.section-header) {
       width: calc(100% - 40px);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .code-controls {
+      flex-flow: column;
+      align-items: flex-end;
+    }
+
+    .explanation:not(.section-header) {
+      width: calc(100% - 10px);
+      padding: 15px 10px;
     }
   }
 `;

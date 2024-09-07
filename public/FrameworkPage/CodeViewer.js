@@ -22,7 +22,7 @@ const darkThemeCss$ = promiseToSignal(
   { loadingValue: '' },
 );
 
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ = 'light', wrapWithinWords = false } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   const theme$ = theme$_ instanceof Signal ? theme$_ : new Signal(theme$_);
   assert(['light', 'dark'].includes(theme$.get()));
@@ -38,9 +38,17 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ 
 
   const el = html`
     <div ${el => { codeContainerEl = el }}>
-      <pre><code class="language-javascript" ${set({
+      <!-- There can't be any whitespace between the pre tag and the code tag, or it will show up in the UI -->
+      <pre ${set({
+        style: useSignals([disableWrapping$], disableWrapping => disableWrapping ? 'overflow-x: auto; white-space: revert' : ''),
+      })}><code class="language-javascript" ${set({
         textContent: text$,
-        style: wrapWithinWords ? 'word-break: break-all' : '',
+        style: useSignals([disableWrapping$], disableWrapping => {
+          return (
+            (wrapWithinWords ? 'word-break: break-all;' : '') +
+            (disableWrapping ? 'white-space: revert;' : '')
+          )
+        }),
       })}></code></pre>
     </div>
 
