@@ -940,4 +940,10 @@ const style = `
       padding: 0;
     }
   }
+
+  @media screen and (max-width: 900px) {
+    .explanation:not(.section-header) {
+      width: calc(100% - 40px);
+    }
+  }
 `;
