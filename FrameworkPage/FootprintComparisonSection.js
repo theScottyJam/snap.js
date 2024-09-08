@@ -10,11 +10,7 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
   const currentComparison$ = new Signal(randomInt(comparisons.length));
   return html`
     <div class="file-size-comparison-region">
-      <!-- // <-- TODO: Find a better way to handle this. Also see if I can keep the icons from shifting as you push next. -->
-      <!-- This button is only here to help position the content in the center -->
-      <button class="next-comparison" style="visibility: hidden; pointer-events: none">
-        <img ${set({ src: `${PUBLIC_URL}/assets/next.svg` })} alt="View next comparison">
-      </button>
+      ${renderNextComparisonButton({ currentComparison$, showOn: 'desktop', invisible: true })}
       <!--
       The exact measurement I got when I last checked after minifying
       with minify-js.com and gzipping it with the "gzip" CLI tool was 1428 bytes.
@@ -22,37 +18,61 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
       ${renderComparisonSquare('Snap Framework', 'Less than 1,500 bytes', 'minified + compressed', {
         iconUrl: `${PUBLIC_URL}/assets/file.svg`,
         iconAlt: 'Icon representing the framework',
-        iconSize: '52px',
+        iconSize: 'slightly-larger',
+        isForSnapFramework: true
       })}
       <p class="vs">VS.</p>
-      ${renderChoice(
-        comparisons.map((renderComparison, i) => ({
-          signalWhen: useSignals([currentComparison$], currentComparison => currentComparison === i),
-          render: renderComparison,
-        }))
-      )}
-      <button class="next-comparison" title="Next Comparison" ${set({
-        onclick: () => {
-          const newIndex = currentComparison$.get() + 1;
-          currentComparison$.set(newIndex >= comparisons.length ? 0 : newIndex);
-        }
-      })}>
-        <img ${set({ src: `${PUBLIC_URL}/assets/next.svg` })} alt="View next comparison">
-      </button>
+      <div class="comparison-and-mobile-next-button">
+        ${renderNextComparisonButton({ currentComparison$, showOn: 'mobile', invisible: true })}
+        ${renderChoice(
+          comparisons.map((renderComparison, i) => ({
+            signalWhen: useSignals([currentComparison$], currentComparison => currentComparison === i),
+            render: renderComparison,
+          }))
+        )}
+        ${renderNextComparisonButton({ currentComparison$, showOn: 'mobile' })}
+      </div>
+      ${renderNextComparisonButton({ currentComparison$, showOn: 'desktop' })}
     </div>
 
     <style ${set({ textContent: style })}></style>
   `;
 });
 
-function renderComparisonSquare(mainText, size, sizeDescription, { iconUrl, iconAlt = undefined, iconSize = '48px' }) {
+/**
+ * Set "invisible" to true to always keep the button hidden, but have it still take up space
+ * when in the correct device mode (i.e. if showOn is "desktop", it'll take up space on desktop mode and be completely gone on mobile).
+ */
+function renderNextComparisonButton({ currentComparison$, showOn, invisible = false }) {
+  if (!['desktop', 'mobile'].includes(showOn)) {
+    throw new Error();
+  }
+
   return html`
-    <div class="comparison-square">
+    <button title="Next Comparison" ${set({
+      className: `next-comparison for-${showOn}` + (invisible ? ' invisible' : ''),
+      onclick: () => {
+        const newIndex = currentComparison$.get() + 1;
+        currentComparison$.set(newIndex >= comparisons.length ? 0 : newIndex);
+      }
+    })}>
+      <img ${set({ src: `${PUBLIC_URL}/assets/next.svg` })} alt="View next comparison">
+    </button>
+  `;
+}
+
+function renderComparisonSquare(mainText, size, sizeDescription, { iconUrl, iconAlt = undefined, iconSize = 'regular-size', isForSnapFramework = false }) {
+  return html`
+    <div ${set({ className: 'comparison-square' + (isForSnapFramework ? ' for-snap-framework' : ' not-for-snap-framework') })}>
       <div class="comparison-square-inner">
         <h3 class="comparison-main-text" ${set({ textContent: mainText })}></h3>
         <div class="comparison-icon-with-explanation">
           <div class="comparison-icon-container">
-            <img ${set({ src: iconUrl, alt: iconAlt, style: `width: ${iconSize}; height: ${iconSize}` })}>
+            <img ${set({
+              src: iconUrl,
+              alt: iconAlt,
+              className: 'comparison-icon' + (iconSize === 'slightly-larger' ? ' slightly-larger' : ' regular-size')
+            })}>
           </div>
           <div class="comparison-size-container">
             <p class="comparison-size" ${set({ textContent: size })}></p>
@@ -127,6 +147,16 @@ const style = `
     margin-right: 20px;
   }
 
+  .comparison-icon.regular-size {
+    width: 48px;
+    height: 48px;
+  }
+
+  .comparison-icon.slightly-larger {
+    width: 52px;
+    height: 52px;
+  }
+
   .comparison-size-container {
     /* Setting it to a fixed width prevents the icon from bobbing around as you push the next button. */
     min-width: 170px;
@@ -150,8 +180,6 @@ const style = `
   }
 
   .next-comparison {
-    margin-left: 30px;
-    margin-top: 15px;
     border: none;
     background: white;
     cursor: pointer;
@@ -165,6 +193,81 @@ const style = `
     img {
       width: 32px;
       height: 96px;
+    }
+
+    &.invisible {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    &.for-desktop {
+      margin-left: 30px;
+      margin-top: 15px;
+    }
+
+    &.for-mobile {
+      margin-left: 5px;
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .comparison-square-inner {
+      background: #eee;
+      padding: 5px 20px 17px;
+      border-radius: 10px;
+    }
+
+    .for-snap-framework .comparison-square-inner {
+      background: #eef7ee;
+    }
+
+    .comparison-main-text {
+      margin-bottom: 0.5em;
+      margin-left: 0;
+      font-size: 1.1rem;
+    }
+
+    .comparison-icon-container {
+      background: unset;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .comparison-icon.regular-size {
+      width: 32px;
+      height: 32px;
+    }
+
+    .comparison-icon.slightly-larger {
+      width: 35px;
+      height: 35px;
+    }
+
+    .comparison-size {
+      margin-top: 0;
+    }
+
+    .file-size-comparison-region {
+      flex-flow: column;
+    }
+
+    .next-comparison.for-desktop {
+      display: none;
+    }
+
+    .next-comparison.for-mobile {
+      display: unset;
+    }
+
+    .comparison-and-mobile-next-button {
+      display: flex;
+      justify-content: center;
+    }
+
+    .not-for-snap-framework .comparison-square-inner {
+      padding: 25px 50px 35px;
     }
   }
 `;

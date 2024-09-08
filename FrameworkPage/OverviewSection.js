@@ -19,4 +19,16 @@ const style = `
     margin-right: auto;
     margin-top: 3.5em;
   }
+
+  @media screen and (max-width: 900px) {
+    .overview-region {
+      max-width: calc(100% - 120px);
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .overview-region {
+      max-width: calc(100% - 60px);
+    }
+  }
 `;

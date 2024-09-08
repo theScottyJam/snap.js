@@ -6,7 +6,7 @@ import { CodeViewer } from './CodeViewer.js';
 import { headerStyleMixin } from './sharedStyles.js';
 
 export const FeatureShowcaseSection = defineElement('FeatureShowcaseSection', () => {
-  const selectedFeature$ = new Signal(0)
+  const selectedFeature$ = new Signal(0);
 
   return html`
     <div class="feature-showcase-region">
@@ -40,11 +40,12 @@ function renderCodeSample({ feature, index, selectedFeature$ }) {
         return selectedFeature === index ? `${base} show` : base;
       })
     })}>
+      <h2 class="mobile-feature-title" ${set({ textContent: feature.header })}></h2>
       <p class="code-tab" ${set({ textContent: feature.tabName })}></p>
-      ${new CodeViewer(feature.code + newLinePad, { theme: 'dark' })}
+      ${new CodeViewer(feature.code + newLinePad, { theme: 'dark', disableWrapping$: new Signal(true) })}
       <div class="feature-description-container">
         <div class="feature-description" ${el => {
-          el.append(feature.renderDescription())
+          el.append(feature.renderDescription());
         }}>
         </div>
       </div>
@@ -71,8 +72,7 @@ function renderFeatureList({ selectedFeature$ }) {
 
 function renderFeatureItem({ featureIndex, selectedFeature$, header }) {
   const containerClass$ = useSignals([selectedFeature$], selectedFeature => {
-    const base = 'feature';
-    return selectedFeature === featureIndex ? `${base} selected` : base;
+    return 'feature' + (selectedFeature === featureIndex ? ' selected' : '');
   });
 
   return html`
@@ -243,6 +243,7 @@ const LINE_COUNT_OF_LONGEST_EXAMPLE = Math.max(...features.map(feature => featur
 
 const CODE_PANEL_WIDTH = 700;
 const CODE_PANEL_WIDTH_SMALL_SCREEN = 600;
+const CODE_VIEWER_BORDER_RADIUS = '8px';
 
 const style = `
   ${headerStyleMixin}
@@ -279,6 +280,10 @@ const style = `
   .feature > h3 {
     margin-top: 30px;
     margin-bottom: 30px;
+  }
+
+  .mobile-feature-title {
+    display: none;
   }
 
   .code-example-area {
@@ -321,11 +326,11 @@ const style = `
     z-index: -1;
   }
 
-  .code-example-area ${customElements.getName(CodeViewer)} {
+  ${customElements.getName(CodeViewer)} {
     display: block;
     width: ${CODE_PANEL_WIDTH}px;
     background-color: #272822;
-    border-radius: 0 8px 8px 8px;
+    border-radius: 0 ${CODE_VIEWER_BORDER_RADIUS} ${CODE_VIEWER_BORDER_RADIUS} ${CODE_VIEWER_BORDER_RADIUS};
     box-shadow: 0 8px 8px -4px rgba(0,0,0,.6), 0 2px 2px 2px rgba(0,0,0,.1);
     padding: 1em;
     box-sizing: border-box;
@@ -348,12 +353,87 @@ const style = `
       font-size: 0.85em;
     }
 
-    .code-example-area ${customElements.getName(CodeViewer)} {
+    ${customElements.getName(CodeViewer)} {
       width: ${CODE_PANEL_WIDTH_SMALL_SCREEN}px;
     }
 
     .feature {
       font-size: 0.9em;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .feature-list {
+      display: none;
+    }
+
+    :host .code-example-area {
+      display: flex;
+      flex-flow: column;
+      padding-bottom: 25px;
+      box-shadow: 0 32px 32px -16px hsla(175, 60%, 70%, 0.5) inset;
+      background: linear-gradient(
+        110deg,
+        hsl(175, 60%, 85%),
+        hsl(175, 80%, 95%) 50%
+      );
+    }
+
+    .mobile-feature-title {
+      display: revert;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+    }
+
+    .feature-description-container {
+      min-height: unset;
+    }
+
+    .feature-description {
+      background: white;
+      border: revert;
+      box-shadow: 0 1px 1px 1px rgba(0,0,0,.03);
+      margin-top: 0;
+      margin-bottom: 1em;
+    }
+
+    .mobile-feature-title,
+    .feature-description {
+      width: calc(100% - 40px);
+      margin-left: 20px;
+    }
+
+    .code-tab {
+      display: none;
+    }
+
+    .code-sample-areas-container {
+      display: flex;
+      width: 100%;
+      flex-flow: column;
+    }
+
+    ${customElements.getName(CodeViewer)} {
+      border-radius: ${CODE_VIEWER_BORDER_RADIUS};
+      order: 2;
+      margin-left: calc(calc(100% - ${CODE_PANEL_WIDTH_SMALL_SCREEN}px) / 2);
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .mobile-feature-title {
+      margin-left: 20px;
+    }
+
+    .feature-description {
+      width: calc(100% - 20px);
+      margin-left: 10px;
+    }
+
+    ${customElements.getName(CodeViewer)} {
+      width: revert;
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 `;
