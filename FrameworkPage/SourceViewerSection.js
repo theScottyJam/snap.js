@@ -3,7 +3,7 @@
 import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals, withLifecycle } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
-import { PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 
@@ -16,16 +16,6 @@ smallScreenSizeMedia.addEventListener('change', event => {
   isSmallScreenSize$.set(event.matches);
 });
 isSmallScreenSize$.set(smallScreenSizeMedia.matches);
-
-// This is used to switch how text is wrapped
-const MOBILE_SCREEN_SIZE = '900px';
-const isMobileScreenSize$ = new Signal(false);
-
-const mobileScreenSizeMedia = matchMedia(`(max-width: ${MOBILE_SCREEN_SIZE})`);
-mobileScreenSizeMedia.addEventListener('change', event => {
-  isMobileScreenSize$.set(event.matches);
-});
-isMobileScreenSize$.set(mobileScreenSizeMedia.matches);
 
 // <-- inline this logic, this signal is now completely unnecessary
 const darkThemeWhenDesktopSize$ = withLifecycle(() => {
@@ -957,7 +947,7 @@ const style = `
     }
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: ${MOBILE_SCREEN_SIZE}) {
     .explanation:not(.section-header) {
       width: calc(100% - 40px);
     }

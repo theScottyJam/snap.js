@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-template-curly-in-string */
 
-import { PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
 import { headerStyleMixin, ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { defineElement, html, renderChoice, set, Signal, useSignals } from './snapFramework.js';
 
@@ -8,9 +9,23 @@ const randomInt = max => Math.floor(Math.random() * max);
 
 export const FootprintComparisonSection = defineElement('FootprintComparisonSection', () => {
   const currentComparison$ = new Signal(randomInt(comparisons.length));
+  const previousComparison = () => {
+    const newIndex = currentComparison$.get() - 1;
+    currentComparison$.set(newIndex < 0 ? comparisons.length - 1 : newIndex);
+  };
+  const nextComparison = () => {
+    const newIndex = currentComparison$.get() + 1;
+    currentComparison$.set(newIndex >= comparisons.length ? 0 : newIndex);
+  };
   return html`
     <div class="file-size-comparison-region">
-      ${renderNextComparisonButton({ currentComparison$, showOn: 'desktop', invisible: true })}
+      ${renderSwitchComparisonButton({
+        direction: 'left',
+        onClick: () => { throw new Error('unreachable - it should not be possible to click this.') },
+        displayBehavior$: useSignals([isMobileScreenSize$], isMobileScreenSize => {
+          return isMobileScreenSize ? 'not-rendered' : 'transparent'
+        }),
+      })}
       <!--
       The exact measurement I got when I last checked after minifying
       with minify-js.com and gzipping it with the "gzip" CLI tool was 1428 bytes.
@@ -19,20 +34,38 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
         iconUrl: `${PUBLIC_URL}/assets/file.svg`,
         iconAlt: 'Icon representing the framework',
         iconSize: 'slightly-larger',
-        isForSnapFramework: true
+        isForSnapFramework: true,
       })}
       <p class="vs">VS.</p>
       <div class="comparison-and-mobile-next-button">
-        ${renderNextComparisonButton({ currentComparison$, showOn: 'mobile', invisible: true })}
+        ${renderSwitchComparisonButton({
+          direction: 'left',
+          onClick: previousComparison,
+          displayBehavior$: useSignals([isMobileScreenSize$], isMobileScreenSize => {
+            return isMobileScreenSize ? 'visible' : 'not-rendered'
+          }),
+        })}
         ${renderChoice(
           comparisons.map((renderComparison, i) => ({
             signalWhen: useSignals([currentComparison$], currentComparison => currentComparison === i),
             render: renderComparison,
           }))
         )}
-        ${renderNextComparisonButton({ currentComparison$, showOn: 'mobile' })}
+        ${renderSwitchComparisonButton({
+          direction: 'right',
+          onClick: nextComparison,
+          displayBehavior$: useSignals([isMobileScreenSize$], isMobileScreenSize => {
+            return isMobileScreenSize ? 'visible' : 'not-rendered'
+          }),
+        })}
       </div>
-      ${renderNextComparisonButton({ currentComparison$, showOn: 'desktop' })}
+      ${renderSwitchComparisonButton({
+        direction: 'right',
+        onClick: nextComparison,
+        displayBehavior$: useSignals([isMobileScreenSize$], isMobileScreenSize => {
+          return isMobileScreenSize ? 'not-rendered' : 'visible'
+        }),
+      })}
     </div>
 
     <style ${set({ textContent: style })}></style>
@@ -40,23 +73,35 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
 });
 
 /**
- * Set "invisible" to true to always keep the button hidden, but have it still take up space
- * when in the correct device mode (i.e. if showOn is "desktop", it'll take up space on desktop mode and be completely gone on mobile).
+ * displayBehavior$ can either be set to "not-rendered", "transparent", or "visible"
+ * * "not-rendered" - the same as "display: none"
+ * * "transparent" - it can't be seen, it's only there to take up space, to help space things apart correctly
+ * * "visible" - normal rendering
  */
-function renderNextComparisonButton({ currentComparison$, showOn, invisible = false }) {
-  if (!['desktop', 'mobile'].includes(showOn)) {
+function renderSwitchComparisonButton({ onClick, direction, displayBehavior$ }) {
+  if (!['left', 'right'].includes(direction)) {
     throw new Error();
   }
 
   return html`
     <button title="Next Comparison" ${set({
-      className: `next-comparison for-${showOn}` + (invisible ? ' invisible' : ''),
-      onclick: () => {
-        const newIndex = currentComparison$.get() + 1;
-        currentComparison$.set(newIndex >= comparisons.length ? 0 : newIndex);
-      }
+      className: useSignals([displayBehavior$], displayBehavior => {
+        const classes = ['switch-comparison', direction];
+        if (displayBehavior === 'transparent') {
+          classes.push('transparent')
+        } else if (displayBehavior === 'not-rendered') {
+          classes.push('not-rendered');
+        } else if (displayBehavior !== 'visible') {
+          throw new Error();
+        }
+        return classes.join(' ');
+      }),
+      onclick: onClick,
     })}>
-      <img ${set({ src: `${PUBLIC_URL}/assets/next.svg` })} alt="View next comparison">
+      <img ${set({
+        src: `${PUBLIC_URL}/assets/next.svg`,
+        alt: direction === 'left' ? 'View previous comparison' : 'View next comparison'
+      })}>
     </button>
   `;
 }
@@ -179,9 +224,11 @@ const style = `
     margin-right: 50px;
   }
 
-  .next-comparison {
+  .switch-comparison {
     border: none;
     background: white;
+    margin-left: 30px;
+    margin-top: 15px;
     cursor: pointer;
     opacity: 0.6;
     &:hover {
@@ -195,23 +242,21 @@ const style = `
       height: 96px;
     }
 
-    &.invisible {
+    &.left img {
+      transform: scaleX(-1);
+    }
+
+    &.transparent {
       visibility: hidden;
       pointer-events: none;
     }
 
-    &.for-desktop {
-      margin-left: 30px;
-      margin-top: 15px;
-    }
-
-    &.for-mobile {
-      margin-left: 5px;
+    &.not-rendered {
       display: none;
     }
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: ${MOBILE_SCREEN_SIZE}) {
     .comparison-square-inner {
       background: #eee;
       padding: 5px 20px 17px;
@@ -253,12 +298,9 @@ const style = `
       flex-flow: column;
     }
 
-    .next-comparison.for-desktop {
-      display: none;
-    }
-
-    .next-comparison.for-mobile {
-      display: unset;
+    .switch-comparison {
+      margin-left: 5px;
+      margin-top: 0px;
     }
 
     .comparison-and-mobile-next-button {
@@ -268,6 +310,12 @@ const style = `
 
     .not-for-snap-framework .comparison-square-inner {
       padding: 25px 50px 35px;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .not-for-snap-framework .comparison-square-inner {
+      padding: 15px 30px 25px;
     }
   }
 `;
