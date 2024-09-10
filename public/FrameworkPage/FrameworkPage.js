@@ -106,17 +106,15 @@ function renderPageContents({ fullText, minifiedText }) {
 function renderTextWithHoverInfo(text, hoverText) {
   const showPopup$ = new Signal(false);
   return html`
-    <span class="hoverable-text">
-      <span ${set({
-        textContent: text,
-        onmouseover: () => showPopup$.set(true),
-        onmouseout: () => showPopup$.set(false),
-      })}></span>
-      <span class="hover-text-popup" ${set({
-        textContent: hoverText,
-        style: useSignals([showPopup$], showPopup => showPopup ? '' : 'display: none'),
-      })}></span>
-    </span>
+    <!-- There can't be any white-space between these elements, or it would show up in the UI -->
+    <span class="hoverable-text"><span ${set({
+      textContent: text,
+      onmouseover: () => showPopup$.set(true),
+      onmouseout: () => showPopup$.set(false),
+    })}></span><span class="hover-text-popup" ${set({
+      textContent: hoverText,
+      style: useSignals([showPopup$], showPopup => showPopup ? '' : 'display: none'),
+    })}></span></span>
   `;
 }
 
@@ -151,6 +149,8 @@ const style = `
   .section-description {
     margin-top: 0;
     margin-bottom: 2em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     text-align: center;
   }
 
