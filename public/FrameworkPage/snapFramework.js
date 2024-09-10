@@ -761,7 +761,8 @@ export function useCleanup(listener) {
  * get called with a reference to the element as a parameter.
  * 
  * To set properties on an element in your template, use the {@link set} helper
- * function.
+ * function. {@link} can also be used to dynamically insert text inside of an
+ * element, by setting the `textContent` property of that element.
  * 
  * There's one important restriction: never set the id attribute on an element
  * in your HTML template string. If you need to set an id, you can do so
@@ -928,6 +929,16 @@ export function html(strings, ...values) {
  * automatically subscribe to those signals and auto-update the associated
  * properties whenever the signal is changed.
  * 
+ * It's important to note that this sets properties
+ * (e.g. `element.id = 'your-id'`), not HTML attributes
+ * (e.g. it does not do `element.setAttribute('id', 'your-id')`).
+ * As a result, if you want to set the CSS class of an element, you have to use
+ * `className` as your key instead of `class`, since that's how the property
+ * is named on native HTML elements.
+ * 
+ * You can update the text inside of an element by setting the `textContent`
+ * property on that element.
+ *
  * @param fields an object that maps property names to values
  *   (or signals with values)
  * @param getRef (optional) a callback that will be called with a reference
@@ -1024,6 +1035,35 @@ export function html(strings, ...values) {
  * 
  * const renderExample = () => renderHeader('Example App');
  * document.body.append(withLifecycle(renderExample).value);
+ * //# COMPLETE-EXAMPLE-END
+ * @example <caption>setting a CSS class with className</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
+ * function renderButton({ text, bold }) {
+ *   return html`
+ *     <button ${
+ *       set({
+ *         textContent: text,
+ *         className: bold ? 'bold' : '',
+ *       })
+ *     }></button>
+ * 
+ *     <style>
+ *       .bold {
+ *         font-weight: bold;
+ *       }
+ *     </style>
+ *   `;
+ * }
+ * //# COMPLETE-EXAMPLE-START
+ * 
+ * const renderExample1 = () => renderButton({ text: 'Not Bold', bold: false });
+ * document.body.append(withLifecycle(renderExample1).value);
+ *
+ * const renderExample2 = () => renderButton({ text: 'Bold', bold: true });
+ * document.body.append(withLifecycle(renderExample2).value);
  * //# COMPLETE-EXAMPLE-END
  */
 export const set = (fields, getRef = undefined) => el => {

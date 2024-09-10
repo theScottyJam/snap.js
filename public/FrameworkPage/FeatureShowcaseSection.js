@@ -3,7 +3,7 @@
 
 import { defineElement, Signal, html, set, useSignals, renderEach } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
-import { headerStyleMixin } from './sharedStyles.js';
+import { headerStyleMixin, headerStyleMixinRules } from './sharedStyles.js';
 
 export const FeatureShowcaseSection = defineElement('FeatureShowcaseSection', () => {
   const selectedFeature$ = new Signal(0);
@@ -76,12 +76,13 @@ function renderFeatureItem({ featureIndex, selectedFeature$, header }) {
   });
 
   return html`
-    <div ${set({
+    <button ${set({
       className: containerClass$,
       onmouseover: () => selectedFeature$.set(featureIndex),
+      onclick: () => selectedFeature$.set(featureIndex),
     })}>
       <h3 ${set({ textContent: header })}></h3>
-    </div>
+    </button>
   `;
 }
 
@@ -260,13 +261,20 @@ const style = `
   }
 
   .feature {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: unset;
+    font-size: 1rem;
     position: relative;
+    border: unset;
     border-top: 1px solid #ccc;
     /* // <-- Find a better way to handle this - it creates a 1px white strip at the bottom when hovering */
     /* The invisible border-bottom forces the background color to extend to the border. */
     border-bottom: 1px solid white;
     padding-left: 20px;
     padding-right: 20px;
+    ${headerStyleMixinRules}
   }
 
   .feature.selected {

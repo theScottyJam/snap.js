@@ -95,9 +95,28 @@ function renderPageContents({ fullText, minifiedText }) {
     ${new OverviewSection()}
     <h2 class="header">— SMALL —</h2>
     ${new FootprintComparisonSection()}
-    <h2 class="header powerful-header">— POWERFUL —</h2>
+    <h2 class="header">— POWERFUL —</h2>
     ${new FeatureShowcaseSection()}
+    <h2 class="header has-section-description">— GRAB 'N GO —</h2>
+    <p class="section-description">All ${renderTextWithHoverInfo('201 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
     ${new SourceViewerSection({ fullText, minifiedText })}
+  `;
+}
+
+function renderTextWithHoverInfo(text, hoverText) {
+  const showPopup$ = new Signal(false);
+  return html`
+    <span class="hoverable-text">
+      <span ${set({
+        textContent: text,
+        onmouseover: () => showPopup$.set(true),
+        onmouseout: () => showPopup$.set(false),
+      })}></span>
+      <span class="hover-text-popup" ${set({
+        textContent: hoverText,
+        style: useSignals([showPopup$], showPopup => showPopup ? '' : 'display: none'),
+      })}></span>
+    </span>
   `;
 }
 
@@ -124,5 +143,34 @@ const style = `
     letter-spacing: 0.2em;
     margin-top: 3.25em;
     margin-bottom: 1.5em;
+    &.has-section-description {
+      margin-bottom: 0.8em;
+    }
+  }
+
+  .section-description {
+    margin-top: 0;
+    margin-bottom: 2em;
+    text-align: center;
+  }
+
+  .hoverable-text {
+    cursor: help;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    /* Allows the popup to be positioned relative to this box */
+    position: relative;
+  }
+
+  .hover-text-popup {
+    pointer-events: none;
+    position: absolute;
+    top: 1.3em;
+    left: 0;
+    background: white;
+    border: 1px solid black;
+    padding: 3px;
+    box-sizing: border-box;
+    text-wrap: nowrap;
   }
 `;
