@@ -7,6 +7,7 @@ import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { PUBLIC_URL } from './shared.js';
 import { headerStyleMixin } from './sharedStyles.js';
 import { OverviewSection } from './OverviewSection.js';
+import { WithHoverInfo } from './WithHoverInfo.js';
 
 export class FrameworkPage extends HTMLElement {
   constructor() {
@@ -104,17 +105,11 @@ function renderPageContents({ fullText, minifiedText }) {
 }
 
 function renderTextWithHoverInfo(text, hoverText) {
-  const showPopup$ = new Signal(false);
   return html`
-    <!-- There can't be any white-space between these elements, or it would show up in the UI -->
-    <span class="hoverable-text"><span ${set({
-      textContent: text,
-      onmouseover: () => showPopup$.set(true),
-      onmouseout: () => showPopup$.set(false),
-    })}></span><span class="hover-text-popup" ${set({
-      textContent: hoverText,
-      style: useSignals([showPopup$], showPopup => showPopup ? '' : 'display: none'),
-    })}></span></span>
+    ${new WithHoverInfo({
+      child: html`<span class="hoverable-text" ${set({ textContent: text })}></span>`,
+      hoverText
+    })}
   `;
 }
 
@@ -155,22 +150,7 @@ const style = `
   }
 
   .hoverable-text {
-    cursor: help;
     text-decoration: underline;
     text-decoration-style: dotted;
-    /* Allows the popup to be positioned relative to this box */
-    position: relative;
-  }
-
-  .hover-text-popup {
-    pointer-events: none;
-    position: absolute;
-    top: 1.3em;
-    left: 0;
-    background: white;
-    border: 1px solid black;
-    padding: 3px;
-    box-sizing: border-box;
-    text-wrap: nowrap;
   }
 `;
