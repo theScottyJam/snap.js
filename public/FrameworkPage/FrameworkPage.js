@@ -7,7 +7,7 @@ import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { PUBLIC_URL } from './shared.js';
 import { headerStyleMixin } from './sharedStyles.js';
 import { OverviewSection } from './OverviewSection.js';
-import { WithHoverInfo } from './WithHoverInfo.js';
+import { WithTooltip } from './WithTooltip.js';
 
 export class FrameworkPage extends HTMLElement {
   constructor() {
@@ -99,16 +99,16 @@ function renderPageContents({ fullText, minifiedText }) {
     <h2 class="header">— POWERFUL —</h2>
     ${new FeatureShowcaseSection()}
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
-    <p class="section-description">All ${renderTextWithHoverInfo('201 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
+    <p class="section-description">All ${renderTextWithTooltip('201 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
     ${new SourceViewerSection({ fullText, minifiedText })}
   `;
 }
 
-function renderTextWithHoverInfo(text, hoverText) {
+function renderTextWithTooltip(text, tooltip) {
   return html`
-    ${new WithHoverInfo({
+    ${new WithTooltip({
       child: html`<span class="hoverable-text" ${set({ textContent: text })}></span>`,
-      hoverText
+      tooltip
     })}
   `;
 }

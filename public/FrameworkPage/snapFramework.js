@@ -100,7 +100,7 @@
  */
 export class Signal {
   #value;
-  #listeners = new Set()
+  #listeners = new Set();
 
   /**
    * Creates a new signal with an optional initial value. If an initial value is

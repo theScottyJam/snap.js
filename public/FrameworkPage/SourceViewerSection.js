@@ -6,7 +6,7 @@ import { assert } from './util.js';
 import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
-import { WithHoverInfo } from './WithHoverInfo.js';
+import { WithTooltip } from './WithTooltip.js';
 
 // This is the point in which we switch to using a single-column layout for the code/docs
 const SMALL_SCREEN_SIZE = '1200px';
@@ -118,14 +118,14 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
             disabled: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
           })}>
             Self-contained docs
-            ${new WithHoverInfo({
+            ${new WithTooltip({
               child: html`<span class="more-info-icon">ⓘ</span>`,
-              hoverText: (
+              tooltip: (
                 'All documentation from this webpage will be placed inside of JSDocs. ' +
                 'A good starting point if you want to take full ownership of the code.'
               ),
               anchor: 'right',
-              getStyle: getHoverInfoStyle
+              getStyle: getTooltipStyle
             })}
           </button>
           <button ${set({
@@ -133,11 +133,11 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
             disabled: useSignals([viewMode$], viewMode => viewMode === 'normal'),
           })}>
             Classic
-            ${new WithHoverInfo({
+            ${new WithTooltip({
               child: html`<span class="more-info-icon">ⓘ</span>`,
-              hoverText: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
+              tooltip: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
               anchor: 'right',
-              getStyle: getHoverInfoStyle
+              getStyle: getTooltipStyle
             })}
           </button>
           <button ${set({
@@ -729,20 +729,20 @@ const CODE_CONTROL_BORDER_RADIUS = '8px';
 const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
 const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
 
-const getHoverInfoStyle = hoverInfoSelector => `
-  ${hoverInfoSelector} {
+const getTooltipStyle = tooltipSelector => `
+  ${tooltipSelector} {
     text-wrap: initial;
     width: 400px;
   }
 
   @media screen and (max-width: 800px) {
-    ${hoverInfoSelector} {
+    ${tooltipSelector} {
       width: 230px;
     }
   }
 
   @media screen and (max-width: 500px) {
-    ${hoverInfoSelector} {
+    ${tooltipSelector} {
       width: 160px;
     }
   }
