@@ -21,13 +21,15 @@
 //     only be rendered when you're viewing a complete, runnable example. If
 //     you're viewing the concise version of the example, this content will
 //     be hidden.
-//   NORMAL-VIEW-ONLY-NEXT: The following line will only be rendered in the normal
-//     view, not the fully documented or minified view.
+//   NORMAL-VIEW-ONLY-NEXT: The following line will only be rendered in the
+//     normal view, not the fully documented or minified view.
 //   AUTO-OPEN: For debugging purposes - place this on an example to cause it
 //     to be auto-opened, making it easier to develop the example.
 
 // Keep the maximum line width to 80 characters - it needs to be easy to read on
-// half a screen on the webpage.
+// half a screen on the webpage. The first couple of lines of an example should
+// be slightly shorter than 80 characters to make room for the floating play
+// button that shows up in the top-right corner of examples in the UI.
 
 //# START
 // Snap Framework beta version
@@ -613,9 +615,9 @@ const onUninitContext = new Context();
  * import { withLifecycle, useCleanup, html } from '%FRAMEWORK_LOCATION%';
  * 
  * //# COMPLETE-EXAMPLE-END
- * // Hooks such as useCleanup() are available to this component and descendent
- * // components it renders (such as `renderAppContent()`) because it was
- * // rendered via withLifecycle().
+ * // Hooks such as useCleanup() are available to this component and
+ * // descendent components it renders (such as `renderAppContent()`) because it
+ * // was rendered via withLifecycle().
  * //
  * // Note that in this specific example, these root components are never
  * // uninitialized (because the uninit function returned by withLifecycle()

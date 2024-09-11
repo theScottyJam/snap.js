@@ -723,6 +723,7 @@ const CODE_BACKGROUND = '#272822';
 const CODE_CONTROL_BORDER_RADIUS = '8px';
 const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
 const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
+const MOBILE_EXPLANATION_BACKGROUND_COLOR = '#eee';
 
 const getTooltipStyle = tooltipSelector => `
   ${tooltipSelector} {
@@ -877,18 +878,9 @@ const style = `
     top: 16px;
     right: 5px;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.6;
     background: white;
     border: none;
-  }
-
-  .example:hover .show-complete-example {
-    /*
-      Using opacity instead of display or visibility to ensure you can still
-      focus this element by tabbing through the page, and as an easy way to
-      control the darkness of the color.
-    */
-    opacity: 0.6;
   }
 
   .show-complete-example:hover {
@@ -897,7 +889,6 @@ const style = `
   }
 
   .show-complete-example:focus {
-    opacity: 0.6;
     outline: ${ICON_BUTTON_OUTLINE_ON_FOCUS};
   }
 
@@ -943,7 +934,7 @@ const style = `
     }
 
     .explanation:not(.section-header) {
-      background: #eee;
+      background: ${MOBILE_EXPLANATION_BACKGROUND_COLOR};
       box-shadow: 0 8px 8px -4px rgba(0,0,0,.1),
         0 2px 2px 2px rgba(0,0,0,.02);
       padding-top: 30px;
@@ -975,6 +966,10 @@ const style = `
       /* Make it take up less space */
       height: 0;
       padding: 0;
+    }
+
+    .show-complete-example {
+      background: ${MOBILE_EXPLANATION_BACKGROUND_COLOR};
     }
   }
 

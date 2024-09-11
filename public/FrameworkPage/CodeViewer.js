@@ -22,6 +22,10 @@ const darkThemeCss$ = promiseToSignal(
   { loadingValue: '' },
 );
 
+/**
+ * disableWrapping$ can be set to true, false, or "without-internal-scrolling".
+ * "without-internal-scrolling" will disable wrapping and also prevent the container from generating a scrollbar.
+ */
 export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   assert(['light', 'dark'].includes(theme));
@@ -39,7 +43,12 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light'
     <div ${el => { codeContainerEl = el }}>
       <!-- There can't be any whitespace between the pre tag and the code tag, or it will show up in the UI -->
       <pre ${set({
-        style: useSignals([disableWrapping$], disableWrapping => disableWrapping ? 'overflow-x: auto; white-space: revert' : ''),
+        style: useSignals([disableWrapping$], disableWrapping => {
+          if (disableWrapping === true) return 'overflow-x: auto; white-space: revert';
+          if (disableWrapping === 'without-internal-scrolling') return 'overflow: revert; white-space: revert';
+          if (disableWrapping === false) return '';
+          throw new Error();
+        }),
       })}><code class="language-javascript" ${set({
         textContent: text$,
         style: useSignals([disableWrapping$], disableWrapping => {

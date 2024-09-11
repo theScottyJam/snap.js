@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks*/
 import { CodeViewer } from './CodeViewer.js';
-import { PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { Signal, defineElement, html, renderEach, renderIf, set, useCleanup, useSignals, withLifecycle } from './snapFramework.js';
 
@@ -51,7 +51,7 @@ export const PopupWithExample = defineElement('PopupWithExample', ({ code, remov
     })}></div>
 
     <div class="foreground">
-      ${renderCodePanel({ codeToView, rerunCodeEventSignal })}
+      ${renderCodePanel({ codeToView, rerunCodeEventSignal, removePopup })}
       ${renderResultPanel({ codeToRun, rerunCodeEventSignal, removePopup })}
     </div>
 
@@ -59,7 +59,7 @@ export const PopupWithExample = defineElement('PopupWithExample', ({ code, remov
   `;
 });
 
-function renderCodePanel({ codeToView, rerunCodeEventSignal }) {
+function renderCodePanel({ codeToView, rerunCodeEventSignal, removePopup }) {
   return html`
     <div class="code-panel">
       <div class="panel-header">
@@ -71,9 +71,13 @@ function renderCodePanel({ codeToView, rerunCodeEventSignal }) {
             Rerun
           </button>
         </div>
+        ${renderCloseButton({ removePopup, forDesktop: false })}
       </div>
       <div class="code">
-        ${new CodeViewer(codeToView, { theme: 'light' })}
+        ${new CodeViewer(codeToView, {
+          theme: 'light',
+          disableWrapping$: useSignals([isMobileScreenSize$], isMobileScreenSize => isMobileScreenSize ? 'without-internal-scrolling' : false),
+        })}
       </div>
     </div>
   `;
@@ -94,9 +98,7 @@ function renderResultPanel({ codeToRun, rerunCodeEventSignal, removePopup }) {
       <div class="panel-header">
         <p>Result</p>
         <div>
-          <button class="close-button" ${set({ onclick: removePopup })}>
-            ×
-          </button>
+          ${renderCloseButton({ removePopup, forDesktop: true })}
         </div>
       </div>
       <div class="result">
@@ -128,6 +130,15 @@ function renderResultPanel({ codeToRun, rerunCodeEventSignal, removePopup }) {
         </div>
       </div>
     </div>
+  `;
+}
+
+function renderCloseButton({ removePopup, forDesktop }) {
+  return html`
+    <button class="close-button" ${set({
+      onclick: removePopup,
+      className: 'close-button ' + (forDesktop ? 'for-desktop' : 'for-mobile'),
+    })}>×</button>
   `;
 }
 
@@ -272,6 +283,9 @@ const style = `
     &:focus {
       outline: ${ICON_BUTTON_OUTLINE_ON_FOCUS};
     }
+    &.for-mobile {
+      display: none;
+    }
   }
 
   .log-output {
@@ -301,5 +315,45 @@ const style = `
     border-top: ${FRAME_BORDER_STYLE};
     border-right: ${FRAME_BORDER_STYLE};
     border-top-right-radius: 4px;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .foreground {
+      grid-template-columns: revert;
+      grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
+    }
+
+    .result-panel {
+      border-left: revert;
+      border-top: ${FRAME_BORDER_STYLE};
+    }
+
+    .close-button {
+      &.for-mobile {
+        display: revert;
+      }
+      &.for-desktop {
+        display: none;
+      }
+    }
+
+    .rerun-button-container {
+      display: revert;
+      margin-top: 4px;
+      margin-right: 12px;
+    }
+
+    .rerun-button {
+      padding: 6px 8px;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .foreground {
+      top: 18px;
+      left: 18px;
+      bottom: 18px;
+      right: 18px;
+    }
   }
 `;
