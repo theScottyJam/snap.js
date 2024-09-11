@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals, withLifecycle } from './snapFramework.js';
+import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
 import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
@@ -17,11 +17,6 @@ smallScreenSizeMedia.addEventListener('change', event => {
   isSmallScreenSize$.set(event.matches);
 });
 isSmallScreenSize$.set(smallScreenSizeMedia.matches);
-
-// <-- inline this logic, this signal is now completely unnecessary
-const darkThemeWhenDesktopSize$ = withLifecycle(() => {
-  return useSignals([], () => 'dark');
-}).value;
 
 function doesLineHavePragma(line, pragma) {
   return line.match(/\/\/# *([a-zA-Z0-9_-]+)/)?.[1] === pragma;
@@ -222,7 +217,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
             },
@@ -230,7 +225,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
             },
@@ -272,7 +267,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               }),
             })
           }>
-            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: 'dark' })}
           </div>
         `);
       }
@@ -315,7 +310,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         }
       }),
     })}>
-      ${new CodeViewer(minifiedText, { theme: darkThemeWhenDesktopSize$, wrapWithinWords: true })}
+      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true })}
     </div>
   `);
   return allNodes;

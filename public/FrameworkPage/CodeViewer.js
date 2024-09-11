@@ -22,10 +22,9 @@ const darkThemeCss$ = promiseToSignal(
   { loadingValue: '' },
 );
 
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
-  const theme$ = theme$_ instanceof Signal ? theme$_ : new Signal(theme$_);
-  assert(['light', 'dark'].includes(theme$.get()));
+  assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
 
   // Waiting a tad before running the syntax highlighter so the element has a chance
@@ -53,17 +52,14 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ 
     </div>
 
     <style ${set({
-      textContent: useSignals(
-        [theme$, lightThemeCss$, darkThemeCss$],
-        (theme, lightThemeCss, darkThemeCss) => theme === 'light' ? lightThemeCss : darkThemeCss
-      )
+      textContent: theme === 'light' ? lightThemeCss$ : darkThemeCss$,
     })}></style>
     <style ${set({ textContent: style })}></style>
   `;
 
   // This is done after html`...` so the syntax highlighting can happen after the parameters have been updated.
   let skip = true;
-  useSignals([text$, theme$], (text, theme) => {
+  useSignals([text$], text => {
     if (skip) return;
     Prism.highlightAllUnder(codeContainerEl);
   });
