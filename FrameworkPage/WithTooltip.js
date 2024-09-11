@@ -1,6 +1,6 @@
 import { defineElement, html, set, Signal, useSignals } from "./snapFramework.js";
 
-export const WithHoverInfo = defineElement('WithHoverInfo', function({ child, hoverText, anchor = 'left', getStyle = undefined }) {
+export const WithTooltip = defineElement('WithTooltip', function({ child, tooltip, anchor = 'left', getStyle = undefined }) {
   this.append(child);
   const showPopup$ = new Signal(false);
   console.assert(['left', 'right'].includes(anchor));
@@ -22,8 +22,8 @@ export const WithHoverInfo = defineElement('WithHoverInfo', function({ child, ho
       },
     })}>
       <slot></slot>
-      <span class="hover-popup" ${set({
-        textContent: hoverText,
+      <span class="tooltip" ${set({
+        textContent: tooltip,
         style: useSignals([showPopup$], showPopup => {
           return `${anchor}: 0` + (showPopup ? '' : '; display: none');
         }),
@@ -31,7 +31,7 @@ export const WithHoverInfo = defineElement('WithHoverInfo', function({ child, ho
     </button>
 
     <style ${set({ textContent: style })}></style>
-    <style ${set({ textContent: getStyle?.('.hover-popup') ?? '' })}></style>
+    <style ${set({ textContent: getStyle?.('.tooltip') ?? '' })}></style>
   `;
 });
 
@@ -43,9 +43,12 @@ const style = `
     cursor: help;
     /* Allows the popup to be positioned relative to this box */
     position: relative;
+    &:focus {
+      outline: revert;
+    }
   }
 
-  .hover-popup {
+  .tooltip {
     /* Ensures inherited styles don't bleed through */
     all: initial;
 

@@ -22,10 +22,13 @@ const darkThemeCss$ = promiseToSignal(
   { loadingValue: '' },
 );
 
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
+/**
+ * disableWrapping$ can be set to true, false, or "without-internal-scrolling".
+ * "without-internal-scrolling" will disable wrapping and also prevent the container from generating a scrollbar.
+ */
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
-  const theme$ = theme$_ instanceof Signal ? theme$_ : new Signal(theme$_);
-  assert(['light', 'dark'].includes(theme$.get()));
+  assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
 
   // Waiting a tad before running the syntax highlighter so the element has a chance
@@ -40,7 +43,12 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ 
     <div ${el => { codeContainerEl = el }}>
       <!-- There can't be any whitespace between the pre tag and the code tag, or it will show up in the UI -->
       <pre ${set({
-        style: useSignals([disableWrapping$], disableWrapping => disableWrapping ? 'overflow-x: auto; white-space: revert' : ''),
+        style: useSignals([disableWrapping$], disableWrapping => {
+          if (disableWrapping === true) return 'overflow-x: auto; white-space: revert';
+          if (disableWrapping === 'without-internal-scrolling') return 'overflow: revert; white-space: revert';
+          if (disableWrapping === false) return '';
+          throw new Error();
+        }),
       })}><code class="language-javascript" ${set({
         textContent: text$,
         style: useSignals([disableWrapping$], disableWrapping => {
@@ -53,17 +61,14 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme: theme$_ 
     </div>
 
     <style ${set({
-      textContent: useSignals(
-        [theme$, lightThemeCss$, darkThemeCss$],
-        (theme, lightThemeCss, darkThemeCss) => theme === 'light' ? lightThemeCss : darkThemeCss
-      )
+      textContent: theme === 'light' ? lightThemeCss$ : darkThemeCss$,
     })}></style>
     <style ${set({ textContent: style })}></style>
   `;
 
   // This is done after html`...` so the syntax highlighting can happen after the parameters have been updated.
   let skip = true;
-  useSignals([text$, theme$], (text, theme) => {
+  useSignals([text$], text => {
     if (skip) return;
     Prism.highlightAllUnder(codeContainerEl);
   });

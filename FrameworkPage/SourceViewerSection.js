@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals, withLifecycle } from './snapFramework.js';
+import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
 import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
-import { WithHoverInfo } from './WithHoverInfo.js';
+import { WithTooltip } from './WithTooltip.js';
 
 // This is the point in which we switch to using a single-column layout for the code/docs
 const SMALL_SCREEN_SIZE = '1200px';
@@ -17,11 +17,6 @@ smallScreenSizeMedia.addEventListener('change', event => {
   isSmallScreenSize$.set(event.matches);
 });
 isSmallScreenSize$.set(smallScreenSizeMedia.matches);
-
-// <-- inline this logic, this signal is now completely unnecessary
-const darkThemeWhenDesktopSize$ = withLifecycle(() => {
-  return useSignals([], () => 'dark');
-}).value;
 
 function doesLineHavePragma(line, pragma) {
   return line.match(/\/\/# *([a-zA-Z0-9_-]+)/)?.[1] === pragma;
@@ -118,14 +113,14 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
             disabled: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
           })}>
             Self-contained docs
-            ${new WithHoverInfo({
+            ${new WithTooltip({
               child: html`<span class="more-info-icon">ⓘ</span>`,
-              hoverText: (
+              tooltip: (
                 'All documentation from this webpage will be placed inside of JSDocs. ' +
                 'A good starting point if you want to take full ownership of the code.'
               ),
               anchor: 'right',
-              getStyle: getHoverInfoStyle
+              getStyle: getTooltipStyle
             })}
           </button>
           <button ${set({
@@ -133,11 +128,11 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
             disabled: useSignals([viewMode$], viewMode => viewMode === 'normal'),
           })}>
             Classic
-            ${new WithHoverInfo({
+            ${new WithTooltip({
               child: html`<span class="more-info-icon">ⓘ</span>`,
-              hoverText: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
+              tooltip: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
               anchor: 'right',
-              getStyle: getHoverInfoStyle
+              getStyle: getTooltipStyle
             })}
           </button>
           <button ${set({
@@ -222,7 +217,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
             },
@@ -230,7 +225,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
                 </div>
               `,
             },
@@ -272,7 +267,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               }),
             })
           }>
-            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: darkThemeWhenDesktopSize$ })}
+            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: 'dark' })}
           </div>
         `);
       }
@@ -315,7 +310,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         }
       }),
     })}>
-      ${new CodeViewer(minifiedText, { theme: darkThemeWhenDesktopSize$, wrapWithinWords: true })}
+      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true })}
     </div>
   `);
   return allNodes;
@@ -728,21 +723,22 @@ const CODE_BACKGROUND = '#272822';
 const CODE_CONTROL_BORDER_RADIUS = '8px';
 const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
 const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
+const MOBILE_EXPLANATION_BACKGROUND_COLOR = '#eee';
 
-const getHoverInfoStyle = hoverInfoSelector => `
-  ${hoverInfoSelector} {
+const getTooltipStyle = tooltipSelector => `
+  ${tooltipSelector} {
     text-wrap: initial;
     width: 400px;
   }
 
   @media screen and (max-width: 800px) {
-    ${hoverInfoSelector} {
+    ${tooltipSelector} {
       width: 230px;
     }
   }
 
   @media screen and (max-width: 500px) {
-    ${hoverInfoSelector} {
+    ${tooltipSelector} {
       width: 160px;
     }
   }
@@ -882,18 +878,9 @@ const style = `
     top: 16px;
     right: 5px;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.6;
     background: white;
     border: none;
-  }
-
-  .example:hover .show-complete-example {
-    /*
-      Using opacity instead of display or visibility to ensure you can still
-      focus this element by tabbing through the page, and as an easy way to
-      control the darkness of the color.
-    */
-    opacity: 0.6;
   }
 
   .show-complete-example:hover {
@@ -902,7 +889,6 @@ const style = `
   }
 
   .show-complete-example:focus {
-    opacity: 0.6;
     outline: ${ICON_BUTTON_OUTLINE_ON_FOCUS};
   }
 
@@ -948,7 +934,7 @@ const style = `
     }
 
     .explanation:not(.section-header) {
-      background: #eee;
+      background: ${MOBILE_EXPLANATION_BACKGROUND_COLOR};
       box-shadow: 0 8px 8px -4px rgba(0,0,0,.1),
         0 2px 2px 2px rgba(0,0,0,.02);
       padding-top: 30px;
@@ -980,6 +966,10 @@ const style = `
       /* Make it take up less space */
       height: 0;
       padding: 0;
+    }
+
+    .show-complete-example {
+      background: ${MOBILE_EXPLANATION_BACKGROUND_COLOR};
     }
   }
 
