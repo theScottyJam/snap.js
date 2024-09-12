@@ -763,7 +763,7 @@ export function useCleanup(listener) {
  * get called with a reference to the element as a parameter.
  * 
  * To set properties on an element in your template, use the {@link set} helper
- * function. {@link} can also be used to dynamically insert text inside of an
+ * function. {@link set} can also be used to dynamically insert text inside of an
  * element, by setting the `textContent` property of that element.
  * 
  * There's one important restriction: never set the id attribute on an element

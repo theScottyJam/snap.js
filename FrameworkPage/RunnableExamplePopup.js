@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks*/
 import { CodeViewer } from './CodeViewer.js';
-import { isMobileScreenSize$, PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, prepareCodeExampleForRunning, prepareCodeExampleForViewing } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { Signal, defineElement, html, renderEach, renderIf, set, useCleanup, useSignals, withLifecycle } from './snapFramework.js';
 
@@ -26,13 +26,9 @@ export function showPopupWithExample(code) {
 export const PopupWithExample = defineElement('PopupWithExample', ({ code, removePopup }) => {
   const rerunCodeEventSignal = createEventSignal();
 
-  const codeToView = code
-    .replaceAll("%FRAMEWORK_LOCATION%", `./snapFramework.js`)
-    .replaceAll("%ASSETS%", `./assets`);
+  const codeToView = prepareCodeExampleForViewing(code);
 
-  const codeToRun = code
-    .replaceAll("%FRAMEWORK_LOCATION%", `${PUBLIC_URL}/FrameworkPage/snapFramework.js`)
-    .replaceAll("%ASSETS%", `${PUBLIC_URL}/assets`);
+  const codeToRun = prepareCodeExampleForRunning(code);
 
   const keyDownListener = event => {
     if (event.key === 'Escape') {
