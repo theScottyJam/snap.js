@@ -181,13 +181,13 @@ const features = [
     // renderDescription: () => html`
     //   <p>
     //     Use <a href="javascript:void(0)">defineElement()</a> to generate a
-    //     <a href="javascript:void(0)">native element (custom web component)</a> that encapsulates your CSS.
+    //     <a href="javascript:void(0)">custom element (web component)</a> that encapsulates your CSS.
     //   </p>
     // `,
     renderDescription: () => html`
       <p>
         Use <code>defineElement()</code> to generate a
-        native element (custom web component) that encapsulates your CSS.
+        custom element (web component) that encapsulates your CSS.
       </p>
     `,
     code: [

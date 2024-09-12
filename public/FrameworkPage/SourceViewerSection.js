@@ -3,7 +3,7 @@
 import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
-import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, prepareCodeExampleForViewing, PUBLIC_URL } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 import { WithTooltip } from './WithTooltip.js';
@@ -217,7 +217,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
                 <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer([...jsDocsLines, ...fullDocsLines].join('\n') + '\n', { theme: 'dark' })}
+                  ${new CodeViewer(prepareCodeExampleForViewing([...jsDocsLines, ...fullDocsLines].join('\n') + '\n'), { theme: 'dark' })}
                 </div>
               `,
             },
@@ -618,7 +618,7 @@ function renderJsDocsExamples(lineBuffer) {
 
       const codeViewerEl = html`
         <div class="example">
-          ${new CodeViewer(conciseExampleStr, {
+          ${new CodeViewer(prepareCodeExampleForViewing(conciseExampleStr), {
             theme: 'light',
             // Technically, lines shouldn't really be wrapping in desktop view,
             // because the lines shouldn't get long enough for that to happen.

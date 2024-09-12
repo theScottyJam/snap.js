@@ -14,3 +14,15 @@ mobileScreenSizeMedia.addEventListener('change', event => {
   isMobileScreenSize$.set(event.matches);
 });
 isMobileScreenSize$.set(mobileScreenSizeMedia.matches);
+
+export function prepareCodeExampleForViewing(code) {
+  return code
+    .replaceAll("%FRAMEWORK_LOCATION%", `./snapFramework.js`)
+    .replaceAll("%ASSETS%", `./assets`);
+}
+
+export function prepareCodeExampleForRunning(code) {
+  return code
+    .replaceAll("%FRAMEWORK_LOCATION%", `${PUBLIC_URL}/FrameworkPage/snapFramework.js`)
+    .replaceAll("%ASSETS%", `${PUBLIC_URL}/assets`);
+}
