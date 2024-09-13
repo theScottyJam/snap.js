@@ -99,7 +99,7 @@ function renderPageContents({ fullText, minifiedText }) {
     <h2 class="header">— POWERFUL —</h2>
     ${new FeatureShowcaseSection()}
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
-    <p class="section-description">All ${renderTextWithTooltip('201 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
+    <p class="section-description">All ${renderTextWithTooltip('198 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
     ${new SourceViewerSection({ fullText, minifiedText })}
   `;
 }
