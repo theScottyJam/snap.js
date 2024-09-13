@@ -3,7 +3,7 @@ import Description from './Description';
 import style from './index.style';
 import {
   lookupContentEntryFromRoute,
-  extractTopLevelPageFromRoute,
+  extractUtilityPageTypeFromRoute,
 } from '../shared';
 
 export default function SingleEntryPage({ page, setPage, content }) {
@@ -12,7 +12,7 @@ export default function SingleEntryPage({ page, setPage, content }) {
     return <NotFound setPage={setPage} page={page} />;
   }
 
-  const topLevelPage = extractTopLevelPageFromRoute(page);
+  const topLevelPage = extractUtilityPageTypeFromRoute(page);
   if (topLevelPage === 'nolodash') {
     return (
       <NolodashSingleEntryPage
@@ -74,7 +74,7 @@ function NotFound({ setPage, page }) {
 }
 
 function BackButton({ setPage, page }) {
-  const path = extractTopLevelPageFromRoute(page) ?? 'utils';
+  const path = extractUtilityPageTypeFromRoute(page) ?? 'utils';
   return (
     <a
       href={'#!/' + path}

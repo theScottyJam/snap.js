@@ -1,31 +1,31 @@
 import React from 'react';
 import style from './Content.style';
 import DocEntry from '../DocEntry';
-import { extractTopLevelPageFromRoute } from '../../shared';
+import { extractUtilityPageTypeFromRoute } from '../../shared';
 import { ReactComponent as SearchIcon } from './searchIcon.svg';
 import MarkDown from '../../MarkDown/MarkDown.js';
 import { nolodashFaq } from './nolodashFaq.js';
 
 export default function Content({ page, setPage, content }) {
   const [filterText, setFilterText] = React.useState('');
-  const topLevelPage = extractTopLevelPageFromRoute(page);
-  if (topLevelPage === null) {
+  const utilityPageType = extractUtilityPageTypeFromRoute(page);
+  if (utilityPageType === null) {
     throw new Error('Invalid route');
   }
 
-  const doesPageHaveFilterBox = topLevelPage === 'nolodash';
+  const doesPageHaveFilterBox = utilityPageType === 'nolodash';
 
   const filteredPageContent = doesPageHaveFilterBox
-    ? filterContent(content[topLevelPage], filterText)
-    : content[topLevelPage];
+    ? filterContent(content[utilityPageType], filterText)
+    : content[utilityPageType];
 
   return (
     <div className={style.content}>
-      <PageSummary topLevelPage={topLevelPage} />
+      <PageSummary topLevelPage={utilityPageType} />
       {doesPageHaveFilterBox && (
         <FilterBox filterText={filterText} setFilterText={setFilterText} />
       )}
-      {filteredPageContent.length === 0 && content[topLevelPage].length > 0 && (
+      {filteredPageContent.length === 0 && content[utilityPageType].length > 0 && (
         <i className={style.noResults}>No Results</i>
       )}
       {filteredPageContent.map(({ categoryHeading, entries }) => (

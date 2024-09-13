@@ -135,7 +135,14 @@ function fetchAndNormalizeCurrentHashPath() {
   } else if (hashRoute.match(/^framework\/release\/1\.0\/?$/)) {
     window.history.replaceState({}, 'Title', '/snap.js/#!/framework');
     hashRoute = 'framework';
-  } else if (!/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute)) {
+  } else if (
+    // If it's a route that doesn't start with a valid top-level route
+    !/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute) ||
+    // Or if it starts with framework/... (we've already passed all valid checks for framework/... routes)
+    hashRoute.startsWith('framework/')
+  ) {
+    // This won't return notFound for all not-found cases - the
+    // utils and nolodash pages are in charge of rendering their own as needed.
     hashRoute = 'notFound';
   }
 
