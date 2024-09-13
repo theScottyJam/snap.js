@@ -172,15 +172,13 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   const isStartPragma = line => doesLineHavePragma(line, 'START');
   const hasClosingCommentToken = line => line.includes('*/');
 
-  // <-- Remove isSectionHeading param
-  const getGridPosStyleForCodeBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([isSmallScreenSize$], isSmallScreenSize => {
+  const getGridPosStyleForCodeBlock = rowNumb_ => useSignals([isSmallScreenSize$], isSmallScreenSize => {
     const rowNumb = isSmallScreenSize ? rowNumb_ * 2 + 1 : rowNumb_;
     const colNumb = isSmallScreenSize ? 1 : 2;
     return `grid-row: ${rowNumb}; grid-column: ${colNumb}`;
   });
 
-  // <-- Remove isSectionHeading param
-  const getGridPosStyleForDocsBlock = (rowNumb_, { isSectionHeading = false } = {}) => useSignals([isSmallScreenSize$], (isSmallScreenSize) => {
+  const getGridPosStyleForDocsBlock = rowNumb_ => useSignals([isSmallScreenSize$], (isSmallScreenSize) => {
     const rowNumb = isSmallScreenSize ? rowNumb_ * 2 : rowNumb_;
     return `grid-row: ${rowNumb}; grid-column: 1`;
   });
@@ -255,14 +253,14 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         docNodes.push(html`
           <h1 class="explanation section-header" ${set({
             textContent: '— ' + sectionHeaderText + ' —',
-            style: getGridPosStyleForDocsBlock(curRowNumb, { isSectionHeading: true }),
+            style: getGridPosStyleForDocsBlock(curRowNumb),
           })}></h1>
         `);
         codeNodes.push(html`
           <div class="code-viewer section-header" ${
             set({
               // eslint-disable-next-line no-loop-func
-              style: useSignals([viewMode$, getGridPosStyleForCodeBlock(curRowNumb, { isSectionHeading: true })], (viewMode, gridPosStyle) => {
+              style: useSignals([viewMode$, getGridPosStyleForCodeBlock(curRowNumb)], (viewMode, gridPosStyle) => {
                 return `display: ${viewMode === 'minified' ? 'none' : 'block'}; ${gridPosStyle}`;
               }),
             })

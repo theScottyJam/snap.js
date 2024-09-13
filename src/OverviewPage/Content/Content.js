@@ -25,9 +25,10 @@ export default function Content({ page, setPage, content }) {
       {doesPageHaveFilterBox && (
         <FilterBox filterText={filterText} setFilterText={setFilterText} />
       )}
-      {filteredPageContent.length === 0 && content[utilityPageType].length > 0 && (
-        <i className={style.noResults}>No Results</i>
-      )}
+      {filteredPageContent.length === 0 &&
+        content[utilityPageType].length > 0 && (
+          <i className={style.noResults}>No Results</i>
+        )}
       {filteredPageContent.map(({ categoryHeading, entries }) => (
         <Category
           key={categoryHeading}

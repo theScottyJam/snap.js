@@ -21,7 +21,9 @@ export function lookupContentEntryFromRoute(content, route) {
     return null;
   }
 
-  const entries = content[utilityPageType].flatMap(category => category.entries);
+  const entries = content[utilityPageType].flatMap(
+    category => category.entries
+  );
 
   for (const entry of entries) {
     if ([utilityPageType, entry.name].join('/') === route) {
