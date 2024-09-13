@@ -29,6 +29,10 @@ class LineBuffer {
     this.#lines = lines;
   }
 
+  clone() {
+    return new LineBuffer(this.#lines.slice(this.#at));
+  }
+
   /**
    * predicateMap is an object that maps predicate names to predicates
    * @returns `{ section: string[], stopReason: <name of predicate or "END"> }`
@@ -164,6 +168,8 @@ function renderControls({ documentedCodeRef, viewMode$, updateViewMode }) {
 const isSectionHeading = line => line.match(/=====+ (.*) =====+/)?.[1]; // If matches, returns the section heading text
 const hasBulletPoint = line => line.match(/^ *\* ?(.*)/)?.[1]; // If matches, returns the text without the bullet point
 const hasParamAnnotation = line => line.match(/^ *@param ([a-zA-Z0-9_$]+) (.*)/)?.slice(1); // If matches, returns the [paramName, description text]
+const isNormalViewOnlyLineStart = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-START');
+const isNormalViewOnlyLineEnd = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-END');
 
 export function renderFrameworkSourceViewerContent({ fullText, minifiedText, viewMode$ }) {
   const lineBuffer = new LineBuffer(fullText.split('\n'));
@@ -273,7 +279,17 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
       const { section, stopReason } = lineBuffer.grabLinesUntilPast({ hasClosingCommentToken });
       assert(stopReason !== 'END');
       assert(jsDocsInfo === undefined, 'two top-level js-doc comments were found in a row, and the webpage is not programmed to know how to render that.');
-      const lineBeingAnnotated = lineBuffer.currentLine();
+      let lineBeingAnnotated = lineBuffer.currentLine();
+      if (isNormalViewOnlyLineStart(lineBeingAnnotated)) {
+        const tempBuffer = lineBuffer.clone();
+        tempBuffer.next();
+        while (!isNormalViewOnlyLineEnd(tempBuffer.currentLine())) {
+          tempBuffer.next();
+          continue;
+        }
+        tempBuffer.next();
+        lineBeingAnnotated = tempBuffer.currentLine();
+      }
       jsDocsInfo = {
         lines: section,
         render: rowNumb => renderJsDocs({
@@ -316,8 +332,6 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
 
 function gatherCodeLines({ lineBuffer }) {
   const isTopLevelOpeningJsDocToken = line => line === '/**';
-  const isNormalViewOnlyLineStart = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-START');
-  const isNormalViewOnlyLineEnd = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-END');
 
   let normalLines = [];
   let fullDocsLines = [];
