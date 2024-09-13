@@ -21,8 +21,12 @@
 //     only be rendered when you're viewing a complete, runnable example. If
 //     you're viewing the concise version of the example, this content will
 //     be hidden.
-//   NORMAL-VIEW-ONLY-NEXT: The following line will only be rendered in the
-//     normal view, not the fully documented or minified view.
+//   NORMAL-VIEW-ONLY-START/NORMAL-VIEW-ONLY-END: The lines inside this boundary
+//     will only be rendered in the normal view, not the fully documented or
+//     minified view.
+//     Can only be started from outside of js-docs. js-docs may be included
+//     inside of it - such docs will only be displayed in the code, they
+//     won't be converted to nice-looking docs on the side.
 //   AUTO-OPEN: For debugging purposes - place this on an example to cause it
 //     to be auto-opened, making it easier to develop the example.
 
@@ -33,8 +37,9 @@
 
 //# START
 // Snap Framework beta version
-//# NORMAL-VIEW-ONLY-NEXT
+//# NORMAL-VIEW-ONLY-START
 // Read the docs: https://thescottyjam.github.io/snap.js/#!/framework/release/1.0
+//# NORMAL-VIEW-ONLY-END
 
 
 // ==================== Reactivity ====================
@@ -100,6 +105,9 @@
  * }
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/** A signal holds state and emits an event whenever that state is updated. */
+//# NORMAL-VIEW-ONLY-END
 export class Signal {
   #value;
   #listeners = new Set();
@@ -262,6 +270,13 @@ export class Signal {
  * document.body.append(selfDestructFragment);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Allows you to subscribe to signals. A derived signal will be returned
+ * that holds the last value your callback returned.
+ * You can choose to not return anything and ignore the derived signal.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function useSignals(dependentSignals, onChange) {
   const derivedSignal = new Signal(undefined);
 
@@ -370,6 +385,9 @@ export function useSignals(dependentSignals, onChange) {
  *   console.info('Result:', x + y);
  * }
  */
+//# NORMAL-VIEW-ONLY-START
+/** Allows you to implicitly pass data through the call stack. */
+//# NORMAL-VIEW-ONLY-END
 export class Context {
   #stack = [];
 
@@ -573,6 +591,9 @@ export class Context {
  * // Logs out the dimensions of the text portion of the profile card.
  * console.log(profileEl.api.getSizeOfText());
  */
+//# NORMAL-VIEW-ONLY-START
+/** Wraps your component in a custom web component to encapsulate your CSS. */
+//# NORMAL-VIEW-ONLY-END
 export function defineElement(name, init) {
   return class CustomElement extends HTMLElement {
     // A dedicated spot where init() can put public fields if wanted
@@ -699,6 +720,13 @@ const onUninitContext = new Context();
  *
  * toggleWidget();
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Components and hooks should be used during a {@link withLifecycle} callback
+ * to receive the capability of registering cleanup handlers. You can manually
+ * trigger the cleanup handlers with the returned uninit() function.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function withLifecycle(callback) {
   const signalUninitialized = new Signal(false);
   const value = onUninitContext.provide(signalUninitialized, callback);
@@ -747,6 +775,12 @@ export function withLifecycle(callback) {
  * });
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Register a cleanup handler that gets called before your component is removed
+ * from the DOM.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function useCleanup(listener) {
   onUninitContext.get().subscribe(listener);
 }
@@ -874,6 +908,13 @@ export function useCleanup(listener) {
  * });
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * A tagged template used to create HTML fragments.
+ * You can interpolate other elements/fragments, or you can interpolate
+ * callbacks inside of elements to receive a reference to that element.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function html(strings, ...values) {
   const isFunctionThatIsNotAClass = value => {
     return (
@@ -1068,6 +1109,12 @@ export function html(strings, ...values) {
  * document.body.append(withLifecycle(renderExample2).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Primarily intended to be used with the html tagged template as a way
+ * to dynamically set properties on an element.
+ */
+//# NORMAL-VIEW-ONLY-END
 export const set = (fields, getRef = undefined) => el => {
   for (const [key, maybeSignal] of Object.entries(fields)) {
     const signal = maybeSignal instanceof Signal
@@ -1162,6 +1209,12 @@ export const set = (fields, getRef = undefined) => el => {
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Renders a DOM node for each item in signalEntries's.
+ * signalEntries should be a signal holding an array of key-value pairs.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function renderEach(signalEntries, initChild) {
   // Maps entry keys to an object of the shape:
   //   {
@@ -1306,6 +1359,12 @@ export function renderEach(signalEntries, initChild) {
  * document.body.append(withLifecycle(renderContent).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Given an array of `{ signalWhen: ..., render: ... }` objects, this will
+ * automatically render the first object who's signalWhen property is true.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function renderChoice(conditions) {
   const signalIndexToRender = useSignals(
     conditions.map(condition => condition.signalWhen),
@@ -1352,6 +1411,9 @@ export function renderChoice(conditions) {
  * document.body.append(withLifecycle(() => renderProfile(profile)).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/** A shorthand for @{link renderChoice} that only supports one branch. */
+//# NORMAL-VIEW-ONLY-END
 export function renderIf(signalWhen, render) {
   return renderChoice([{ signalWhen, render }]);
 }

@@ -318,22 +318,47 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
 
 function gatherCodeLines({ lineBuffer }) {
   const isTopLevelOpeningJsDocToken = line => line === '/**';
-  const isNormalViewOnlyLineNext = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-NEXT');
+  const isNormalViewOnlyLineStart = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-START');
+  const isNormalViewOnlyLineEnd = line => doesLineHavePragma(line, 'NORMAL-VIEW-ONLY-END');
 
   let normalLines = [];
   let fullDocsLines = [];
+  let normalViewOnly = false;
   while (true) {
-    const { section, stopReason } = lineBuffer.grabLinesUntil({ isTopLevelOpeningJsDocToken, isSectionHeading, isNormalViewOnlyLineNext });
+    const { section, stopReason } = lineBuffer.grabLinesUntil({
+      isTopLevelOpeningJsDocToken,
+      isSectionHeading,
+      isNormalViewOnlyLineStart,
+      isNormalViewOnlyLineEnd,
+    });
     normalLines.push(...section);
-    fullDocsLines.push(...section);
+    if (!normalViewOnly) {
+      fullDocsLines.push(...section);
+    }
 
-    if (stopReason === 'isNormalViewOnlyLineNext') {
-      lineBuffer.next(); // Skip the line with the pragma
+    if (normalViewOnly && stopReason === 'isTopLevelOpeningJsDocToken') {
+      // Register the `/**` and move on.
+      // Content inside of the NORMAL-VIEW pragma won't count as documentation that gets shown on the side.
       normalLines.push(lineBuffer.currentLine());
       lineBuffer.next();
       continue;
     }
 
+    if (stopReason === 'isNormalViewOnlyLineStart') {
+      lineBuffer.next(); // Skip the line with the pragma
+      assert(normalViewOnly === false);
+      normalViewOnly = true;
+      continue;
+    }
+
+    if (stopReason === 'isNormalViewOnlyLineEnd') {
+      lineBuffer.next(); // Skip the line with the pragma
+      assert(normalViewOnly === true);
+      normalViewOnly = false;
+      continue;
+    }
+
+    assert(normalViewOnly === false, 'Expected the normal-view-only pragma section to end before returning from here.');
     return { normalLines, fullDocsLines, stopReason };
   }
 }
