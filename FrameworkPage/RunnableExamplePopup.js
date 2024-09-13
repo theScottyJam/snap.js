@@ -2,7 +2,7 @@
 import { CodeViewer } from './CodeViewer.js';
 import { isMobileScreenSize$, prepareCodeExampleForRunning, prepareCodeExampleForViewing } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
-import { Signal, defineElement, html, renderEach, renderIf, set, useCleanup, useSignals, withLifecycle } from './snapFramework.js';
+import { Signal, defineElement, html, renderChoice, renderEach, set, useCleanup, useSignals, withLifecycle } from './snapFramework.js';
 
 const createEventSignal = () => new Signal(false);
 
@@ -98,26 +98,32 @@ function renderResultPanel({ codeToRun, rerunCodeEventSignal, removePopup }) {
         </div>
       </div>
       <div class="result">
-        ${renderIf(showResult$, () => html`
-          <iframe frameborder="0" ${iframeEl => {
-            // Wait a moment for the iframe to be attached to the DOM before trying to access its contents.
-            setTimeout(() => {
-              runExampleInIframe({
-                iframeEl,
-                codeToRun,
-                // logLevel is either "info" or "error"
-                onLog: (logLevel, message ) => {
-                  logOutput$.set([...logOutput$.get(), { cssClass: logLevel, message }]);
-                },
-              })
-            });
-          }}></iframe>
-        `)}
-        ${renderIf(useSignals([logOutput$], logOutput => logOutput.length > 0), () => html`
-          <div>
-            <p class="log-output-heading">Log Output</p>
-          </div>
-        `)}
+        ${renderChoice([{
+          signalWhen: showResult$,
+          render: () => html`
+            <iframe frameborder="0" ${iframeEl => {
+              // Wait a moment for the iframe to be attached to the DOM before trying to access its contents.
+              setTimeout(() => {
+                runExampleInIframe({
+                  iframeEl,
+                  codeToRun,
+                  // logLevel is either "info" or "error"
+                  onLog: (logLevel, message ) => {
+                    logOutput$.set([...logOutput$.get(), { cssClass: logLevel, message }]);
+                  },
+                })
+              });
+            }}></iframe>
+          `
+        }])}
+        ${renderChoice([{
+          signalWhen: useSignals([logOutput$], logOutput => logOutput.length > 0),
+          render: () => html`
+            <div>
+              <p class="log-output-heading">Log Output</p>
+            </div>
+          `
+        }])}
         <div class="log-output">
           ${renderEach(
             useSignals([logOutput$], logOutput => logOutput.map((logLine, i) => [i, logLine])),

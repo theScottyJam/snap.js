@@ -21,8 +21,12 @@
 //     only be rendered when you're viewing a complete, runnable example. If
 //     you're viewing the concise version of the example, this content will
 //     be hidden.
-//   NORMAL-VIEW-ONLY-NEXT: The following line will only be rendered in the
-//     normal view, not the fully documented or minified view.
+//   NORMAL-VIEW-ONLY-START/NORMAL-VIEW-ONLY-END: The lines inside this boundary
+//     will only be rendered in the normal view, not the fully documented or
+//     minified view.
+//     Can only be started from outside of js-docs. js-docs may be included
+//     inside of it - such docs will only be displayed in the code, they
+//     won't be converted to nice-looking docs on the side.
 //   AUTO-OPEN: For debugging purposes - place this on an example to cause it
 //     to be auto-opened, making it easier to develop the example.
 
@@ -33,8 +37,9 @@
 
 //# START
 // Snap Framework beta version
-//# NORMAL-VIEW-ONLY-NEXT
+//# NORMAL-VIEW-ONLY-START
 // Read the docs: https://thescottyjam.github.io/snap.js/#!/framework/release/1.0
+//# NORMAL-VIEW-ONLY-END
 
 
 // ==================== Reactivity ====================
@@ -100,6 +105,9 @@
  * }
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/** A signal holds state and emits an event whenever that state is updated. */
+//# NORMAL-VIEW-ONLY-END
 export class Signal {
   #value;
   #listeners = new Set();
@@ -262,6 +270,13 @@ export class Signal {
  * document.body.append(selfDestructFragment);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Allows you to subscribe to signals. A derived signal will be returned
+ * that holds the last value your callback returned.
+ * You can choose to not return anything and ignore the derived signal.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function useSignals(dependentSignals, onChange) {
   const derivedSignal = new Signal(undefined);
 
@@ -370,6 +385,9 @@ export function useSignals(dependentSignals, onChange) {
  *   console.info('Result:', x + y);
  * }
  */
+//# NORMAL-VIEW-ONLY-START
+/** Allows you to implicitly pass data through the call stack. */
+//# NORMAL-VIEW-ONLY-END
 export class Context {
   #stack = [];
 
@@ -573,6 +591,9 @@ export class Context {
  * // Logs out the dimensions of the text portion of the profile card.
  * console.log(profileEl.api.getSizeOfText());
  */
+//# NORMAL-VIEW-ONLY-START
+/** Wraps your component in a custom web component to encapsulate your CSS. */
+//# NORMAL-VIEW-ONLY-END
 export function defineElement(name, init) {
   return class CustomElement extends HTMLElement {
     // A dedicated spot where init() can put public fields if wanted
@@ -597,8 +618,8 @@ export function defineElement(name, init) {
 const onUninitContext = new Context();
 
 /**
- * Use this to bootstrap a root framework component. This is what allows your
- * components to use hooks such as {@link useCleanup}.
+ * Use this to bootstrap a root component. This is what allows your components
+ * to use hooks such as {@link useCleanup}.
  * 
  * @param callback This callback will be auto-called. While it is running,
  *   lifecycle hooks will be available to be used.
@@ -699,6 +720,13 @@ const onUninitContext = new Context();
  *
  * toggleWidget();
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Components and hooks should be used during a {@link withLifecycle} callback
+ * to receive the capability of registering cleanup handlers. You can manually
+ * trigger the cleanup handlers with the returned uninit() function.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function withLifecycle(callback) {
   const signalUninitialized = new Signal(false);
   const value = onUninitContext.provide(signalUninitialized, callback);
@@ -747,6 +775,12 @@ export function withLifecycle(callback) {
  * });
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Register a cleanup handler that gets called before your component is removed
+ * from the DOM.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function useCleanup(listener) {
   onUninitContext.get().subscribe(listener);
 }
@@ -765,13 +799,6 @@ export function useCleanup(listener) {
  * To set properties on an element in your template, use the {@link set} helper
  * function. {@link set} can also be used to dynamically insert text inside of an
  * element, by setting the `textContent` property of that element.
- * 
- * There's one important restriction: never set the id attribute on an element
- * in your HTML template string. If you need to set an id, you can do so
- * after-the-fact, by using {@link set} or some other method. The way this HTML
- * template tag is able to find elements and provide them to interpolated
- * functions is by temporarily setting an id attribute on those elements, and if
- * you attempt to also set an id attribute, that can create a conflict.
  * 
  * This is a stand-alone function that isn't dependent on anything else, which
  * means you can copy-paste it into any project and use it as-is, without
@@ -817,63 +844,14 @@ export function useCleanup(listener) {
  *     </p>
  *   </main>
  * `);
- * 
- * //# COLLAPSE-EXAMPLES
- * @example <caption>Setting an ID</caption>
- * //# COMPLETE-EXAMPLE-START
- * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
- * function renderBadExample() {
- * //# COMPLETE-EXAMPLE-END
- *   // Wrong - may cause issues if you
- *   // interpolate a callback into this element.
- * //# COMPLETE-EXAMPLE-START
- *   //
- *   // Technically nothing bad will happen in this specific case, but it's
- *   // simpler to treat this as a general hard-and-fast rule instead of
- *   // trying to learn what the exceptions are.
- * //# COMPLETE-EXAMPLE-END
- *   return html`
- *     <p id="bad-example-id">
- *       Bad Example!
- *     </p>
- *   `;
- * //# COMPLETE-EXAMPLE-START
- * };
- * //# COMPLETE-EXAMPLE-END
- *
- * //# COMPLETE-EXAMPLE-START
- * function renderGoodExample1() {
- * //# COMPLETE-EXAMPLE-END
- *   // Correct
- *   return html`
- *     <p ${el => { el.id = 'good-example-1-id' }}>
- *       Good Example 1!
- *     </p>
- *   `;
- * //# COMPLETE-EXAMPLE-START
- * }
- * //# COMPLETE-EXAMPLE-END
- *
- * //# COMPLETE-EXAMPLE-START
- * function renderGoodExample2() {
- * //# COMPLETE-EXAMPLE-END
- *   // Also correct
- *   return html`
- *     <p ${set({ id: 'good-example-2-id' })}>
- *       Good Example 2!
- *     </p>
- *   `;
- * //# COMPLETE-EXAMPLE-START
- * }
- * 
- * withLifecycle(() => {
- *   document.body.append(renderBadExample());
- *   document.body.append(renderGoodExample1());
- *   document.body.append(renderGoodExample2());
- * });
- * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * A tagged template used to create HTML fragments.
+ * You can interpolate other elements/fragments, or you can interpolate
+ * callbacks inside of elements to receive a reference to that element.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function html(strings, ...values) {
   const isFunctionThatIsNotAClass = value => {
     return (
@@ -886,19 +864,16 @@ export function html(strings, ...values) {
     return node instanceof HTMLElement || node instanceof DocumentFragment;
   };
 
-  const baseElementId = String(Math.random()).split('.')[1];
-  const getIdAtIndex = index => `autogenerated-id-${baseElementId}-${index}`;
-
   // Build the HTML string
   let htmlString = strings[0];
   for (const [i, string] of strings.slice(1).entries()) {
     const value = values[i];
     if (isFunctionThatIsNotAClass(value)) {
-      htmlString += `id="${getIdAtIndex(i)}"`;
+      htmlString += `data-frameworkref="${i}"`;
     } else if (isElementOrFragment(value)) {
+      // Creates a placeholder that'll get replaced with an interpolated value.
       htmlString += (
-        `<template id="${getIdAtIndex(i)}" data-info="child placeholder">` +
-        '</template>'
+        `<template data-frameworkref="${i}" data-info="placeholder"></template>`
       );
     } else {
       throw new Error('Invalid value interpolated into the html tag.');
@@ -913,11 +888,11 @@ export function html(strings, ...values) {
   // Apply interpolated values to the element tree
   for (const [i, value] of values.entries()) {
     if (isFunctionThatIsNotAClass(value)) {
-      const el = templateEl.content.getElementById(getIdAtIndex(i));
-      el.removeAttribute('id');
+      const el = templateEl.content.querySelector(`*[data-frameworkref="${i}"]`);
+      delete el.dataset.frameworkref;
       value(el);
     } else if (isElementOrFragment(value)) {
-      const placeholderEl = templateEl.content.getElementById(getIdAtIndex(i));
+      const placeholderEl = templateEl.content.querySelector(`*[data-frameworkref="${i}"]`);
       placeholderEl.parentNode.insertBefore(value, placeholderEl);
       placeholderEl.parentNode.removeChild(placeholderEl);
     }
@@ -1068,6 +1043,12 @@ export function html(strings, ...values) {
  * document.body.append(withLifecycle(renderExample2).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Primarily intended to be used with the html tagged template as a way
+ * to dynamically set properties on an element.
+ */
+//# NORMAL-VIEW-ONLY-END
 export const set = (fields, getRef = undefined) => el => {
   for (const [key, maybeSignal] of Object.entries(fields)) {
     const signal = maybeSignal instanceof Signal
@@ -1162,6 +1143,12 @@ export const set = (fields, getRef = undefined) => el => {
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Renders a DOM node for each item in signalEntries's.
+ * signalEntries should be a signal holding an array of key-value pairs.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function renderEach(signalEntries, initChild) {
   // Maps entry keys to an object of the shape:
   //   {
@@ -1306,6 +1293,12 @@ export function renderEach(signalEntries, initChild) {
  * document.body.append(withLifecycle(renderContent).value);
  * //# COMPLETE-EXAMPLE-END
  */
+//# NORMAL-VIEW-ONLY-START
+/**
+ * Given an array of `{ signalWhen: ..., render: ... }` objects, this will
+ * automatically render the first object who's signalWhen property is true.
+ */
+//# NORMAL-VIEW-ONLY-END
 export function renderChoice(conditions) {
   const signalIndexToRender = useSignals(
     conditions.map(condition => condition.signalWhen),
@@ -1318,40 +1311,4 @@ export function renderChoice(conditions) {
   return renderEach(signalIndexToRender, indexToRender => {
     return conditions[indexToRender].render();
   });
-}
-
-/**
- * A shorthand for `renderChoice()` when you only have one condition that's
- * deciding if something should render or not.
- * 
- * @example
- * //# COMPLETE-EXAMPLE-START
- * import { Signal, withLifecycle, html, set, renderIf } from '%FRAMEWORK_LOCATION%';
- * 
- * //# COMPLETE-EXAMPLE-END
- * function renderProfile(user) {
- *   return html`
- *     <p ${set({ textContent: user.name })}></p>
- *     ${renderIf(user.signalDateOfBirth, () => html`
- *       <p ${set({ textContent: user.signalDateOfBirth })}></p>
- *     `)}
- *   `;
- * }
- * 
- * //# COMPLETE-EXAMPLE-START
- * 
- * const profile = {
- *   name: 'Cookie Monster',
- *   signalDateOfBirth: new Signal(undefined),
- * };
- * 
- * setTimeout(() => {
- *   profile.signalDateOfBirth.set('1/1/1966');
- * }, 2000);
- * 
- * document.body.append(withLifecycle(() => renderProfile(profile)).value);
- * //# COMPLETE-EXAMPLE-END
- */
-export function renderIf(signalWhen, render) {
-  return renderChoice([{ signalWhen, render }]);
 }

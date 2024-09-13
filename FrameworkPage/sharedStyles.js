@@ -4,7 +4,8 @@ font-family: 'Questrial', sans-serif;
 letter-spacing: 0.05em;
 `;
 
-// <-- See if I can just target all headers everywhere instead of trying to remember to auto-inject this style in each CSS block.
+// TODO: It's low-priority, but it would be better to create a helper function
+// that automatically mixes together the same core style + additional custom styles.
 export const headerStyleMixin = `
   h1, h2, h3, h4, h5 {
     ${headerStyleMixinRules}
