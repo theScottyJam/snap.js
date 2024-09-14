@@ -25,8 +25,9 @@ const darkThemeCss$ = promiseToSignal(
 /**
  * disableWrapping$ can be set to true, false, or "without-internal-scrolling".
  * "without-internal-scrolling" will disable wrapping and also prevent the container from generating a scrollbar.
+ * wrapWithinWords allows wrapping to occur in the middle of the word - useful for minified text where the actual content isn't meant to be human-readable.
  */
-export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(false) } = {}) => {
+export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light', wrapWithinWords = false, disableWrapping$ = new Signal(true) } = {}) => {
   const text$ = text$_ instanceof Signal ? text$_ : new Signal(text$_);
   assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
@@ -78,6 +79,11 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light'
 });
 
 const style = `
+  :host {
+    /* Allows others to modify the margin of this element. */
+    display: block;
+  }
+
   :host pre {
     margin: 0;
     padding: 0;

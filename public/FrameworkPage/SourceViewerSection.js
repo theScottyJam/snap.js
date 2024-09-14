@@ -197,6 +197,12 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   let jsDocsInfo = undefined; // If jsdocs were previously found, this will have the shape { render: ..., lines: ... }
   let inTopLevelJsDocs = false;
   let rowNumb = 1;
+
+  // Used to figure out which element to apply the last-on-desktop class on.
+  // last-on-desktop will also be applied elsewhere to handle the fact that the last element
+  // is something different when viewing the minified code.
+  let lastRowNumberForNormalView$ = new Signal(undefined); // "noraml view" meaning non-minified
+
   while (!lineBuffer.atEnd()) {
     if (!inTopLevelJsDocs) {
       let { normalLines, fullDocsLines, stopReason } = gatherCodeLines({ lineBuffer })
@@ -215,21 +221,36 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         );
 
         const jsDocsLines = reformatJsdocsForDisplay(jsDocsInfo?.lines ?? []);
+        const codeViewerClass$ = useSignals([lastRowNumberForNormalView$], lastRowNumberForNormalView => {
+          return 'code-viewer' + (lastRowNumberForNormalView === curRowNumb ? ' last-on-desktop' : '');
+        });
         codeNodes.push(html`
           ${renderChoice([
             {
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'full-docs'),
               render: () => html`
-                <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer(prepareCodeExampleForViewing([...jsDocsLines, ...fullDocsLines].join('\n') + '\n'), { theme: 'dark' })}
+                <div ${set({
+                  className: codeViewerClass$,
+                  style: getGridPosStyleForCodeBlock(curRowNumb),
+                })}>
+                  ${new CodeViewer(prepareCodeExampleForViewing([...jsDocsLines, ...fullDocsLines].join('\n') + '\n'), {
+                    theme: 'dark',
+                    disableWrapping$: new Signal(false),
+                  })}
                 </div>
               `,
             },
             {
               signalWhen: useSignals([viewMode$], viewMode => viewMode === 'normal'),
               render: () => html`
-                <div class="code-viewer" ${set({ style: getGridPosStyleForCodeBlock(curRowNumb) })}>
-                  ${new CodeViewer(normalLines.join('\n') + '\n', { theme: 'dark' })}
+                <div ${set({
+                  className: codeViewerClass$,
+                  style: getGridPosStyleForCodeBlock(curRowNumb),
+                })}>
+                  ${new CodeViewer(normalLines.join('\n') + '\n', {
+                    theme: 'dark',
+                    disableWrapping$: new Signal(false),
+                  })}
                 </div>
               `,
             },
@@ -271,7 +292,10 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
               }),
             })
           }>
-            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', { theme: 'dark' })}
+            ${new CodeViewer([rawSectionHeaderText, ...section].join('\n') + '\n', {
+              theme: 'dark',
+              disableWrapping$: new Signal(false),
+            })}
           </div>
         `);
       }
@@ -304,8 +328,6 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
 
   assert(jsDocsInfo === undefined, 'A jsdoc node was created, but we failed to find a spot to place it.');
 
-  codeNodes.at(-1).querySelector('.code-viewer').classList.add('last');
-
   const allNodes = document.createDocumentFragment();
   allNodes.append(
     ...docNodes,
@@ -313,8 +335,10 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   );
   
   const curRowNumb = rowNumb;
+  // rowNumb is always pointing to the next row number, not the current, which is why we need to subtract 1.
+  lastRowNumberForNormalView$.set(curRowNumb - 1);
   allNodes.append(html`
-    <div class="code-viewer" ${set({
+    <div class="code-viewer last-on-desktop" ${set({
       style: useSignals([viewMode$, isSmallScreenSize$], (viewMode, isSmallScreenSize) => {
         const displayStyle = `display: ${viewMode === 'minified' ? 'block' : 'none'}`;
         if (isSmallScreenSize) {
@@ -324,9 +348,10 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         }
       }),
     })}>
-      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true })}
+      ${new CodeViewer(minifiedText, { theme: 'dark', wrapWithinWords: true, disableWrapping$: new Signal(false) })}
     </div>
   `);
+
   return allNodes;
 }
 
@@ -757,7 +782,8 @@ function renderExtractedJsDescriptionText(text) {
 }
 
 const CODE_BACKGROUND = '#272822';
-const CODE_CONTROL_BORDER_RADIUS = '8px';
+const CODE_CONTROL_BUTTON_BORDER_RADIUS = '8px';
+const CODE_AREA_BORDER_RADIUS = '8px';
 const CODE_CONTROL_INNER_BORDER_RADIUS = '4px';
 const CODE_CONTROL_BUTTON_MAIN_COLOR = '#ccc';
 const MOBILE_EXPLANATION_BACKGROUND_COLOR = '#eee';
@@ -798,7 +824,7 @@ const style = `
     background: ${CODE_BACKGROUND};
     margin: 0;
     padding: 10px;
-    border-top-left-radius: 8px;
+    border-top-left-radius: ${CODE_AREA_BORDER_RADIUS};
   }
 
   .code-controls button {
@@ -813,7 +839,7 @@ const style = `
   .view-mode-buttons {
     display: flex;
     background: ${CODE_BACKGROUND};
-    border-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border-radius: ${CODE_CONTROL_BUTTON_BORDER_RADIUS};
     border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};
   }
 
@@ -838,7 +864,7 @@ const style = `
   }
 
   .select-all {
-    border-radius: ${CODE_CONTROL_BORDER_RADIUS};
+    border-radius: ${CODE_CONTROL_BUTTON_BORDER_RADIUS};
     border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};
     /* This allows the ::after pseudo-element to be absolutely positioned inside of the button. */
     position: relative;
@@ -872,8 +898,8 @@ const style = `
     padding-bottom: 3em;
   }
 
-  .code-viewer:last-child {
-    padding-bottom: 1em;
+  .code-viewer.last-on-desktop {
+    border-bottom-left-radius: ${CODE_AREA_BORDER_RADIUS};
   }
 
   .jsdoc-header {

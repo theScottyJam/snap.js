@@ -8,6 +8,7 @@ import { PUBLIC_URL } from './shared.js';
 import { headerStyleMixin } from './sharedStyles.js';
 import { OverviewSection } from './OverviewSection.js';
 import { WithTooltip } from './WithTooltip.js';
+import { AdditionalInformationSection } from './AdditionalInformationSection.js';
 
 export class FrameworkPage extends HTMLElement {
   constructor() {
@@ -101,6 +102,8 @@ function renderPageContents({ fullText, minifiedText }) {
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
     <p class="section-description">All ${renderTextWithTooltip('195 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
     ${new SourceViewerSection({ fullText, minifiedText })}
+    <h2 class="header">— Additional Guidelines —</h2>
+    ${new AdditionalInformationSection()}
   `;
 }
 

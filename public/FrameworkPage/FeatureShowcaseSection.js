@@ -42,7 +42,7 @@ function renderCodeSample({ feature, index, selectedFeature$ }) {
     })}>
       <h2 class="mobile-feature-title" ${set({ textContent: feature.header })}></h2>
       <p class="code-tab" ${set({ textContent: feature.tabName })}></p>
-      ${new CodeViewer(feature.code + newLinePad, { theme: 'dark', disableWrapping$: new Signal(true) })}
+      ${new CodeViewer(feature.code + newLinePad, { theme: 'dark' })}
       <div class="feature-description-container">
         <div class="feature-description" ${el => {
           el.append(feature.renderDescription());
