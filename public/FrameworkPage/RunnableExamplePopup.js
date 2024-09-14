@@ -170,10 +170,21 @@ function runExampleInIframe({ iframeEl, codeToRun, onLog }) {
     onLog('error', error.message);
   });
 
-  const scriptEl = iframeEl.contentDocument.createElement('script');
-  scriptEl.type = 'module';
-  scriptEl.textContent = codeToRun;
-  iframeEl.contentDocument.head.append(scriptEl);
+  // The below code doesn't work in Firefox because it causes the tab to crash.
+  // This will hopefully get fixed in a future release, but until then, using
+  // srcdoc as shown below seems to be a good workaround.
+  //
+  // const scriptEl = iframeEl.contentDocument.createElement('script');
+  // scriptEl.type = 'module';
+  // scriptEl.textContent = codeToRun;
+  // iframeEl.contentDocument.head.append(scriptEl);
+
+  iframeEl.srcdoc = `
+    <!doctype html>
+    <html><head><script type="module">
+      ${codeToRun}
+    </script></head></html>
+  `;
 }
 
 const FRAME_BORDER_STYLE = '1px solid #ccc';

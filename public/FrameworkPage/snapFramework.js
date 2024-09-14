@@ -1239,18 +1239,18 @@ export function renderEach(signalEntries, initChild) {
  * import { Signal, withLifecycle, html, renderChoice } from '%FRAMEWORK_LOCATION%';
  *
  * // This signal will be set to true when
- * // the container size is smaller than 300px
+ * // the container size is smaller than 480px
  * const signalIsMobileView = new Signal(false);
- * const mobileMedia = matchMedia(`(max-width: 300px)`)
+ * const mobileMedia = matchMedia(`(max-width: 480px)`)
  * mobileMedia.addEventListener('change', event => {
  *   signalIsMobileView.set(event.matches)
  * })
  * signalIsMobileView.set(mobileMedia.matches)
  * 
  * // This signal will be set to true when
- * // the container size is smaller than 500px
+ * // the container size is smaller than 550px
  * const signalIsTabletView = new Signal(false);
- * const tabletMedia = matchMedia(`(max-width: 500px)`)
+ * const tabletMedia = matchMedia(`(max-width: 550px)`)
  * tabletMedia.addEventListener('change', event => {
  *   signalIsTabletView.set(event.matches)
  * })
