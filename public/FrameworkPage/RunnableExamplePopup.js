@@ -178,6 +178,7 @@ function runExampleInIframe({ iframeEl, codeToRun, onLog }) {
 
 const FRAME_BORDER_STYLE = '1px solid #ccc';
 const BUTTON_BORDER_COLOR = '#aaa';
+const POPUP_BORDER_RADIUS = '4px';
 
 const style = `
   .backdrop {
@@ -199,7 +200,7 @@ const style = `
     left: 80px;
     bottom: 80px;
     right: 80px;
-    border-radius: 4px;
+    border-radius: ${POPUP_BORDER_RADIUS};
   }
 
   .panel-header {
@@ -278,6 +279,7 @@ const style = `
     border-left: 1px solid ${BUTTON_BORDER_COLOR};
     border-bottom: 1px solid ${BUTTON_BORDER_COLOR};
     border-bottom-left-radius: 3px;
+    border-top-right-radius: ${POPUP_BORDER_RADIUS};
     cursor: pointer;
     &:hover {
       background: ${ICON_BUTTON_BACKGROUND_ON_HOVER};

@@ -32,14 +32,6 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light'
   assert(['light', 'dark'].includes(theme));
   let codeContainerEl;
 
-  // Waiting a tad before running the syntax highlighter so the element has a chance
-  // to get attached to the DOM first.
-  setTimeout(() => {
-    // highlightAllUnder() needs to run against a container that holds the pre element.
-    // It can't run against the pre element itself.
-    Prism.highlightAllUnder(codeContainerEl);
-  }, 200); // <-- (why is 200ms needed? Is it so the theme/font has a chance to load in? Something else?)
-
   const el = html`
     <div ${el => { codeContainerEl = el }}>
       <!-- There can't be any whitespace between the pre tag and the code tag, or it will show up in the UI -->
@@ -68,12 +60,9 @@ export const CodeViewer = defineElement('CodeViewer', (text$_, { theme = 'light'
   `;
 
   // This is done after html`...` so the syntax highlighting can happen after the parameters have been updated.
-  let skip = true;
   useSignals([text$], text => {
-    if (skip) return;
     Prism.highlightAllUnder(codeContainerEl);
   });
-  skip = false;
 
   return el;
 });

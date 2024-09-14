@@ -258,9 +258,6 @@ const style = `
     position: relative;
     border: unset;
     border-top: 1px solid #ccc;
-    /* // <-- Find a better way to handle this - it creates a 1px white strip at the bottom when hovering */
-    /* The invisible border-bottom forces the background color to extend to the border. */
-    border-bottom: 1px solid white;
     padding-left: 20px;
     padding-right: 20px;
     ${headerStyleMixinRules}
