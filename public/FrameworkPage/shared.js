@@ -15,6 +15,8 @@ mobileScreenSizeMedia.addEventListener('change', event => {
 });
 isMobileScreenSize$.set(mobileScreenSizeMedia.matches);
 
+// --- Code Formatting --- //
+
 export function prepareCodeExampleForViewing(code) {
   return code
     .replaceAll("%FRAMEWORK_LOCATION%", `./snapFramework.js`)
@@ -25,4 +27,17 @@ export function prepareCodeExampleForRunning(code) {
   return code
     .replaceAll("%FRAMEWORK_LOCATION%", `${PUBLIC_URL}/FrameworkPage/snapFramework.js`)
     .replaceAll("%ASSETS%", `${PUBLIC_URL}/assets`);
+}
+
+// --- Internal Linking --- //
+
+const uniqueIdsToElements = new Map();
+
+export function registerInternalLinkTarget(uniqueId, element) {
+  console.assert(!uniqueIdsToElements.has(element));
+  uniqueIdsToElements.set(uniqueId, element);
+}
+
+export function jumpToInternalLinkTarget(uniqueId) {
+  uniqueIdsToElements.get(uniqueId).scrollIntoView({  behavior: 'smooth' });
 }

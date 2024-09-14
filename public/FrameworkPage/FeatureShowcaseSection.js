@@ -4,6 +4,7 @@
 import { defineElement, Signal, html, set, useSignals, renderEach } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { headerStyleMixin, headerStyleMixinRules } from './sharedStyles.js';
+import { jumpToInternalLinkTarget } from './shared.js';
 
 export const FeatureShowcaseSection = defineElement('FeatureShowcaseSection', () => {
   const selectedFeature$ = new Signal(0);
@@ -115,20 +116,11 @@ const features = [
   {
     header: 'Reactive',
     tabName: 'EchoBox.js',
-    // renderDescription: () => html`
-    //   <!-- // <-- Fix links -->
-    //   <p>
-    //     Reactivity is handled by signals - stateful objects that emit events when updated.
-    //     No need to fuss with
-    //     <a href="javascript:void(0)">caching</a>/<a href="javascript:void(0)">memoization</a>/<a href="javascript:void(0)">a&nbsp;special&nbsp;compiler</a>
-    //     to avoid unnecessary rerenders - your component never rerenders.
-    //   </p>
-    // `,
     renderDescription: () => html`
       <p>
         Reactivity is handled by signals - stateful objects that emit events when updated.
         No need to fuss with
-        caching/memoization/a&nbsp;special&nbsp;compiler
+        <a href="https://react.dev/reference/react/useCallback">caching references</a>/<a href="https://react.dev/reference/react/useMemo">memoization</a>/<a href="https://react.dev/learn/react-compiler">a&nbsp;special&nbsp;compiler</a>
         to avoid unnecessary rerenders - your component never rerenders.
       </p>
     `,
@@ -177,17 +169,14 @@ const features = [
   }, {
     header: 'Encapsulate your CSS',
     tabName: 'Card.js',
-    // <-- fix links
-    // renderDescription: () => html`
-    //   <p>
-    //     Use <a href="javascript:void(0)">defineElement()</a> to generate a
-    //     <a href="javascript:void(0)">custom element (web component)</a> that encapsulates your CSS.
-    //   </p>
-    // `,
     renderDescription: () => html`
       <p>
-        Use <code>defineElement()</code> to generate a
-        custom element (web component) that encapsulates your CSS.
+        Use <a href="javascript://Jump to defineElement's docs" ${set({
+          onclick: () => jumpToInternalLinkTarget('code-link:defineElement'),
+        })}>defineElement()</a>
+        to generate a
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">custom element (web component)</a>
+        that encapsulates your CSS.
       </p>
     `,
     code: [

@@ -3,7 +3,7 @@
 import { defineElement, html, renderChoice, renderEach, set, Signal, useSignals } from './snapFramework.js';
 import { CodeViewer } from './CodeViewer.js';
 import { assert } from './util.js';
-import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, prepareCodeExampleForViewing, PUBLIC_URL } from './shared.js';
+import { isMobileScreenSize$, jumpToInternalLinkTarget, MOBILE_SCREEN_SIZE, prepareCodeExampleForViewing, PUBLIC_URL, registerInternalLinkTarget } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 import { WithTooltip } from './WithTooltip.js';
@@ -209,6 +209,12 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
       if (!normalLines.every(line => isBlankLine(line))) {
         const curRowNumb = rowNumb++;
 
+        // --- Renders the explanation for a piece of code --- //
+        // This is happening right before we also render the piece of code being explained.
+        // We already found the relevant text for this explanation in a previous cycle of the loop,
+        // and have prepared a render function. The code below is mostly just calling that render function
+        // to make it actually get rendered at this point in time.
+
         docNodes.push(jsDocsInfo !== undefined
           ? jsDocsInfo.render(curRowNumb)
           : html`
@@ -219,6 +225,9 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
             })}></div>
           `
         );
+
+        // --- Renders a piece of code --- //
+        // This will only render non-minified code. Minified code rendering happens elsewhere.
 
         const jsDocsLines = reformatJsdocsForDisplay(jsDocsInfo?.lines ?? []);
         const codeViewerClass$ = useSignals([lastRowNumberForNormalView$], lastRowNumberForNormalView => {
@@ -269,6 +278,9 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         inTopLevelJsDocs = true;
         lineBuffer.next(); // Go past opening comment
       }
+
+      // --- Renders a section heading --- //
+
       if (stopReason === 'isSectionHeading') {
         const rawSectionHeaderText = lineBuffer.currentLine();
         const sectionHeaderText = isSectionHeading(rawSectionHeaderText);
@@ -300,6 +312,9 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
         `);
       }
     } else {
+      // --- Prepares an explanation for rendering --- //
+      // This prepares a render function that'll be called at a later loop cycle.
+
       const { section, stopReason } = lineBuffer.grabLinesUntilPast({ hasClosingCommentToken });
       assert(stopReason !== 'END');
       assert(jsDocsInfo === undefined, 'two top-level js-doc comments were found in a row, and the webpage is not programmed to know how to render that.');
@@ -333,6 +348,8 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
     ...docNodes,
     ...codeNodes,
   );
+
+  // --- Renders minified code --- //
   
   const curRowNumb = rowNumb;
   // rowNumb is always pointing to the next row number, not the current, which is why we need to subtract 1.
@@ -355,6 +372,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, vie
   return allNodes;
 }
 
+/** Grabs a chunk that will eventually be rendered on the "code" side of the view. */
 function gatherCodeLines({ lineBuffer }) {
   const isTopLevelOpeningJsDocToken = line => line === '/**';
 
@@ -400,34 +418,7 @@ function gatherCodeLines({ lineBuffer }) {
   }
 }
 
-function reformatJsdocsForDisplay(lines) {
-  if (lines.length === 0) {
-    return [];
-  }
-
-  const newLines = ['/**'];
-  let inCompleteExample = false;
-  for (const line of lines) {
-    if (doesLineHavePragma(line, 'COLLAPSE-EXAMPLES') || doesLineHavePragma(line, 'AUTO-OPEN')) {
-      continue;
-    }
-    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-START')) {
-      inCompleteExample = true;
-      continue;
-    }
-    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-END')) {
-      inCompleteExample = false;
-      continue;
-    }
-    if (!inCompleteExample) {
-      newLines.push(line);
-    }
-  }
-
-  newLines.push(' */')
-  return newLines;
-}
-
+/* Takes the contents of js-docs and renders them in a nicer format, on the "explanation" side of the view. */
 function renderJsDocs({ lines: lines_, lineBeingAnnotated, gridPosStyle$ }) {
   const stripStarFromLine = line => line.replace(/^ *\* ?/, '');
   const lines = lines_.map(line => stripStarFromLine(line));
@@ -451,7 +442,7 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, gridPosStyle$ }) {
   }
 
   if (whatIsBeingDocumented) {
-    contentNode.append(html`
+    const jsdocHeaderFragment = html`
       <h2 class="jsdoc-header">
         <span class="jsdoc-header-label" ${set({ textContent: whatIsBeingDocumented.type })}></span>
         <span class="jsdoc-header-entity-name" ${set({ textContent: whatIsBeingDocumented.name })}></span>
@@ -463,7 +454,17 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, gridPosStyle$ }) {
             : html``
         }
       </h2>
-    `);
+    `;
+
+    // This querySelector must run before the fragment is appended to the parent (because fragments get emptied when that happens)
+    const jsdocHeaderEl = jsdocHeaderFragment.querySelector('.jsdoc-header');
+
+    registerInternalLinkTarget(
+      'code-link:' + whatIsBeingDocumented.name,
+      jsdocHeaderEl
+    );
+
+    contentNode.append(jsdocHeaderFragment);
   }
 
   while (!lineBuffer.atEnd()) {
@@ -759,11 +760,20 @@ function renderExtractedJsDescriptionText(text) {
           <a ${set({ href: url, textContent: displayText })}></a>
         `);
       } else {
-        // contentNode.append(html`
-        //   <a href="javascript:void(0)" ${set({ textContent: linkText })}></a>
-        // `);
+
+        // The href="..." is set to something that's a little more human readable,
+        // so when your browser displays it in the bottom-left, it'll inform the user what the link actually does.
+        // Seemed nicer than the generic `javascript:void(0)` that's typically done, and it sounded fun to do.
+        if (linkText.includes('\n')) {
+          // Shouldn't happen - but just in case, we wouldn't want this getting evaluated in the JavaScript link below.
+          throw new Error();
+        }
         contentNode.append(html`
-          <code ${set({ textContent: linkText })}></code>
+          <a ${set({
+            href: `javascript://Jump to ${linkText}'s docs`, // eslint-disable-line no-script-url
+            textContent: linkText,
+            onclick: () => jumpToInternalLinkTarget('code-link:' + linkText),
+          })}></a>
         `);
       }
     } else if (patternMatch?.[2] !== undefined) {
@@ -779,6 +789,34 @@ function renderExtractedJsDescriptionText(text) {
   }
 
   return contentNode;
+}
+
+function reformatJsdocsForDisplay(lines) {
+  if (lines.length === 0) {
+    return [];
+  }
+
+  const newLines = ['/**'];
+  let inCompleteExample = false;
+  for (const line of lines) {
+    if (doesLineHavePragma(line, 'COLLAPSE-EXAMPLES') || doesLineHavePragma(line, 'AUTO-OPEN')) {
+      continue;
+    }
+    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-START')) {
+      inCompleteExample = true;
+      continue;
+    }
+    if (doesLineHavePragma(line, 'COMPLETE-EXAMPLE-END')) {
+      inCompleteExample = false;
+      continue;
+    }
+    if (!inCompleteExample) {
+      newLines.push(line);
+    }
+  }
+
+  newLines.push(' */')
+  return newLines;
 }
 
 const CODE_BACKGROUND = '#272822';

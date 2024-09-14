@@ -1,6 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 
 import { CodeViewer } from "./CodeViewer.js";
+import { jumpToInternalLinkTarget, registerInternalLinkTarget } from "./shared.js";
+import { headerStyleMixin } from "./sharedStyles.js";
 import { defineElement, html, set } from "./snapFramework.js";
 
 export const AdditionalInformationSection = defineElement('AdditionalInformationSection', () => {
@@ -92,12 +94,20 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       <li>
         There are many valid reasons to use the context API, but there are also many ways to abuse it.
         It's possible you won't need to directly use it at all and that's fine.
-        <!-- // <-- TODO: Fix the link -->
-        It's usually better to explicitly pass data from parent to child, or to use <a href="javascript:void(0)">a global state management strategy</a>.
+        It's usually better to explicitly pass data from parent to child, or to use
+        <a href='javascript://Jump to "global state management"' ${set({
+          onclick: () => jumpToInternalLinkTarget('section:global-state-management')
+        })}>
+          a global state management strategy
+        </a>.
       </li>
     </ul>
 
-    <h2>Global State Management</h2>
+    <h2 ${el => {
+      registerInternalLinkTarget('section:global-state-management', el);
+    }}>
+      Global State Management
+    </h2>
 
     <p>
       Many applications benefit from having their state kept outside of their component tree.
@@ -181,7 +191,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       <summary>View</summary>
       
       <p>
-        <strong>Q:</strong> This framework is uglier than React/Angular/Vue/etc! Why?
+        <strong>Q: This framework is uglier than React/Angular/Vue/etc! Why?</strong>
       </p>
 
       <p>
@@ -200,7 +210,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        <strong>Q:</strong> Where are the unit tests?
+        <strong>Q: Where are the unit tests?</strong>
       </p>
 
       <p>
@@ -208,7 +218,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        <strong>Q:</strong> How do the hooks provided by this framework compare with React's hooks?
+        <strong>Q: How do the hooks provided by this framework compare with React's hooks?</strong>
       </p>
 
       <p>
@@ -240,7 +250,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        <strong>Q:</strong> I don't like hooks, why did you have to include them?
+        <strong>Q: I don't like hooks, why did you have to include them?</strong>
       </p>
 
       <p>
@@ -257,6 +267,8 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
 });
 
 const style = `
+  ${headerStyleMixin}
+
   :host {
     display: block;
     max-width: 800px;
