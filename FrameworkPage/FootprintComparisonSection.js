@@ -3,7 +3,7 @@
 
 import { isMobileScreenSize$, MOBILE_SCREEN_SIZE, PUBLIC_URL } from './shared.js';
 import { headerStyleMixin, ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
-import { defineElement, html, renderChoice, set, Signal, useSignals } from './snapFramework.js';
+import { defineElement, html, renderChoice, set, Signal, useSignals, withLifecycle } from './snapFramework.js';
 
 const randomInt = max => Math.floor(Math.random() * max);
 
@@ -158,6 +158,17 @@ const comparisons = [
     iconUrl: `${PUBLIC_URL}/assets/lodash.svg`,
   }),
 ];
+
+withLifecycle(() => {
+  document.head.append(html`
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/favicon.ico` })}/>
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/assets/react.svg` })}/>
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/assets/angular.ico` })}/>
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/assets/vue.svg` })}/>
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/assets/jquery.ico` })}/>
+    <link rel="prefetch" ${set({ href: `${PUBLIC_URL}/assets/lodash.svg` })}/>
+  `);
+});
 
 const style = `
   ${headerStyleMixin}

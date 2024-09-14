@@ -170,14 +170,26 @@ function runExampleInIframe({ iframeEl, codeToRun, onLog }) {
     onLog('error', error.message);
   });
 
-  const scriptEl = iframeEl.contentDocument.createElement('script');
-  scriptEl.type = 'module';
-  scriptEl.textContent = codeToRun;
-  iframeEl.contentDocument.head.append(scriptEl);
+  // The below code doesn't work in Firefox because it causes the tab to crash.
+  // This will hopefully get fixed in a future release, but until then, using
+  // srcdoc as shown below seems to be a good workaround.
+  //
+  // const scriptEl = iframeEl.contentDocument.createElement('script');
+  // scriptEl.type = 'module';
+  // scriptEl.textContent = codeToRun;
+  // iframeEl.contentDocument.head.append(scriptEl);
+
+  iframeEl.srcdoc = `
+    <!doctype html>
+    <html><head><script type="module">
+      ${codeToRun}
+    </script></head></html>
+  `;
 }
 
 const FRAME_BORDER_STYLE = '1px solid #ccc';
 const BUTTON_BORDER_COLOR = '#aaa';
+const POPUP_BORDER_RADIUS = '4px';
 
 const style = `
   .backdrop {
@@ -199,7 +211,7 @@ const style = `
     left: 80px;
     bottom: 80px;
     right: 80px;
-    border-radius: 4px;
+    border-radius: ${POPUP_BORDER_RADIUS};
   }
 
   .panel-header {
@@ -278,6 +290,7 @@ const style = `
     border-left: 1px solid ${BUTTON_BORDER_COLOR};
     border-bottom: 1px solid ${BUTTON_BORDER_COLOR};
     border-bottom-left-radius: 3px;
+    border-top-right-radius: ${POPUP_BORDER_RADIUS};
     cursor: pointer;
     &:hover {
       background: ${ICON_BUTTON_BACKGROUND_ON_HOVER};
