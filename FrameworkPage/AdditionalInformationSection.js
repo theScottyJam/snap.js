@@ -216,6 +216,24 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
+        <strong>Q: Why doesn't this framework make better use of custom web components?</strong>
+      </p>
+
+      <p>
+        The original plan was to build this framework around Custom Web Component - every component you make would be a custom web component. I soon found out that web components add a fair amount of complexity with little benefit - here are just some of the issues you will run into if you use them "properly":
+      </p>
+
+      <ul>
+        <li><strong>Complex lifecycles:</strong> In most frameworks, the lifecycle primarily involves an initialization step and a clean-up step. After your component has been cleaned up, it's never going to be used again. Custom web components are different because they try to mimic how you use native components. Never, at any point in time do you tell a native component "Hey, I'm done using you, you're good to completely clean up". You might detach the native component from the DOM, and it'll temporarily clean itself up at that point, but it has to be prepared for the scenario where you turn around and re-attaching it back into the DOM elsewhere, at which point it has to un-clean itself up and go back to being fully functional again. Doing something as simple as moving an element from one place to another in the DOM will cause it to go through this cleanup-then-uncleanup cycle. Asking users to build on top of web components "properly" means asking them to manage this extra "uncleanup" lifecycle step - which is frankly, unnecessary complexity.</li>
+        <li><strong>Attributes vs properties:</strong> A well-built web component is capable of receiving inputs in two different formats - through HTML attributes (e.g. <code>&lt;your-web-component size="3"&gt;&lt;your-web-component&gt;</code>) and properties (e.g. <code>yourWebComponent.size = 3;</code>). These formats are fairly different from each other - attributes will always have string values while properties can contain any JavaScript data, Boolean attributes are intended to be handled by the presence or absence of the attribute (meaning an attribute that's set to the empty string should be considered true), while with properties, you just set it to a normal boolean value, and so on. All of this complexity of being able to support two forms of inputs is, once again, placed on you, the person creating the web components - frameworks can help make some of it easier, but it can't entirely remove the complexity.</li>
+        <li><strong>Name collisions:</strong> Custom web components are built off of the concept of inheritance, which means you're going to automatically inherit various attributes and properties that are common to all elements, and if new native attributes are added to the language, you will also inherit those. This makes name collision a very real issue. I ran into it when I was trying to create an input named "title", forgetting that the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title">title attribute</a> is already a thing, which caused all sorts of weird bugs. I solved this by prefixing all of my inputs and property names with an "x", which, again, was a burden of ugliness being placed upon me, the user of the framework.</li>
+      </ul>
+
+      <p>
+        That's a lot of downsides to custom web components, but they do offer one really nice up-side - CSS encapsulation, and I didn't want to go without that. The compromise I eventually came to, was to use custom web components simply as a way to encapsulate CSS, not as the basis for defining all components. The web components produced by the framework would be very unidiomatic, because 1. they wouldn't properly support the "cleanup"/"uncleanup" lifecycle, instead, you had to explicitly tell them when to clean up using the framework's own lifecycle management system, and 2. they wouldn't support attributes or properties - all inputs had to be passed in via the constructor. I wouldn't even give the end-user the luxury of having complete control over the name of their custom element - I tack on a random number to avoid custom element name conflicts.
+      </p>
+
+      <p>
         <strong>Q: How do the hooks provided by this framework compare with React's hooks?</strong>
       </p>
 
