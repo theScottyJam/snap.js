@@ -213,7 +213,7 @@ export class Signal {
  * //# COMPLETE-EXAMPLE-END
  * function renderBomb({ signalAnimate }) {
  *   const fragment = html`
- *     <img src="%ASSETS%/bomb.svg" style="visibility: visible">
+ *     <img src="%ASSETS%/bomb.svg" style="visibility: visible"/>
  *   `;
  *   const bombEl = fragment.querySelector('img');
  * 
