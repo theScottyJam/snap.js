@@ -603,13 +603,13 @@ export function defineElement(name, init) {
       super();
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       shadowRoot.append(init.call(this, ...params));
-    };
+    }
 
     static {
       const randomId = String(Math.random()).slice(2, 10);
       customElements.define(`${name.toLowerCase()}-${randomId}`, CustomElement);
     }
-  }
+  };
 }
 
 // ==================== Lifecycle ====================
@@ -858,7 +858,7 @@ export function html(strings, ...values) {
       Object.getPrototypeOf(value) === Function.prototype
     );
   };
-  
+
   const isElementOrFragment = node => {
     return node instanceof HTMLElement || node instanceof DocumentFragment;
   };
@@ -1186,7 +1186,7 @@ export function renderEach(signalEntries, initChild) {
         const { uninit, value: childNode } = withLifecycle(renderChild);
 
         updatedFragment.append(markStart, childNode, markEnd);
-        currentlyRenderedLookup.set(key, { markStart, markEnd, uninit })
+        currentlyRenderedLookup.set(key, { markStart, markEnd, uninit });
       } else {
         // Move a child
         const { markStart, markEnd } = currentlyRenderedLookup.get(key);

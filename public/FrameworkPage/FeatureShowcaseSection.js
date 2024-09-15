@@ -208,7 +208,7 @@ const features = [
     code: [
       'const themeContext = new Context();',
       '',
-      'export export function renderThemedApp() {',
+      'export function renderThemedApp() {',
       "  return themeContext.provide({ primaryTextColor: 'blue' }, () => {",
       '    return html`',
       '      <h1>Themed App Example</h1>',
