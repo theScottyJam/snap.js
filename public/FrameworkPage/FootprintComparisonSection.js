@@ -27,8 +27,8 @@ export const FootprintComparisonSection = defineElement('FootprintComparisonSect
         }),
       })}
       <!--
-      The exact measurement I got when I last checked after minifying
-      with minify-js.com and gzipping it with the "gzip" CLI tool was 1391 bytes.
+      Size of the framework. This needs to be updated if changes are made to the framework.
+      Search the project for §G2Fme for more notes on this.
       -->
       ${renderComparisonSquare('Snap Framework', 'Less than 1,400 bytes', 'minified + compressed', {
         iconUrl: `${PUBLIC_URL}/assets/file.svg`,
@@ -106,7 +106,7 @@ function renderSwitchComparisonButton({ onClick, direction, displayBehavior$ }) 
   `;
 }
 
-function renderComparisonSquare(mainText, size, sizeDescription, { iconUrl, iconAlt = undefined, iconSize = 'regular-size', isForSnapFramework = false }) {
+function renderComparisonSquare(mainText, size, sizeDescription, { iconUrl, iconAlt = '', iconSize = 'regular-size', isForSnapFramework = false }) {
   return html`
     <div ${set({ className: 'comparison-square' + (isForSnapFramework ? ' for-snap-framework' : ' not-for-snap-framework') })}>
       <div class="comparison-square-inner">

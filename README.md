@@ -19,6 +19,8 @@ A typical folder for a doc entry will contain some or all of the following:
 
 When updating a description.md file, if you notice the folder also has a test.js file as well, please check its contents. Its possible the test.js file has a copy of a function from description.md that its trying to test.
 
+The code for the Snap Framework page is made using the Snap Framework, and is in the public/FrameworkPage/ folder (in order to make it render outside of React's control).
+
 ## Commands
 
 Use `npm ci` to install the dependencies.
@@ -43,3 +45,20 @@ To get a good idea of the vibe I'm shooting for with thesee Lodash doc entries, 
   * They have a habit of making parameters optional that really shouldn't be optional. If you can't think of a sensible reason for someone to purposefully omit a parameter, then don't bother supporting that "use case" in your non-lodash replacement.
   * If you give Lodash a bad parameter, they like to try to coerce it into something usable instead of throwing an error. Don't bother supporting this in your non-lodash replacement functions. The end-user is encouraged to modify these helper functions to fit their project's style, and that could be mean "don't do any explicit handling of bad parameters as that's too much noise in the codebase" or "throw runtime errors on bad parameters" or "add TypeScript type definitions". This website's job is to just provide the solutions in their simplist form so that it's easy to build on top of them if needed.
   * Some Lodash functions should simply not be used. In cases like this, explain why its a bad idea to use the given function, then provide a non-lodash replacement anyways.
+
+# Updating the Snap Framework Code
+
+The actual source code for the snap framework contains lots of pragmas to describe how to parse and present various parts of the framework. The pragma parsing code is somewhat brittle, but it does the job, but it does mean that any time you make a change to the source code, make sure to pay close attention to how it looks on the rendered page. Does it look ok in both the fully documented mode and the "classic" mode? Does it look ok in mobile view? Do the examples open up fine and run?
+
+When you're done making updates to the framework, there's a number of places that need to be updated with new informatino:
+1. Update the link to more docs at the top of the framework file. Make sure the new link points to an actual, updated documentation page. (At the moment of writing, there's only one version released, so there's not any code written up yet to support multiple doc pages).
+2. Minify the code (I've been using minify-js.com), then paste the minified version into snapFramework.min.js.
+3. gzip the minified code, then take note of the number of bytes it uses. Update the size comparison if needed (which can be found by searching the project for §G2Fme). Currently it's measured at 1391 bytes (Please update this number in this README as well whenever making a change).
+4. Count the number of lines without whitespace or comments. I use the "cloc" tool on npm (`npx cloc ./snapFramework.js`). Search the project for §u5gEq to know where to paste it.
+
+The link at the top of the file contains a version number embedded in it - use the following guide to update that version number.
+Given a version number of X.Y:
+* X: Breaking change
+* Y: New feature added or bugs fixed
+
+If you're only changing js-doc comments, you can simply make the change without bumping the version number, or making any changes to the statistics (since none of the statistics measure the comments).

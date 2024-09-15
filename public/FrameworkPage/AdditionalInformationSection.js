@@ -52,7 +52,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
     ].join('\n'))}
 
     <p>
-      If you defining a custom element and want to apply styles to the element you're defining, you can use the <code>:host</code> CSS selector. You might, for example, set the <code>display</code> property to something other than the default value of <code>inline</code> in order to allow your custom element to receive paddings/margin styling, among other reasons.
+      If you defining a custom element and want to apply styles to the element you're defining, you can use the <code>:host</code> CSS selector. You might, for example, set the <code>display</code> property to something other than the default value of <code>inline</code> to allow your custom element to receive paddings/margin styling, among other reasons.
     </p>
 
     ${new CodeViewer([
@@ -94,12 +94,10 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       <li>
         There are many valid reasons to use the context API, but there are also many ways to abuse it.
         It's possible you won't need to directly use it at all and that's fine.
-        It's usually better to explicitly pass data from parent to child, or to use
+        It's usually better to explicitly pass data from parent to child or to use
         <a href='javascript://Jump to "global state management"' ${set({
           onclick: () => jumpToInternalLinkTarget('section:global-state-management')
-        })}>
-          a global state management strategy
-        </a>.
+        })}>a global state management strategy</a>.
       </li>
     </ul>
 
@@ -111,7 +109,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
 
     <p>
       Many applications benefit from having their state kept outside of their component tree.
-      In modern frameworks, this is often accomplished through additional tools (such a Redux, Vuex, etc).
+      In modern frameworks, this is often accomplished through additional tools (such as Redux, Vuex, etc).
       The Snap Framework supports this kind of state management natively through signals. Because the signal API
       isn't inherently tied to the rest of the framework, they can be used, independently, to manage state outside of the component tree.
     </p>
@@ -150,7 +148,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
     ].join('\n'))}
 
     <p>
-      You can derive new global-state signals from existing global-state signals in with the help of the <code>useSignals()</code> hook.
+      You can derive new global-state signals from existing global-state signals with the help of the <code>useSignals()</code> hook.
     </p>
 
     ${new CodeViewer([
@@ -185,7 +183,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       '}',
     ].join('\n'))}
 
-    <h2>Design decision notes</h2>
+    <h2>Design Notes</h2>
     
     <details>
       <summary>View</summary>
@@ -195,18 +193,18 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        "Prettiness" isn't the highest priority. So yes, you may find that some tasks in &lt;insert your favorite framework&gt; is less verbose than the Snap Framework, and that's fine. The priorities of this framework are, in order:
+        "Prettiness" isn't the highest priority. So yes, you may find that some tasks in &lt;insert your favorite framework&gt; are less verbose than the Snap Framework, and that's fine. The priorities of this framework are, in order:
       </p>
 
       <ol>
-        <li>The framework should provide a similar feature-set that modern frameworks provide.</li>
+        <li>The framework should provide a similar feature set that modern frameworks provide.</li>
         <li>The framework's code should be small <em>and</em> simple.</li>
         <li>The framework should feel nice to use.</li>
         <li>The framework should be reasonably performant.</li>
       </ol>
 
       <p>
-        There are a number of features and performance improvements that were considered for this framework that ultimately got cut, not because they weren't useful or improved the end-user's experience, but because they added too much complexity or too much code to the overall framework. Some performance improvements were cut as well because they would have had a negligible effect for the majority of users, while adding a fair amount of complexity to the code itself.
+        Several features and performance improvements that were considered for this framework that ultimately got cut, not because they weren't useful or improved the end-user's experience, but because they added too much complexity or too much code to the overall framework. Some performance improvements were cut as well because they would have had a negligible effect for the majority of users while adding a fair amount of complexity to the code itself.
       </p>
 
       <p>
@@ -214,7 +212,7 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        I may publish some at a future point in time depending on the demand. For now, if you want them, you'll either need to write them yourself, or create a GitHub issue to let me know that this is wanted.
+        I may publish some at a future point in time depending on the demand. For now, if you want them, you'll either need to write them yourself or create a GitHub issue to let me know that this is wanted.
       </p>
 
       <p>
@@ -222,11 +220,11 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        A lot of React's hooks are simply unnecessary in the Snap Framework mostly due to the fact that components in the Snap Framework don't rerender. It's actually quite surprising how much simpler things become when the concept of rerendering is removed. I'll go over the most common React hooks and explain how the equivalent functionality is handled in the Snap framework - for no particular reason aside from the fact that it's an interesting comparison.
+        A lot of React's hooks are simply unnecessary in the Snap Framework primarily because components in the Snap Framework don't rerender. It is quite surprising how much simpler things become when the concept of rerendering is removed. I'll go over the most common React hooks and explain how the equivalent functionality is handled in the Snap Framework - for no particular reason aside from the fact that it's an interesting comparison.
       </p>
 
       <p>
-        <strong>useState/useReducer:</strong> In React, <code>useState()</code> will keep track of a piece of state between rerenders. Each time you update a piece of state, it will trigger an entire rerender. <code>useReducer()</code> is very similar to <code>useState()</code>, just with an alternative API that makes it easier to make changes to a deeply nested piece of state. In the Snap Framework, signals are used instead. A signal holds a piece of mutable state, and whoever cares about that piece of state can subscribe to to the signal. This is what eliminates the need to have rerenders, a virtual DOM, and DOM diffing.
+        <strong>useState/useReducer:</strong> In React, <code>useState()</code> will keep track of a piece of state between rerenders. Each time you update a piece of state, it will trigger an entire rerender. <code>useReducer()</code> is very similar to <code>useState()</code>, just with an alternative API that makes it easier to make changes to a deeply nested piece of state. In the Snap Framework, signals are used instead. A signal holds a piece of mutable state, and whoever cares about that piece of state can subscribe to the signal. This is what eliminates the need to have rerenders, a virtual DOM, and DOM diffing.
       </p>
 
       <p>
@@ -234,19 +232,19 @@ export const AdditionalInformationSection = defineElement('AdditionalInformation
       </p>
 
       <p>
-        <strong>useCallback/useMemo:</strong> These are optimization techniques that are used to prevent too much stuff from rerendering whenever a state change happens. React is actually coming out with a new <a href="https://react.dev/learn/react-compiler">React Compiler</a> that will, in part, automatically memoize values for you to take the worry off of you. In the Snap framework, there aren't any rerenders so there's nothing that needs to be optimized in this regard.
+        <strong>useCallback/useMemo:</strong> These are optimization techniques that are used to prevent too much stuff from rerendering whenever a state change happens. React is coming out with a new <a href="https://react.dev/learn/react-compiler">React Compiler</a> that will, in part, automatically memoize values for you to take the worry off of you. In the Snap Framework, there aren't any rerenders so there's nothing that needs to be optimized in this regard.
       </p>
 
       <p>
-        <strong>useContext:</strong> This is pretty much the same as the Snap Framework's <code>Context</code> <code>get()</code> method. They both give you access to parameters that have been implicitly passed from parent component to child component. Snap Framework's <code>Context</code> class is a little more powerful in that it isn't explicitly tied to components - you can use it to implicitly pass parameters down any function.
+        <strong>useContext:</strong> This is pretty much the same as the Snap Framework's <code>Context</code> <code>get()</code> method. They both give you access to parameters that have been implicitly passed from parent components to child components. Snap Framework's <code>Context</code> class is a little more powerful in that it isn't explicitly tied to components - you can use it to implicitly pass parameters down any function.
       </p>
 
       <p>
-        <strong>useImperativeHandle:</strong> A React component returns an element tree representation, but with <code>useImperativeHandle()</code>, it allows a component to additionally register a custom API of any shape to go along with the element tree. Consumers of the component can get access to that custom API and use the methods/properties provided on it. In the Snap Framework, the same objective is accomplished by creating a custom element (with <code>defineElement()</code>), then attaching whatever methods/properties you want to its <code>.api</code> property. Consumers can create an instance of your custom element, then interact with it through that <code>.api</code> property.
+        <strong>useImperativeHandle:</strong> A React component returns an element tree representation, but with <code>useImperativeHandle()</code>, it allows a component to additionally register a custom API of any shape to go along with the element tree. Consumers of the component can get access to that custom API and use the methods/properties provided on it. In the Snap Framework, the same objective is accomplished by creating a custom element (with <code>defineElement()</code>), and then attaching whatever methods/properties you want to its <code>.api</code> property. Consumers can create an instance of your custom element and then interact with it through that <code>.api</code> property.
       </p>
 
       <p>
-        <strong>useEffect:</strong> This hook has multiple use-cases rolled into one function. 1. It allows you to react when a component is being mounted. In the Snap framework, your component function itself is basically an on-mount handler - everything you put in there will execute as the component is being set up. 2. It allows you to react when a component is being unmounted. In the Snap Framework, this is provided through the <code>useCleanup()</code> hook. 3. It allows you to react to state changes. In the Snap Framework, this is done via <code>useSignals()</code>.
+        <strong>useEffect:</strong> This hook has multiple use cases rolled into one function. 1. It allows you to react when a component is being mounted. In the Snap Framework, your component function itself is essentially an on-mount handler - everything you put in there will execute as the component is being set up. 2. It allows you to react when a component is being unmounted. In the Snap Framework, this is provided through the <code>useCleanup()</code> hook. 3. It allows you to react to state changes. In the Snap Framework, this is done via <code>useSignals()</code>.
       </p>
 
       <p>

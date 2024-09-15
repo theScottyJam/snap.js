@@ -100,6 +100,7 @@ function renderPageContents({ fullText, minifiedText }) {
     <h2 class="header">— POWERFUL —</h2>
     ${new FeatureShowcaseSection()}
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
+    <!-- Whenever the framework gets updated, this statistic needs to be updated as well - search the project for §u5gEq for more info. -->
     <p class="section-description">All ${renderTextWithTooltip('195 lines', 'Excluding whitespace and comments')} of code shown below are just a copy-paste away from being yours.</p>
     ${new SourceViewerSection({ fullText, minifiedText })}
     <h2 class="header">— Additional Guidelines —</h2>
