@@ -36,7 +36,6 @@
 // button that shows up in the top-right corner of examples in the UI.
 
 //# START
-// Snap Framework beta version
 //# NORMAL-VIEW-ONLY-START
 // Read the docs: https://thescottyjam.github.io/snap.js/#!/framework/release/1.0
 //# NORMAL-VIEW-ONLY-END
@@ -45,7 +44,7 @@
 // ==================== Reactivity ====================
 
 /**
- * An event emitter with state. You can provide initial state to it when
+ * An event emitter with state. You can provide an initial state to it when
  * constructing it, then `.get()` or `.set(...)` that piece of state at any
  * point in time. Others can choose to `.subscribe()` to the signal to listen
  * for state changes, and then later`.unsubscribe()` as needed.
@@ -168,7 +167,7 @@ export class Signal {
  *   returned. Each time the callback returns a different value, the signal
  *   will be updated. This allows you to easily derive a new signal from
  *   existing signals. You may also choose to ignore this capability and simply
- *   use `useSignals()` as a way to trigger side-effects whenever a signal
+ *   use `useSignals()` as a way to trigger side effects whenever a signal
  *   changes.
  * 
  * @example <caption>Using useSignals() to derive a new signal</caption>
@@ -214,7 +213,7 @@ export class Signal {
  * //# COMPLETE-EXAMPLE-END
  * function renderBomb({ signalAnimate }) {
  *   const fragment = html`
- *     <img src="%ASSETS%/bomb.svg" style="visibility: visible">
+ *     <img src="%ASSETS%/bomb.svg" style="visibility: visible"/>
  *   `;
  *   const bombEl = fragment.querySelector('img');
  * 
@@ -306,7 +305,7 @@ export function useSignals(dependentSignals, onChange) {
 /**
  * The Context class allows you to implicitly pass around parameters.
  * It can be used as an alternative to "prop-drilling", and it is what powers
- * {@link useCleanup} which in turn powers life-cycles.
+ * {@link useCleanup} which in turn powers life cycles.
  * 
  * Data is provided via the `.provide()` function, and later retrieved via
  * `.get()`.
@@ -604,13 +603,13 @@ export function defineElement(name, init) {
       super();
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       shadowRoot.append(init.call(this, ...params));
-    };
+    }
 
     static {
       const randomId = String(Math.random()).slice(2, 10);
       customElements.define(`${name.toLowerCase()}-${randomId}`, CustomElement);
     }
-  }
+  };
 }
 
 // ==================== Lifecycle ====================
@@ -796,8 +795,8 @@ export function useCleanup(listener) {
  * If you interpolate a function inside of an element tag, that function will
  * get called with a reference to the element as a parameter.
  * 
- * To set properties on an element in your template, use the {@link set} helper
- * function. {@link set} can also be used to dynamically insert text inside of an
+ * Use the {@link set} helper function to set properties on an element in your
+ * template. {@link set} can also be used to dynamically insert text inside of an
  * element, by setting the `textContent` property of that element.
  * 
  * This is a stand-alone function that isn't dependent on anything else, which
@@ -859,7 +858,7 @@ export function html(strings, ...values) {
       Object.getPrototypeOf(value) === Function.prototype
     );
   };
-  
+
   const isElementOrFragment = node => {
     return node instanceof HTMLElement || node instanceof DocumentFragment;
   };
@@ -1067,7 +1066,7 @@ export const set = (fields, getRef = undefined) => el => {
 /**
  * This is similar to doing a for loop, but inside of a template.
  * 
- * Given a signal holding a array of entries, `renderChild()` will render
+ * Given a signal holding an array of entries, `renderChild()` will render
  * one node per entry in the array. Each entry in the signal's array should
  * be a tuple containing a key-value pair. Every time a new element needs
  * to be rendered, the `initChild()` callback will be called with the
@@ -1075,8 +1074,8 @@ export const set = (fields, getRef = undefined) => el => {
  * should return a new HTML node to be rendered.
  * 
  * The singal's entry keys are used to uniquely identify that particular entry,
- * so if the contents of the array is updated, it can figure out,
- * by comparing keys, if elements need to moved, destroyed, or created.
+ * so if the contents of the array are updated, it can figure out,
+ * by comparing keys, if elements need to be moved, destroyed, or created.
  * 
  * @example
  * //# COMPLETE-EXAMPLE-START
@@ -1187,7 +1186,7 @@ export function renderEach(signalEntries, initChild) {
         const { uninit, value: childNode } = withLifecycle(renderChild);
 
         updatedFragment.append(markStart, childNode, markEnd);
-        currentlyRenderedLookup.set(key, { markStart, markEnd, uninit })
+        currentlyRenderedLookup.set(key, { markStart, markEnd, uninit });
       } else {
         // Move a child
         const { markStart, markEnd } = currentlyRenderedLookup.get(key);
@@ -1226,11 +1225,12 @@ export function renderEach(signalEntries, initChild) {
 /**
  * This is similar to doing an if-else chain, but inside of a template.
  * 
- * This will find the first matching condition from a list of conditions
- * then render the associated element. If no matches were found, nothing will render.
+ * This will find the first matching condition from a list of conditions and
+ * then render the associated element. If no matches are found, nothing will
+ * render.
  * 
  * @param conditions A list of objects. Each object should have two properties.
- *   1. `signalWhen`, which holds a signal containing a boolean which decides
+ *   1. `signalWhen`, which holds a signal containing a boolean that decides
  *   if this element should render or not, and 2. `render()`, which should
  *   return an element to render.
  * 
