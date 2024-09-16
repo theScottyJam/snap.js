@@ -1,3 +1,4 @@
+/* global globalThis */
 /* eslint-disable react-hooks/rules-of-hooks*/
 import { CodeViewer } from './CodeViewer.js';
 import { isMobileScreenSize$, prepareCodeExampleForRunning, prepareCodeExampleForViewing } from './shared.js';
@@ -144,46 +145,85 @@ function renderCloseButton({ removePopup, forDesktop }) {
   `;
 }
 
+// The below code doesn't work in Firefox because it causes the tab to crash.
+// This will hopefully get fixed in a future release, but until then, using
+// an alternative runExampleInIframe() below will work for now.
+
+// function runExampleInIframe({ iframeEl, codeToRun, onLog }) {
+//   const logMethodsToOverride = [
+//     { fnName: 'info', logLevel: 'info' },
+//     { fnName: 'log', logLevel: 'info' },
+//     { fnName: 'warn', logLevel: 'error' },
+//     { fnName: 'error', logLevel: 'error' },
+//   ];
+//   for (const { fnName, logLevel } of logMethodsToOverride) {
+//     const iframeLogFn = iframeEl.contentWindow.console[fnName];
+//     iframeEl.contentWindow.console[fnName] = (...args) => {
+//       const isObject = value => value !== null && typeof value === 'object';
+//       const argsAsString = args.map(arg => {
+//         return isObject(arg) || Array.isArray(arg)
+//           ? JSON.stringify(arg, null, '  ')
+//           : String(arg);
+//       }).join(' ');
+
+//       onLog(logLevel, argsAsString);
+//       iframeLogFn(...args);
+//     };
+//   }
+
+//   iframeEl.contentWindow.addEventListener('error', error => {
+//     onLog('error', error.message);
+//   });
+
+//   const scriptEl = iframeEl.contentDocument.createElement('script');
+//   scriptEl.type = 'module';
+//   scriptEl.textContent = codeToRun;
+//   iframeEl.contentDocument.head.append(scriptEl);
+
+//   iframeEl.srcdoc = `
+//     <!doctype html>
+//     <html><head><script type="module">
+//       ${codeToRun}
+//     </script></head></html>
+//   `;
+// }
+
 function runExampleInIframe({ iframeEl, codeToRun, onLog }) {
-  const logMethodsToOverride = [
-    { fnName: 'info', logLevel: 'info' },
-    { fnName: 'log', logLevel: 'info' },
-    { fnName: 'warn', logLevel: 'error' },
-    { fnName: 'error', logLevel: 'error' },
-  ];
-  for (const { fnName, logLevel } of logMethodsToOverride) {
-    const iframeLogFn = iframeEl.contentWindow.console[fnName];
-    iframeEl.contentWindow.console[fnName] = (...args) => {
-      const isObject = value => value !== null && typeof value === 'object';
-      const argsAsString = args.map(arg => {
-        return isObject(arg) || Array.isArray(arg)
-          ? JSON.stringify(arg, null, '  ')
-          : String(arg);
-      }).join(' ');
-
-      onLog(logLevel, argsAsString);
-      iframeLogFn(...args);
-    };
-  }
-
-  iframeEl.contentWindow.addEventListener('error', error => {
-    onLog('error', error.message);
-  });
-
-  // The below code doesn't work in Firefox because it causes the tab to crash.
-  // This will hopefully get fixed in a future release, but until then, using
-  // srcdoc as shown below seems to be a good workaround.
-  //
-  // const scriptEl = iframeEl.contentDocument.createElement('script');
-  // scriptEl.type = 'module';
-  // scriptEl.textContent = codeToRun;
-  // iframeEl.contentDocument.head.append(scriptEl);
+  globalThis.__onIframeConsoleOutput = onLog;
 
   iframeEl.srcdoc = `
     <!doctype html>
-    <html><head><script type="module">
-      ${codeToRun}
-    </script></head></html>
+    <html><head>
+      <script>
+        const logMethodsToOverride = [
+          { fnName: 'info', logLevel: 'info' },
+          { fnName: 'log', logLevel: 'info' },
+          { fnName: 'warn', logLevel: 'error' },
+          { fnName: 'error', logLevel: 'error' },
+        ];
+        for (const { fnName, logLevel } of logMethodsToOverride) {
+          const logFn = console[fnName];
+          console[fnName] = (...args) => {
+            const isObject = value => value !== null && typeof value === 'object';
+            const argsAsString = args.map(arg => {
+              return isObject(arg) || Array.isArray(arg)
+                ? JSON.stringify(arg, null, '  ')
+                : String(arg);
+            }).join(' ');
+
+            globalThis.parent.__onIframeConsoleOutput(logLevel, argsAsString);
+            logFn(...args);
+          };
+        }
+
+        window.addEventListener('error', error => {
+          globalThis.parent.__onIframeConsoleOutput('error', error.message);
+        });
+      </script>
+      <script type="module">
+        ${codeToRun}
+      </script>
+    </head></html>
   `;
 }
 
