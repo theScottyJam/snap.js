@@ -127,6 +127,7 @@
     "categoryHeading": "Lang",
     "entries": [
       "cloneDeep",
+      "eq",
       "isArguments",
       "isArray",
       "isArrayBuffer",

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.eq(value, other)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#eq",
+  "summary": "Performs a `SameValueZero` comparison between two values to determine if they are equivalent."
+}
