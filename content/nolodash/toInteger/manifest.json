@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toInteger(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toInteger",
+  "summary": "Converts `value` to an integer."
+}

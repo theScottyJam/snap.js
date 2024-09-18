@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.gt(value, other)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#gt",
+  "summary": "Checks if `value` is greater than `other`."
+}

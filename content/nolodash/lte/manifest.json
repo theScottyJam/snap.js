@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.lte(value, other)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#lte",
+  "summary": "Checks if `value` is less than or equal to `other`."
+}

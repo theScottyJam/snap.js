@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toNumber(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toNumber",
+  "summary": "Converts `value` to a number."
+}
