@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.castArray(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#castArray",
+  "summary": "Casts `value` as an array if it's not one."
+}

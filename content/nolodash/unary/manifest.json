@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.unary(func)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#unary",
+  "summary": "Creates a function that accepts up to one argument, ignoring any additional arguments."
+}

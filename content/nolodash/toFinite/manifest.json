@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toFinite(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toFinite",
+  "summary": "Converts `value` to a finite number."
+}

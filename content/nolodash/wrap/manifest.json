@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.wrap(value, wrapper)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#wrap",
+  "summary": "Creates a function that provides `value` to `wrapper` as its first argument. Any additional arguments provided to the function are appended to those provided to the `wrapper`."
+}

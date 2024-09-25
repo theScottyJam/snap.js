@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.toSafeInteger(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#toSafeInteger",
+  "summary": "Converts `value` to a safe integer. A safe integer can be compared and represented correctly."
+}

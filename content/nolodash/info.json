@@ -114,18 +114,22 @@
       "bind",
       "bindKey",
       "curry",
+      "debounce",
       "delay",
       "flip",
       "negate",
       "once",
       "overArgs",
       "rest",
-      "spread"
+      "spread",
+      "unary",
+      "wrap"
     ]
   },
   {
     "categoryHeading": "Lang",
     "entries": [
+      "castArray",
       "cloneDeep",
       "eq",
       "gt",
@@ -167,8 +171,11 @@
       "isWeakSet",
       "lt",
       "lte",
+      "toFinite",
       "toInteger",
-      "toNumber"
+      "toLength",
+      "toNumber",
+      "toSafeInteger"
     ]
   },
   {
@@ -253,10 +260,12 @@
       "camelCase",
       "capitalize",
       "deburr",
+      "endsWith",
       "escape",
       "lowerCase",
       "lowerFirst",
       "snakeCase",
+      "startsWith",
       "toLower",
       "toUpper",
       "unescape",

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.endsWith(string, target, position?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#endsWith",
+  "summary": "Checks if `string` ends with the given target string."
+}
