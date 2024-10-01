@@ -113,8 +113,8 @@
       "before",
       "bind",
       "bindKey",
+      "curryRight",
       "curry",
-      "debounce",
       "delay",
       "flip",
       "negate",
@@ -264,7 +264,11 @@
       "escape",
       "lowerCase",
       "lowerFirst",
+      "parseInt",
+      "repeat",
+      "replace",
       "snakeCase",
+      "split",
       "startsWith",
       "toLower",
       "toUpper",
@@ -272,6 +276,22 @@
       "upperCase",
       "upperFirst",
       "words"
+    ]
+  },
+  {
+    "categoryHeading": "Util",
+    "entries": [
+      "identity",
+      "noop",
+      "range",
+      "rangeRight",
+      "stubArray",
+      "stubFalse",
+      "stubObject",
+      "stubString",
+      "stubTrue",
+      "times",
+      "uniqueId"
     ]
   }
 ]

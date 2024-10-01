@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.replace(string, pattern, replacement)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#replace",
+  "summary": "Replaces matches for `pattern` in `string` with `replacement`."
+}

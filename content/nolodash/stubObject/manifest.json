@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.stubObject()",
+  "lodashLink": "https://lodash.com/docs/4.17.15#stubObject",
+  "summary": "This method returns a new empty object."
+}

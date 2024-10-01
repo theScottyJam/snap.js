@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.identity(value)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#identity",
+  "summary": "This method returns the first argument it receives."
+}

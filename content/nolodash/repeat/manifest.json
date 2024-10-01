@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.repeat(string, n)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#repeat",
+  "summary": "Repeats the given string `n` times."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.uniqueId(prefix?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#uniqueId",
+  "summary": "Generates a unique ID. If prefix is given, the ID is appended to it."
+}

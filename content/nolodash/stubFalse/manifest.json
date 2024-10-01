@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.stubFalse()",
+  "lodashLink": "https://lodash.com/docs/4.17.15#stubFalse",
+  "summary": "This method returns `false`."
+}

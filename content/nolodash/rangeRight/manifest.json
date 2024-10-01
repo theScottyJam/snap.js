@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.rangeRight(start?, end, step?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#rangeRight",
+  "summary": "This method is like `_.range` except that it populates values in descending order."
+}

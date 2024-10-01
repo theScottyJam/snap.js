@@ -1,0 +1,3 @@
+```javascript
+string.repeat(n)
+```

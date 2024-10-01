@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.times(n, iteratee)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#times",
+  "summary": "Invokes the iteratee `n` times, returning an array of the results of each invocation."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.parseInt(string, radix?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#parseInt",
+  "summary": "Converts `string` to an integer of the specified radix."
+}

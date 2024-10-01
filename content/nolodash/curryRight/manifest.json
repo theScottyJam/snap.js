@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.curryRight(func, arity?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#curryRight",
+  "summary": "This method is like _.curryRight except that arguments will be passed in in reverse order."
+}

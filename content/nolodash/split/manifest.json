@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.split(string, separator, limit?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#split",
+  "summary": "Splits `string` by `separator`."
+}
