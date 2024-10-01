@@ -18,7 +18,7 @@ function curryRight(func, arity, _appliedArgs = []) {
   return (...args) => {
     const newAppliedArgs = [...args, ..._appliedArgs];
     if (newAppliedArgs.length < arity) {
-      return curryRight(func, arity, newAppliedArgs)
+      return curryRight(func, arity, newAppliedArgs);
     } else {
       return func(...newAppliedArgs);
     }

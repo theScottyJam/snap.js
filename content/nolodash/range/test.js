@@ -13,7 +13,7 @@ function range(...args) {
   }
 
   const result = [];
-  if ( step > 0) {
+  if (step > 0) {
     for (let i = start; i < end; i += step) {
       result.push(i);
     }
@@ -48,21 +48,21 @@ describe('range()', () => {
   });
 
   it('can iterate backwards', () => {
-    expect(range(5, 2, -1)).toEqual([5, 4, 3])
+    expect(range(5, 2, -1)).toEqual([5, 4, 3]);
   });
 
   it('can iterate over floats', () => {
-    expect(range(3, 5, 0.5)).toEqual([3, 3.5, 4, 4.5])
+    expect(range(3, 5, 0.5)).toEqual([3, 3.5, 4, 4.5]);
   });
 
   it('return an empty array if the step is pointed in the wrong direction', () => {
-    expect(range(2, 4, -1)).toEqual([])
-    expect(range(4, 2)).toEqual([])
+    expect(range(2, 4, -1)).toEqual([]);
+    expect(range(4, 2)).toEqual([]);
   });
 
   it('return an empty array if the stop is already at the start', () => {
-    expect(range(4, 4)).toEqual([])
-    expect(range(4, 4, -1)).toEqual([])
+    expect(range(4, 4)).toEqual([]);
+    expect(range(4, 4, -1)).toEqual([]);
   });
 
   it('throws when any of the arguments are not a finite number', () => {

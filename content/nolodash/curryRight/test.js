@@ -3,7 +3,7 @@ describe('curryRight() without "_" placeholder support', () => {
     return (...args) => {
       const newAppliedArgs = [...args, ..._appliedArgs];
       if (newAppliedArgs.length < arity) {
-        return curryRight(func, arity, newAppliedArgs)
+        return curryRight(func, arity, newAppliedArgs);
       } else {
         return func(...newAppliedArgs);
       }
