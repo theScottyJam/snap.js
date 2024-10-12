@@ -3,7 +3,7 @@ describe('randomInt()', () => {
 
   it('returns a number within the bounds', () => {
     for (let i = 0; i < TEST_REPETITIONS; ++i) {
-      const result = _.randomInt(5, 10);
+      const result = $.randomInt(5, 10);
       expect(result).toBeGreaterThanOrEqual(5);
       expect(result).toBeLessThan(10);
     }
@@ -11,7 +11,7 @@ describe('randomInt()', () => {
 
   it('returns a whole number', () => {
     for (let i = 0; i < TEST_REPETITIONS; ++i) {
-      const result = _.randomInt(5, 10);
+      const result = $.randomInt(5, 10);
       expect(Math.round(result)).toBe(result);
     }
   });

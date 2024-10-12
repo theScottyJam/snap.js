@@ -4,7 +4,7 @@ describe('randomChoice()', () => {
   it('returns an element from the original array', () => {
     for (let i = 0; i < TEST_REPETITIONS; ++i) {
       const array = ['a', 'b', 'c', 'd', 'e'];
-      expect(array).toContain(_.randomChoice(array));
+      expect(array).toContain($.randomChoice(array));
     }
   });
 });

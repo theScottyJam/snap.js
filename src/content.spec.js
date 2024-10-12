@@ -11,8 +11,8 @@ for (const { categoryHeading, entries } of content) {
     // Evaluate the src code, returning the function contained inside.
     const srcFn = new Function(`return (${src ?? '() => {}'})`)(); // eslint-disable-line no-new-func
     // Creates a utility object to pass into the test case
-    const _ = { [srcFn.name]: srcFn };
+    const $ = { [srcFn.name]: srcFn };
     // Executes the test cases
-    new Function('_', 'jest', test)(_, jest); // eslint-disable-line no-new-func
+    new Function('$', 'jest', test)($, jest); // eslint-disable-line no-new-func
   }
 }
