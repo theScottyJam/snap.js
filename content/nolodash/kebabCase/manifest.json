@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.kebabCase(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#kebabCase",
+  "summary": "Converts `string` to kebab case."
+}

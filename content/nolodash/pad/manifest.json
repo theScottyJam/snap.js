@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.pad(string, length, chars?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pad",
+  "summary": "Pads `string` on the left and right sides if it's shorter than `length`. Padding characters are truncated if they can't be evenly divided by `length`."
+}

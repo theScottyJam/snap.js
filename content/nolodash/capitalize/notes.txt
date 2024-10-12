@@ -1,0 +1,1 @@
+A number of doc entries have this capitalize utility function embedded in them. You can search the project for `const capitalize =` to find them.

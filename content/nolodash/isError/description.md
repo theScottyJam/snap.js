@@ -49,5 +49,6 @@ There's not really anything that can be done to avoid this. You could try layeri
 If you're exclusively using Node, you can use `require('util').types.isNativeError(value)` to specifically check if the value is an instance of `Error` or one of its subclasses.
 
 Some very early JavaScript proposals may provide support for more robust ways to do cross-realm type checking:
+* [Error.isError](https://github.com/tc39/proposal-is-error)
 * [istypes](https://github.com/jasnell/proposal-istypes)
 * [Pattern matching's built-in matchers](https://github.com/tc39/proposal-pattern-matching#built-in-custom-matchers-1)

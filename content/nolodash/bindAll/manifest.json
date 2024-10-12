@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.bindAll(object, methodNames)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#bindAll",
+  "summary": "Binds methods of an object to the object itself, overwriting the existing method."
+}

@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.attempt(func, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#attempt",
+  "summary": "Attempts to invoke `func`, returning either the result or the caught error object. Any additional arguments are provided to `func` when it's invoked."
+}

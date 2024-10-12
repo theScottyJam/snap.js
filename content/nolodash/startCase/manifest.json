@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.startCase(string)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#startCase",
+  "summary": "Converts `string` to start case."
+}

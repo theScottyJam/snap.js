@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.truncate(string, options)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#truncate",
+  "summary": "Truncates `string` if it's longer than the given maximum string length. The last characters of the truncated string are replaced with the omission string which defaults to \"...\"."
+}

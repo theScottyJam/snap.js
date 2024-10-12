@@ -11,18 +11,6 @@ function once(func) {
     return cachedResult;
   };
 }
-function before(n, func) {
-  let lastResult;
-  return function (...args) {
-    n--;
-    if (n <= 0) {
-      return lastResult;
-    }
-
-    lastResult = func.call(this, ...args);
-    return lastResult;
-  };
-}
 
 describe('once()', () => {
   it('returns the last result after one calls', () => {

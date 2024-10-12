@@ -19,7 +19,9 @@ function invoke(object, path, ...args) {
 }
 ```
 
-One of the primary reasons Lodash's `_.invoke()` function was commonly used, was as a way to easily invoke a function nested in an object, without having to worry about in-between fields being undefined. This is now possible today using [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`?.`) whenever you suspect a property might be undefined.
+Be aware that, like Lodash's `_.invoke()`, the above implementation doesn't do anything to guard against prototype look-ups, for example, `invoke({}, 'toString')` will work, and will return the string `'[object Object]'`. To guard against this, use `if (!(Object.hasOwn(head, object)))` instead of `if(!(head in object))`.
+
+One of the primary reasons Lodash's `_.invoke()` function was commonly used, was as a way to easily invoke a function nested in an object without having to worry about in-between fields being undefined. This is now possible today using [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`?.`) whenever you suspect a property might be undefined.
 
 For example, these two are effectively the same:
 

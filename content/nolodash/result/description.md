@@ -19,7 +19,7 @@ function result(object, path, defaultValue = undefined) {
 }
 ```
 
-One of the primary reasons Lodash's `_.result()` function was commonly used, was as a way to easily invoke a function nested in an object, without having to worry about in-between fields being undefined. This is now possible today using [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`?.`) whenever you suspect a property might be undefined, and the [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing) to provide a default value.
+One of the primary reasons Lodash's `_.result()` function was commonly used, was as a way to easily invoke a function nested in an object without having to worry about in-between fields being undefined. This is now possible today using [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`?.`) whenever you suspect a property might be undefined, and the [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing) to provide a default value.
 
 For example, these two are effectively the same:
 

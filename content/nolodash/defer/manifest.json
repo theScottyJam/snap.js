@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.defer(func, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#defer",
+  "summary": "Defers invoking the `func` until the current call stack has cleared. Any additional arguments are provided to `func` when it's invoked."
+}

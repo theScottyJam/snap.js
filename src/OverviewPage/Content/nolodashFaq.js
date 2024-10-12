@@ -3,7 +3,7 @@ export const nolodashFaq = `
 
   The point of this webpage isn't to protest the usage of Lodash. Think of it more as, among other things, a tool to help you know if you need Lodash or not. You can look up your favorite Lodash functions in this reference, and if the non-Lodash alternatives you find seem trivial enough, then sure, this webpage may be pushing you to give it up. On the other hand, if the alternatives are fairly complicated, then this webpage has served to reaffirm your commitment to Lodash.
 
-  Even if you never plan on using Lodash, it can be nice to have a quick reference of all sorts of data-manipulation utilities in your pocket.
+  Even if you never plan on using Lodash, it can be nice to have a quick reference of all sorts of data-manipulation utilities in your pocket. Or, perhaps, you might enjoy just browsing the pages and learning how another JavaScript developer writes code - you might learn a thing or two, or not.
 
 **Lodash is battle-tested. Why would someone use a copy-paste solution instead?**
 

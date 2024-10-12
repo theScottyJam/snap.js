@@ -1,9 +1,12 @@
 body {
   margin: 0;
+  overflow-y: hidden;
+}
+
+body, fieldset, label {
   font-family: 'Fira Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-y: hidden;
 }
 
 #root {

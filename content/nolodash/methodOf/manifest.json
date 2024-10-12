@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.methodOf(object, ...args)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#methodOf",
+  "summary": "The opposite of `_.method`; this method creates a function that invokes the method at a given path of `object`. Any additional arguments are provided to the invoked method."
+}

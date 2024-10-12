@@ -1,0 +1,16 @@
+Lodash's _.truncate() actually contains a bug.
+
+Observe the output from the following:
+
+> _.truncate('abcd~=efgh~=ijklmn', { separator: '~=', length: 'abcd~=efgh~=i...'.length })
+'abcd~=efgh...'
+> _.truncate('abcd~=efgh~=ijklmn', { separator: '~=', length: 'abcd~=efgh~=...'.length })
+'abcd~=efgh...'
+> _.truncate('abcd~=efgh~=ijklmn', { separator: '~=', length: 'abcd~=efgh~...'.length })
+'abcd...'
+> _.truncate('abcd~=efgh~=ijklmn', { separator: '~=', length: 'abcd~=efgh...'.length })
+'abcd~=efgh...' <-- This should instead be 'abcd...'
+> _.truncate('abcd~=efgh~=ijklmn', { separator: '~=', length: 'abcd~=efg...'.length })
+'abcd...'
+
+They check to see if the separator is found right at the point where they want to slice the string, but they don't account for the fact that the separator might be multiple characters, which means they need to check a little further back.
