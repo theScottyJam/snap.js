@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.defaultTo(value, defaultValue)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#defaultTo",
+  "summary": "Checks `value` to determine whether a default value should be returned in its place. The `defaultValue` is returned if value is `NaN`, `null`, or `undefined`."
+}

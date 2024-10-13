@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.debounce(func, wait, options?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#debounce",
+  "summary": "Creates a debounced function that delays invoking `func` until after `wait` milliseconds have elapsed since the last time the debounced function was invoked. The `func` is invoked with the last arguments provided to the debounced function. Subsequent calls to the debounced function return the result of the last `func` invocation. See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/) for details over the differences between `_.debounce` and `_.throttle`."
+}

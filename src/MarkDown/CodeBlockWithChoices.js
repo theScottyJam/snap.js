@@ -14,7 +14,7 @@ function assert(condition, message = 'Assertion failed') {
 export function CodeBlockWithChoices({ text, renderCodeBlock }) {
   const { metadata, choices } = useMemo(
     () => parseTextWithChoices(text),
-    [text],
+    [text]
   );
   const [formState, setFormState] = useState(
     Object.fromEntries(metadata.map(choice => [choice.id, choice.default]))
@@ -38,7 +38,12 @@ export function CodeBlockWithChoices({ text, renderCodeBlock }) {
                       name={optionId}
                       value={optionId}
                       checked={formState[choiceId] === optionId}
-                      onChange={() => setFormState(currentFormState => ({ ...currentFormState, [choiceId]: optionId }))}
+                      onChange={() =>
+                        setFormState(currentFormState => ({
+                          ...currentFormState,
+                          [choiceId]: optionId,
+                        }))
+                      }
                     />
                     {optionMessage}
                   </label>
@@ -49,14 +54,22 @@ export function CodeBlockWithChoices({ text, renderCodeBlock }) {
         );
       })}
 
-      <CodeBlockChoice formState={formState} choices={choices} renderCodeBlock={renderCodeBlock} />
+      <CodeBlockChoice
+        formState={formState}
+        choices={choices}
+        renderCodeBlock={renderCodeBlock}
+      />
     </div>
   );
 }
 
 function CodeBlockChoice({ formState, choices, renderCodeBlock }) {
   for (const { condition, text } of choices) {
-    if (Object.entries(condition).every(([choiceId, optionId]) => formState[choiceId] === optionId)) {
+    if (
+      Object.entries(condition).every(
+        ([choiceId, optionId]) => formState[choiceId] === optionId
+      )
+    ) {
       return renderCodeBlock(text);
     }
   }
@@ -107,7 +120,10 @@ function parseTextWithChoices(text) {
       continue;
     }
 
-    assert(choices.length !== 0, `Expected to find a "//# CONFIG" annotation, on line ${index + 1}`);
+    assert(
+      choices.length !== 0,
+      `Expected to find a "//# CONFIG" annotation, on line ${index + 1}`
+    );
 
     choices.at(-1).text += line + '\n';
   }

@@ -21,7 +21,10 @@ export default function Content({ page, setPage, content }) {
 
   return (
     <div className={style.content}>
-      <PageSummary topLevelPage={utilityPageType} />
+      <PageSummary
+        topLevelPage={utilityPageType}
+        pageContent={content[utilityPageType]}
+      />
       {doesPageHaveFilterBox && (
         <FilterBox filterText={filterText} setFilterText={setFilterText} />
       )}
@@ -58,7 +61,7 @@ function Category({ heading, entries, page, setPage }) {
   );
 }
 
-function PageSummary({ topLevelPage }) {
+function PageSummary({ topLevelPage, pageContent }) {
   if (topLevelPage === 'utils') {
     return (
       <>
@@ -70,6 +73,10 @@ function PageSummary({ topLevelPage }) {
       </>
     );
   } else if (topLevelPage === 'nolodash') {
+    const numberOfEntries = pageContent.flatMap(
+      section => section.entries
+    ).length;
+    const totalEntries = 294;
     return (
       <>
         <h2>Lodash Replacements</h2>
@@ -86,10 +93,11 @@ function PageSummary({ topLevelPage }) {
           explanation about that particular function.
         </p>
         <p>
-          This page is still a work-in-progress. Additional entries are
-          constantly being added to this page. If you see any issues on any of
-          the existing entries, or if you have any suggestions for improvement,
-          please{' '}
+          This page is still a work-in-progress. There are currently{' '}
+          {numberOfEntries} out of {totalEntries} entries that have been done,
+          and more are constantly being added to this page. If you see any
+          issues on any of the existing entries, or if you have any suggestions
+          for improvement, please{' '}
           <a href="https://github.com/theScottyJam/snap.js/issues">
             open an issue on GitHub
           </a>
