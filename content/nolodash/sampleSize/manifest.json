@@ -1,5 +1,5 @@
 {
-  "fnSignature": "_.sample(collection)",
-  "lodashLink": "https://lodash.com/docs/4.17.15#sample",
-  "summary": "Gets a random element from `collection`."
+  "fnSignature": "_.sampleSize(collection, n)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#sampleSize",
+  "summary": "Gets `n` random elements at unique keys from `collection` up to the size of `collection`."
 }

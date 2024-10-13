@@ -21,7 +21,7 @@ function buildContentFile({ sourcePath, destPath }) {
   const infoFilePath = `${sourcePath}/info.json`;
   const entryInfo = JSON.parse(fs.readFileSync(infoFilePath, 'utf-8'))
 
-  const entries = entryInfo.map(({categoryHeading, entries}) => {
+  const entries = entryInfo.map(({ categoryHeading, hidden = undefined, entries }) => {
     const loadedEntries = entries.map(name => {
       const entryBasePath = `${sourcePath}/${name}`
       let src = tryReadFile(`${entryBasePath}/src.js`, { fallbackValue: null });
@@ -35,9 +35,19 @@ function buildContentFile({ sourcePath, destPath }) {
         description: fs.readFileSync(`${entryBasePath}/description.md`, 'utf-8'),
         src,
         test: tryReadFile(`${entryBasePath}/test.js`, { fallbackValue: '' }),
-      }
+      };
     })
-    return { categoryHeading, entries: loadedEntries }
+
+    const res = { categoryHeading, entries: loadedEntries };
+    if (hidden) {
+      if (sourcePath.includes('nolodash')) {
+        // This is because I haven't done the work to render the "this entry is unlisted"
+        // message under a no-lodash entry.
+        throw new Error('Hiding entries is not supported for nolodash entries.');
+      }
+      res.hidden = true;
+    }
+    return res;
   })
 
   const allRegisteredDirectories = new Set(entryInfo.flatMap(category => category.entries));

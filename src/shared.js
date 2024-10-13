@@ -13,7 +13,12 @@ export function extractUtilityPageTypeFromRoute(route) {
   }
 }
 
-/** May return null, if there was no matching entry found. */
+/**
+ * May return null if there was no matching entry found.
+ * If a content entry is returned, it will have an additional
+ * "hidden" property, indicating if the entry is intended
+ * to be unlisted.
+ */
 export function lookupContentEntryFromRoute(content, route) {
   const utilityPageType = extractUtilityPageTypeFromRoute(route);
 
@@ -21,13 +26,11 @@ export function lookupContentEntryFromRoute(content, route) {
     return null;
   }
 
-  const entries = content[utilityPageType].flatMap(
-    category => category.entries
-  );
-
-  for (const entry of entries) {
-    if ([utilityPageType, entry.name].join('/') === route) {
-      return entry;
+  for (const category of content[utilityPageType]) {
+    for (const entry of category.entries) {
+      if ([utilityPageType, entry.name].join('/') === route) {
+        return { ...entry, hidden: category.hidden };
+      }
     }
   }
 

@@ -32,3 +32,17 @@ style.fnSignatureLink = css`
     text-decoration: underline;
   }
 `;
+
+style.unlisted = css`
+  label: unlisted;
+  display: flex;
+  flex-flow: column;
+  gap: 1rem;
+  background: #fcd;
+  border: #f00;
+  border-radius: 6px;
+  padding: 12px;
+  & > * {
+    margin: 0;
+  }
+`;

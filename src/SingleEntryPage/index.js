@@ -39,6 +39,7 @@ function DefaultSingleEntryPage({ pageData, setPage, page }) {
     <div>
       <BackButton setPage={setPage} page={page} />
       <h1 className={style.entryHeader}>{name}()</h1>
+      {pageData.hidden && <UnlistedWarning />}
       {src && <Code src={src} />}
       <Description summary={summary} description={description} />
     </div>
@@ -83,5 +84,22 @@ function BackButton({ setPage, page }) {
     >
       Back to Overview
     </a>
+  );
+}
+
+function UnlistedWarning() {
+  return (
+    <div class={style.unlisted}>
+      <p>
+        <strong>This entry is now unlisted.</strong>
+      </p>
+      <p>
+        If you happen to have a direct link to it you'd still be able to view
+        it, but you won't see it listed in the overview page anymore. Entries
+        become unlisted typically because another version of the entry got
+        created on the "Lodash Replacements" page that's either equally
+        informative, or more informative than this entry.
+      </p>
+    </div>
   );
 }

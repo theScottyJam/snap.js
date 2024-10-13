@@ -32,15 +32,17 @@ export default function Content({ page, setPage, content }) {
         content[utilityPageType].length > 0 && (
           <i className={style.noResults}>No Results</i>
         )}
-      {filteredPageContent.map(({ categoryHeading, entries }) => (
-        <Category
-          key={categoryHeading}
-          heading={categoryHeading}
-          entries={entries}
-          page={page}
-          setPage={setPage}
-        />
-      ))}
+      {filteredPageContent.map(({ categoryHeading, hidden = false, entries }) =>
+        hidden ? undefined : (
+          <Category
+            key={categoryHeading}
+            heading={categoryHeading}
+            entries={entries}
+            page={page}
+            setPage={setPage}
+          />
+        )
+      )}
     </div>
   );
 }
@@ -69,6 +71,13 @@ function PageSummary({ topLevelPage, pageContent }) {
         <p>
           These are a handful of various copy-paste-friendly utility functions,
           that are ready to be mixed into any project that might need them.
+        </p>
+        <p>
+          This page was created before the "Lodash Replacements" page. I have
+          since removed most entries from this page, because the same
+          information could be found in the "Lodash Replacements" section. In
+          the future, I may add things like utility TYpeScript types and
+          what-not to this page - things that Lodash does not cover.
         </p>
       </>
     );
