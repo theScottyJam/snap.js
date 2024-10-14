@@ -18,6 +18,8 @@ const set2 = new Set(array2);
 const resultWithDuplicates = array1.filter(x => set2.has(x));
 ```
 
-Both `array.includes()` and `set.has()` use [the SameValueZero comparison algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality) under-the-hood as well, just like Lodash's `_.intersection()`.
+If you don't care about preserving element order or allowing duplicates, perhaps it would be better to use sets from the start and take advantage of [the built-in `set.intersection()` function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/intersection).
+
+Both `array.includes()` and sets use [the SameValueZero comparison algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality) under-the-hood as well, just like Lodash's `_.intersection()`.
 
 There is [an upcoming proposal](https://github.com/tc39/proposal-set-methods) that will introduce a native `.intersection()` method for sets.

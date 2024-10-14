@@ -13,3 +13,9 @@ const result = array1.concat(value1, array2);
 
 // Expected output: [1, 2, 3, 4, 5, 6, 7]
 ```
+
+If you have sets, you can use the `.union()` method.
+
+```javascript
+const combinedSet = new Set(['a', 'b']).union(new Set(['b', 'c']))
+```
