@@ -14,12 +14,12 @@ style.codeBlockWithChoices = css`
 style.fieldSet = css`
   label: field-set;
   border: unset;
+  white-space: wrap;
 `;
 
 style.label = css`
   label: label;
   cursor: pointer;
-  white-space: wrap;
 `;
 
 style.input = css`

@@ -1,4 +1,4 @@
-In general, it's recommended to avoid mutating the original array, but if you must, the following `filterInPlace()` helper can be used to achieve the desired result.
+If you're not in a very performance sensitive area of your codebase or dealing with large arrays, consider just using the native `.filter()` function instead which returns a copy instead of mutating the original. If you are worried about performance, you can use the following `filterInPlace()` helper to achieve the desired result in `O(n)` time.
 
 ```javascript
 function filterInPlace(array, predicate) {

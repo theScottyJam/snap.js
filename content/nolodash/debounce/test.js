@@ -524,7 +524,6 @@ describe('debounce()', () => {
   });
 
   // only applicable for trailing-only debounce functions
-  // <-- Because I'm reusing the debounce functions, I would actually expect this to have a value from a previous debounce function instead of undefined. What's going on?
   multiTest('returns undefined if no value has been memoized yet', [
     {
       targets: {

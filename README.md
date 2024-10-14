@@ -4,7 +4,17 @@ The Copy-Paste Library.
 
 View the built website [over here](https://thescottyjam.github.io/snap.js/#!/nolodash).
 
+## Contributing
+
+I'm an opinionated guy and will be very picky with what's contained in this website, how things are worded, etc.
+
+If you want to open a PR to fix some of my poor spelling/grammer, or help improve things in other minor ways, great! That'll be very much appreciated.
+
+If you want to make larger changes or additions, you can make a PR, but don't be surprised if I just overhaul it with my own ideas or reject it entirely. Alternatively, feel free to just open a discussion in the GitHub issues to discuss changes you'd like to see made.
+
 ## Project Structure
+
+The code behind this website is a dumpster fire, but it does the job, and I don't care enough to clean it up. There's other projects that I put more work into making them as nice as possible behind the scenes, I guess this isn't one of them. The "dumpster fire"-ness comes from a few factors: 1. The purpose of this website greatly changed as it was being developed, 2. since it is a personal project, I used it as an opportunity to experiment with different, less common ways of organizing code, and 3. after a while, I just started hacking in the first thing that works, without trying to hard to do it "right". So, sorry-not-sorry. Anyways, here's a general explanation of what's going on.
 
 The website content is stored as markdown files found inside of the content/ directory. Before deployment, a script is run that combines everything in `content/` into a couple of json files. These json files will be used by the webpage to populate itself. They also get used by the test-runner to run the automated tests found within.
 
@@ -14,8 +24,8 @@ A typical folder for a doc entry will contain some or all of the following:
 * manifest.json - contains metadata about this doc entry.
 * description.md - The actual description for this entry.
 * src.js - (optional) A complmete implementation of a utility function. These files only get used for the "Simple Utilities" section of the website. For the "Lodash Replacements", always put your code into the description.md files (it'll make the entries look more consistent with each other).
-* test.js - (optional) A test file for your code in this doc entry. If you're testing an entry that has a src.js file, the function it defines will be automatically available to you as `_.<name of function>()` (Don't confuse the underscore with Lodash - this system was put in place before I had decided to add content related to Lodash, and even then, it may not have been the smartest choice - sorry about that). If you're testing an entry who's code resides in the description.md file, you'll have to copy-paste your function into the test file.
-* extraNotes.txt - (optional) Any extra notes you may wish to provide for maintainers that you didn't want to include in the webpage itself.
+* test.js - (optional) A test file for your code in this doc entry. If you're testing an entry that has a src.js file, the function it defines will be automatically available to you as `$.<name of function>()`. If you're testing an entry who's code resides in the description.md file, you'll have to copy-paste your function into the test file.
+* extraNotes.txt or notes.txt - (optional) Any extra notes you may wish to provide for maintainers that you didn't want to include in the webpage itself. There's two different names for this file simply because I haven't been consistent here.
 
 When updating a description.md file, if you notice the folder also has a test.js file as well, please check its contents. Its possible the test.js file has a copy of a function from description.md that its trying to test.
 

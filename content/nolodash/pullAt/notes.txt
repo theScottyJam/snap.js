@@ -1,0 +1,7 @@
+The same filterInPlace helper can also be found in all of these entries:
+* _.pull()
+* _.pullAll()
+* _.pullAllBy()
+* _.pullAllWith()
+* _.pullAt()
+* _.remove() - the helper is called "remove()" instead of "filterInPlace()" in this entry

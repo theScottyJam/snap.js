@@ -11,7 +11,7 @@ function camelCase(string) {
 
 The above generates the word list by simply splitting on space characters. Refer to [the entry for `_.words()`](#!/nolodash/words) for alternative ways to extract words from text (which includes information on dealing with different languages).
 
-Refer to the [`_.capitalize()` entry](#!/nolodash/capitalize) to learn more about the design behind the capitalize function being used.
+Refer to the [`_.capitalize()` entry](#!/nolodash/capitalize) to learn more about its implementations, and alternative ways to implement it in a more i18n-friendly manner.
 
 If you need to support internationalization, swap `.toUpperCase()`/`.toLowerCase()` with [`.toLocalUpperCase()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLocaleUpperCase)/[`.toLocaleLowerCase()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLocaleLowerCase), and, if needed, provide the target language as an argument to these functions. This solution isn't perfect - read [this great post for a more nuanced exploration on internationalization and casing](https://stackoverflow.com/a/53930826/7696223).
 
