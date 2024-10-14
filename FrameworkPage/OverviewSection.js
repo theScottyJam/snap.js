@@ -4,7 +4,7 @@ export const OverviewSection = defineElement('OverviewSection', () => {
   return html`
     <div class="overview-region">
       <p>
-        Need to add some complex interactivity to a webpage, but don't wish to go all out with a large framework? Perhaps your small webpage doesn't even have the infrastructure to install third-party dependencies from NPM. The Snap Framework is a simple, hackable copy-paste solution that provides the same core features as larger frameworks, but without the weight or setup hassle.
+        Need to add some complex interactivity to a webpage, but don't wish to go all out with a large framework? Perhaps your small webpage doesn't even have the infrastructure to install third-party dependencies from NPM, or perhaps you have strict auditing requirements in your company and want to add a framework without having to audit a huge codebase. The Snap Framework is a minimal, hackable copy-paste solution that provides the same core features as larger frameworks, but without the weight or setup hassle.
       </p>
     </div>
 
