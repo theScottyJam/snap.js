@@ -2,7 +2,6 @@
 
 import { html, renderChoice, set, Signal, useCleanup, useSignals, withLifecycle } from './snapFramework.js';
 import { SourceViewerSection } from './SourceViewerSection.js';
-import { FootprintComparisonSection } from './FootprintComparisonSection.js';
 import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { PUBLIC_URL } from './shared.js';
 import { headerStyleMixin } from './sharedStyles.js';
@@ -95,9 +94,7 @@ function renderLoadFailed() {
 function renderPageContents({ fullText, minifiedText }) {
   return html`
     ${new OverviewSection()}
-    <h2 class="header">— SMALL —</h2>
-    ${new FootprintComparisonSection()}
-    <h2 class="header">— POWERFUL —</h2>
+    <div style="height: 20px"></div>
     ${new FeatureShowcaseSection()}
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
     <!-- Whenever the framework gets updated, this statistic needs to be updated as well - search the project for §u5gEq for more info. -->
