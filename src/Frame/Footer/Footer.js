@@ -12,7 +12,10 @@ export default function Footer() {
           Github
         </a>
         .<br className={style.breakWhenSmall} /> All code presented is under the{' '}
-        <a href="https://github.com/theScottyJam/snap.js/blob/main/license" rel="noreferrer">
+        <a
+          href="https://github.com/theScottyJam/snap.js/blob/main/license"
+          rel="noreferrer"
+        >
           "unlicense" license
         </a>
         .
