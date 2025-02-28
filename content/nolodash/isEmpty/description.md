@@ -20,7 +20,7 @@ You can check if an object has zero non-inherited string keys by checking the le
 Object.keys({}).length === 0;
 ```
 
-Lodash treats undefined and null as empty, while treating all other non-string primitives as non-empty. This distinction is technically nonsense. Only containers can be empty. If your piece of data can't hold anything, then it _can't_ be empty or non-empty, instead it's simply an invalid input. It's true that a `null` or `undefined` can be used to represent the absence of a value, but these pieces of data aren't in-and-of-themselves _empty_. In any case, if you want to check if something is `undefined` or `null`, you can just use `value === undefined` or `value === null`.
+Lodash treats `undefined` and `null` as empty, while treating all other non-string primitives as non-empty. This distinction is technically nonsense. Only containers can be empty. If your piece of data can't hold anything, then it _can't_ be empty or non-empty, instead it's simply an invalid input. It's true that a `null` or `undefined` can be used to represent the absence of a value, but these pieces of data aren't in-and-of-themselves _empty_. In any case, if you want to check if something is `undefined` or `null`, you can just use `value === undefined` or `value === null`.
 
 If you want to check if an [array-like value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#array-like_objects) (e.g. the argument object, typed arrays, etc) is empty, check the `.length` property, the same way you would with a normal array.
 

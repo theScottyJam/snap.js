@@ -60,7 +60,7 @@ To get a good idea of the vibe I'm shooting for with thesee Lodash doc entries, 
 
 The actual source code for the snap framework contains lots of pragmas to describe how to parse and present various parts of the framework. The pragma parsing code is somewhat brittle, but it does the job, but it does mean that any time you make a change to the source code, make sure to pay close attention to how it looks on the rendered page. Does it look ok in both the fully documented mode and the "classic" mode? Does it look ok in mobile view? Do the examples open up fine and run?
 
-When you're done making updates to the framework, there's a number of places that need to be updated with new informatino:
+When you're done making updates to the framework, there's a number of places that need to be updated with new information:
 1. Update the link to more docs at the top of the framework file. Make sure the new link points to an actual, updated documentation page. (At the moment of writing, there's only one version released, so there's not any code written up yet to support multiple doc pages).
 2. Minify the code (I've been using minify-js.com), then paste the minified version into snapFramework.min.js.
 3. gzip the minified code, then take note of the number of bytes it uses. Update the size comparison if needed (which can be found by searching the project for §G2Fme). Currently it's measured at 1391 bytes (Please update this number in this README as well whenever making a change).

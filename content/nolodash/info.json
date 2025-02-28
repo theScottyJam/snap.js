@@ -175,6 +175,7 @@
       "isWeakSet",
       "lt",
       "lte",
+      "toArray",
       "toFinite",
       "toInteger",
       "toLength",
