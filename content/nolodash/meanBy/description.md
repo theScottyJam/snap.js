@@ -1,5 +1,3 @@
-We will use a plain JavaScript implementation of `_.mean()` to solve this problem.
-
 ```javascript
 function mean(array) {
   return array.reduce((a, b) => a + b) / array.length;
@@ -9,3 +7,5 @@ function mean(array) {
 // new values, before taking the mean.
 mean(array.map(iteratee));
 ```
+
+Refer to [mean()'s page](#!/nolodash/mean) for more information on its implementation.
