@@ -8,7 +8,7 @@
     "default": "trailing",
     "options": {
       "leading": "At the leading end of the series of calls.",
-      "trailing": "At the trailing end of the series of calls.",
+      "trailing": "At the trailing end of the series of calls (Lodash's default behavior).",
       "leadingAndTrailing": "At both the leading and trailing end of the series of calls."
     }
   },

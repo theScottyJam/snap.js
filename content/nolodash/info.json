@@ -267,6 +267,7 @@
       "deburr",
       "endsWith",
       "escape",
+      "escapeRegExp",
       "kebabCase",
       "lowerCase",
       "lowerFirst",
