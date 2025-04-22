@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.template(string, options?)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#template",
+  "summary": "Creates a compiled template function that can interpolate data properties in \"interpolate\" delimiters, HTML-escape interpolated data properties in \"escape\" delimiters, and execute JavaScript in \"evaluate\" delimiters."
+}

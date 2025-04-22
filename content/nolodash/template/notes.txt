@@ -1,0 +1,1 @@
+Similar descriptions and warnings can be found under the `_.escape()` entry.

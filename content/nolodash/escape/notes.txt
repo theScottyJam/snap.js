@@ -1,0 +1,3 @@
+I'm choosing to name the escapeHtmlChars() because browsers already supply an escape() function, and I don't want to encourage shadowinging it. Besides, escapeHtmlChars() is much clearer anyways.
+
+This function can also be found under "template"'s entry, but it has been renamed to "esc()". Similar explanations can also be found there.

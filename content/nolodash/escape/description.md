@@ -9,7 +9,7 @@ function escapeHtmlChars(string) {
 }
 ```
 
-Please be careful when using functions like this as improper usage can result in XSS vunerabilities. The following is a quick guideline on how this `escapeHtmlChars()` function should and should not be used.
+Please be careful when using functions like this as improper usage can result in XSS vulnerabilities. The following is a quick guideline on how this `escapeHtmlChars()` function should and should not be used.
 
 ```javascript
 // ✓ - It is safe to use escaped user input between most HTML tags.
@@ -41,12 +41,12 @@ Do you _really_ need an `escape()` function? Or would an alternative, less-error
 document.body.innerHTML = `<p>${_.escape(userSuppliedString)}</p>`;
 ```
 
-This has the appearance of being simple and concise, but managing when and how to use `_.escape()` can be error-prone. There are a number of alternative solutions out there that remove many of these pitfalls (but not all, so you still need to look out for XSS vunerabilities no matter how you code). For example, you can use the browser APIs to manually build up your HTML instead of using string manipulation + `.innerHTML`.
+This has the appearance of being simple and concise, but managing when and how to use `_.escape()` can be error-prone. There are a number of alternative solutions out there that remove many of these pitfalls (but not all, so you still need to look out for XSS vulnerabilities no matter how you code). For example, you can use the browser APIs to manually build up your HTML instead of using string manipulation + `.innerHTML`.
 
 ```javascript
 const paragraph = document.createElement('p');
-// .innerText will automatically escape HTML characters for you.
-paragraph.innerText = userSuppliedString;
+// .textContent will automatically escape HTML characters for you.
+paragraph.textContent = userSuppliedString;
 document.body.replaceWith(paragraph);
 ```
 
