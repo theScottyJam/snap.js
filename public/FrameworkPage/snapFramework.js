@@ -1066,16 +1066,20 @@ export const set = (fields, getRef = undefined) => el => {
 /**
  * This is similar to doing a for loop, but inside of a template.
  * 
- * Given a signal holding an array of entries, `renderChild()` will render
- * one node per entry in the array. Each entry in the signal's array should
- * be a tuple containing a key-value pair. Every time a new element needs
+ * Given a signal holding an array of entries, the `renderChild()` parameter
+ * will render one node per entry in the array. Each entry in the signal's array
+ * should be a tuple containing a key-value pair. Every time a new element needs
  * to be rendered, the `initChild()` callback will be called with the
  * entry value as the first parameter, followed by the entry key. `initChild()`
  * should return a new HTML node to be rendered.
  * 
- * The singal's entry keys are used to uniquely identify that particular entry,
+ * The signal's entry keys are used to uniquely identify that particular entry,
  * so if the contents of the array are updated, it can figure out,
  * by comparing keys, if elements need to be moved, destroyed, or created.
+ * 
+ * The signal's entry values can, in turn, hold more "descendant" signals.
+ * You can then cause individual items in the list to be updated by changing
+ * the values of these descendant signals.
  * 
  * @example
  * //# COMPLETE-EXAMPLE-START
@@ -1102,16 +1106,14 @@ export const set = (fields, getRef = undefined) => el => {
  * //# COMPLETE-EXAMPLE-END
  * function renderTodoItems(signalTodos) {
  *   return html`
- *     <div class="todo-list">
- *       ${renderEach(
- *         // Derive a new signal from signalTodos.
- *         // This new signal will use the todo item's id as the key.
- *         useSignals([signalTodos], todos => {
- *           return todos.map(todo => [todo.id, todo]);
- *         }),
- *         (todo, todoId) => renderTodoItem({ todo, signalTodos }),
- *       )}
- *     </div>
+ *     ${renderEach(
+ *       // Derive a new signal from signalTodos.
+ *       // This new signal will use the todo item's id as the key.
+ *       useSignals([signalTodos], todos => {
+ *         return todos.map(todo => [todo.id, todo]);
+ *       }),
+ *       (todo, todoId) => renderTodoItem({ todo, signalTodos }),
+ *     )}
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
@@ -1136,6 +1138,96 @@ export const set = (fields, getRef = undefined) => el => {
  *         },
  *       })}>Remove</button>
  *     </div>
+ *   `;
+ * }
+ * 
+ * document.body.append(withLifecycle(renderApp).value);
+ * //# COMPLETE-EXAMPLE-END
+ * //# COLLAPSE-EXAMPLES
+ * @example <caption>Using descendant signals to update list content.</caption>
+ * //# COMPLETE-EXAMPLE-START
+ * import { Signal, useSignals, withLifecycle, html, set, renderEach } from '%FRAMEWORK_LOCATION%';
+ * 
+ * //# COMPLETE-EXAMPLE-END
+ * // Holds a list of todo items of the shape
+ * // { id: <number>, signalMessage: <signal holding a string> }
+ * const signalTodos = new Signal([]);
+ * 
+ * //# COMPLETE-EXAMPLE-START
+ * async function fetchTodos() {
+ *   // Generate fake data
+ *   const fakeTodos = [];
+ *   for (let i = 0; i < 5; i++) {
+ *     if (Math.random() > 0.4) {
+ *       fakeTodos.push({
+ *         id: i,
+ *         message: `${Math.random() > 0.5 ? 'Secret' : 'Public'} mission #${i + 1}`
+ *       });
+ *     }
+ *   }
+ * 
+ *   const shuffle = collection => collection
+ *     .map(value => ({ value, order: Math.random() }))
+ *     .sort((a, b) => a.order - b.order)
+ *     .map(({ value }) => value);
+ * 
+ *   return shuffle(fakeTodos);
+ * }
+ * //# COMPLETE-EXAMPLE-END
+ * 
+ * // Loads an updated todo list and merges the data into signalTodos.
+ * // If the updated todo list contains a todo item that we're already aware
+ * // of, we'll find the matching todo item from the existing signalTodos,
+ * // find its descendant "signalMessage", update that signal, and continue
+ * // to use it. This will cause existing nodes in the UI to be updated.
+ * // If the updated todo list contains a new todo item, we'll add a
+ * // new entry for it in signalTodos and create a new signalMessage for it.
+ * async function refreshTodos() {
+ *   const newTodos = await fetchTodos();
+ *   const oldTodos = signalTodos.get();
+ *   signalTodos.set(newTodos.map(todoItem => {
+ *     const oldTodo = oldTodos.find(t => t.id === todoItem.id);
+ *     const signalMessage = oldTodo?.signalMessage ?? new Signal();
+ *     signalMessage.set(todoItem.message);
+ *     return { id: todoItem.id, signalMessage };
+ *   }));
+ * }
+ * 
+ * //# COMPLETE-EXAMPLE-START
+ * refreshTodos();
+ * 
+ * function renderApp() {
+ *   return html`
+ *     <button ${set({ onclick: refreshTodos })}>
+ *       Refresh
+ *     </button>
+ *     ${renderTodoItems()}
+ *     <p>
+ *       Note that a checkbox will stay checked
+ *       across a refresh as long as the id stays the same.
+ *     </p>
+ *   `;
+ * }
+ * 
+ * //# COMPLETE-EXAMPLE-END
+ * function renderTodoItems() {
+ *   return html`
+ *     ${renderEach(
+ *       useSignals([signalTodos], todos => {
+ *         return todos.map(todo => [todo.id, todo]);
+ *       }),
+ *       (todo, todoId) => renderTodoItem(todo),
+ *     )}
+ *   `;
+ * }
+ * 
+ * //# COMPLETE-EXAMPLE-START
+ * function renderTodoItem(todo) {
+ *   return html`
+ *     <label style="display: block">
+ *       <input type="checkbox">
+ *       <span ${set({ textContent: todo.signalMessage })}></span>
+ *     </label>
  *   `;
  * }
  * 
