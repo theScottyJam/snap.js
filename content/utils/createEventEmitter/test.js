@@ -1,6 +1,25 @@
+function createEventEmitter() {
+  const listeners = [];
+  return {
+    subscribe(fn) {
+      listeners.push(fn);
+      let unsubscribed = false;
+      return function unsubscribe() {
+        if (unsubscribed) return;
+        const index = listeners.indexOf(fn);
+        listeners.splice(index, 1);
+        unsubscribed = true;
+      };
+    },
+    trigger(...args) {
+      return listeners.map(fn => fn(...args));
+    },
+  };
+}
+
 describe('createEventEmitter()', () => {
   it('triggers subscribed events with arguments', () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
     const spy1 = jest.fn();
     event.subscribe(spy1);
     const spy2 = jest.fn();
@@ -12,7 +31,7 @@ describe('createEventEmitter()', () => {
   });
 
   it('returns the results of the subscribed functions', () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
     event.subscribe(() => 2);
     event.subscribe(() => 3);
 
@@ -21,7 +40,7 @@ describe('createEventEmitter()', () => {
   });
 
   it('is capable of having async subscribers', async () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
     event.subscribe(async () => 2);
     event.subscribe(async () => 3);
 
@@ -30,7 +49,7 @@ describe('createEventEmitter()', () => {
   });
 
   it('is capable of being triggered multiple times, with new subscribers', () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
     expect(event.trigger()).toEqual([]);
 
     event.subscribe(() => 1);
@@ -41,7 +60,7 @@ describe('createEventEmitter()', () => {
   });
 
   it('allows unsubscribing', () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
 
     const unsubscribe = event.subscribe(() => 1);
     event.subscribe(() => 2);
@@ -50,7 +69,7 @@ describe('createEventEmitter()', () => {
   });
 
   it('allows repeated calls to unsubscribe', () => {
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
 
     const unsubscribe = event.subscribe(() => 1);
     event.subscribe(() => 2);
@@ -63,7 +82,7 @@ describe('createEventEmitter()', () => {
     // Tested by unsubscribing multiple times, but only expecting one unsubscribe to happen
     const fn = () => 2;
 
-    const event = $.createEventEmitter();
+    const event = createEventEmitter();
     const unsubscribe = event.subscribe(fn);
     event.subscribe(fn);
     unsubscribe();

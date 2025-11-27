@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+  overflow-y: hidden;
+}
+
+#root {
+  overflow-y: auto;
+  height: 100vh;
+}

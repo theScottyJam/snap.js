@@ -8,40 +8,36 @@ View the built website [over here](https://thescottyjam.github.io/snap.js/#!/nol
 
 I'm an opinionated guy and will be very picky with what's contained in this website, how things are worded, etc.
 
-If you want to open a PR to fix some of my poor spelling/grammer, or help improve things in other minor ways, great! That'll be very much appreciated.
+If you want to open a PR to fix some of my poor spelling/grammar, or help improve things in other minor ways, great! That'll be very much appreciated.
 
-If you want to make larger changes or additions, you can make a PR, but don't be surprised if I just overhaul it with my own ideas or reject it entirely. Alternatively, feel free to just open a discussion in the GitHub issues to discuss changes you'd like to see made.
+If you want to see larger changes or additions happen, I would recommend starting by discussing your desired changes in the GitHub issues. If you submit a PR out of the blue, that's fine, but don't be surprised if I overhaul it with my own ideas or reject it entirely.
 
 ## Project Structure
 
-The code behind this website is a dumpster fire, but it does the job, and I don't care enough to clean it up. There's other projects that I put more work into making them as nice as possible behind the scenes, I guess this isn't one of them. The "dumpster fire"-ness comes from a few factors: 1. The purpose of this website greatly changed as it was being developed, 2. since it is a personal project, I used it as an opportunity to experiment with different, less common ways of organizing code, and 3. after a while, I just started hacking in the first thing that works, without trying to hard to do it "right". So, sorry-not-sorry. Anyways, here's a general explanation of what's going on.
-
 The website content is stored as markdown files found inside of the content/ directory. Before deployment, a script is run that combines everything in `content/` into a couple of json files. These json files will be used by the webpage to populate itself. They also get used by the test-runner to run the automated tests found within.
 
-The rest of the source code is found inside of src/. It's not intended to be the cleanest code, but it does the job.
+The rest of the source code is found inside of app/.
 
 A typical folder for a doc entry will contain some or all of the following:
 * manifest.json - contains metadata about this doc entry.
 * description.md - The actual description for this entry.
-* src.js - (optional) A complmete implementation of a utility function. These files only get used for the "Simple Utilities" section of the website. For the "Lodash Replacements", always put your code into the description.md files (it'll make the entries look more consistent with each other).
-* test.js - (optional) A test file for your code in this doc entry. If you're testing an entry that has a src.js file, the function it defines will be automatically available to you as `$.<name of function>()`. If you're testing an entry who's code resides in the description.md file, you'll have to copy-paste your function into the test file.
-* extraNotes.txt or notes.txt - (optional) Any extra notes you may wish to provide for maintainers that you didn't want to include in the webpage itself. There's two different names for this file simply because I haven't been consistent here.
+* src.js - (optional) A complete implementation of a utility function. These files only get used for the "Simple Utilities" section of the website. For the "Lodash Replacements", always put your code into the description.md files (it'll make the entries look more consistent with each other).
+* test.js - (optional) A test file for your code in this doc entry. You'll have to copy-paste your function into the test file to test it.
+* notes.txt - (optional) Any extra notes you may wish to provide for maintainers that you didn't want to include in the webpage itself.
 
 When updating a description.md file, if you notice the folder also has a test.js file as well, please check its contents. Its possible the test.js file has a copy of a function from description.md that its trying to test.
-
-The code for the Snap Framework page is made using the Snap Framework, and is in the public/FrameworkPage/ folder (in order to make it render outside of React's control).
 
 ## Commands
 
 Use `npm ci` to install the dependencies.
 
-To start the development server, use `npm start`. Note that you'll have to restart the command whenever you change something in `content/`.
+To start the development server, use `npm start`. If you're making changes to `content/`, you'd want to run `npm run build:watch` as well, which will auto-build the content/ folder for you.
 
-Before committing, try to remember to run `npm test` and `npm run lint-fix` first. The first command will run a handful of tests and the second will lint most of the project. The UI itself isn't tested, but some of the utility functions have automated tests to go with them.
+Before committing, try to remember to run `npm test` and `npm run lint:fix` first. The first command will run a handful of tests and the second will lint most of the project. The UI itself isn't tested, but some of the utility functions have automated tests to go with them.
 
 Other available commands:
 
-- `npm run predeploy` runs prettier and tests
+- `npm run predeploy` runs the linter and tests
 - `npm run deploy` auto-runs predeploy and publishes this webpage.
 
 ## The spirit of a Lodash doc entry
@@ -61,13 +57,14 @@ To get a good idea of the vibe I'm shooting for with thesee Lodash doc entries, 
 The actual source code for the snap framework contains lots of pragmas to describe how to parse and present various parts of the framework. The pragma parsing code is somewhat brittle, but it does the job, but it does mean that any time you make a change to the source code, make sure to pay close attention to how it looks on the rendered page. Does it look ok in both the fully documented mode and the "classic" mode? Does it look ok in mobile view? Do the examples open up fine and run?
 
 When you're done making updates to the framework, there's a number of places that need to be updated with new information:
-1. Update the link to more docs at the top of the framework file. Make sure the new link points to an actual, updated documentation page. (At the moment of writing, there's only one version released, so there's not any code written up yet to support multiple doc pages).
-2. Minify the code (I've been using minify-js.com), then paste the minified version into snapFramework.min.js.
-3. gzip the minified code, then take note of the number of bytes it uses. Update the size comparison if needed (which can be found by searching the project for §G2Fme). Currently it's measured at 1391 bytes (Please update this number in this README as well whenever making a change).
-4. Count the number of lines without whitespace or comments. I use the "cloc" tool on npm (`npx cloc ./snapFramework.js`). Search the project for §u5gEq to know where to paste it.
+1. Add the new version to the framework/ folder. The minified version can be created by using an online tool such as minify-js.com.
+2. Update the documentation link near the top of the framework source file.
+3. Update the changelog.
+4. Count the number of lines without whitespace or comments. I use the "cloc" tool on npm (`npx cloc ./snapFramework.js`).
+5. Register the new framework version with the line count in the list of available versions. Search the project for §u5gEq to know where to paste it.
+6. Update the project to use the latest version of the framework.
 
-The link at the top of the file contains a version number embedded in it - use the following guide to update that version number.
-Given a version number of X.Y:
+Version numbers obey the following pattern. Given a version number of X.Y:
 * X: Breaking change
 * Y: New feature added or bugs fixed
 

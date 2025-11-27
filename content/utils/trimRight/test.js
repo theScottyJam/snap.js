@@ -1,26 +1,34 @@
+function trimRight(str, toRemove = ' \t\n') {
+  const chars = str.split('');
+  while (chars.length && toRemove.includes(chars[chars.length - 1])) {
+    chars.pop();
+  }
+  return chars.join('');
+}
+
 describe('trimRight()', () => {
   it('trims characters from the right', () => {
-    const res = $.trimRight(' \t\n abc  ');
+    const res = trimRight(' \t\n abc  ');
     expect(res).toEqual(' \t\n abc');
   });
 
   it('can trim down to an empty string', () => {
-    const res = $.trimRight('  \n\t ');
+    const res = trimRight('  \n\t ');
     expect(res).toEqual('');
   });
 
   it("does not trim when there's nothing to trim", () => {
-    const res = $.trimRight(' abc');
+    const res = trimRight(' abc');
     expect(res).toEqual(' abc');
   });
 
   it('can use custom trim characters', () => {
-    const res = $.trimRight('YXabcXYX', 'XY');
+    const res = trimRight('YXabcXYX', 'XY');
     expect(res).toEqual('YXabc');
   });
 
   it("won't trim anything if an empty string is provided for the trim characters", () => {
-    const res = $.trimRight(' abc ', '');
+    const res = trimRight(' abc ', '');
     expect(res).toEqual(' abc ');
   });
 });

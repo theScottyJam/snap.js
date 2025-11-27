@@ -1,9 +1,17 @@
+function* zip(...arrays) {
+  if (arrays.length === 0) return;
+  const minLength = Math.min(...arrays.map(arr => arr.length));
+  for (let i = 0; i < minLength; ++i) {
+    yield arrays.map(arr => arr[i]);
+  }
+}
+
 describe('zip()', () => {
   const range = (start, stop) =>
     Array.from({ length: stop - start }, (_, i) => i + start);
 
   it('zips up arrays', () => {
-    const zipped = [...$.zip(range(0, 3), range(3, 6))];
+    const zipped = [...zip(range(0, 3), range(3, 6))];
     expect(zipped).toEqual([
       [0, 3],
       [1, 4],
@@ -12,7 +20,7 @@ describe('zip()', () => {
   });
 
   it('discards elements from longer arrays', () => {
-    const zipped = [...$.zip(range(0, 3), range(3, 9))];
+    const zipped = [...zip(range(0, 3), range(3, 9))];
     expect(zipped).toEqual([
       [0, 3],
       [1, 4],
@@ -21,7 +29,7 @@ describe('zip()', () => {
   });
 
   it('zips up three arrays', () => {
-    const zipped = [...$.zip([1, 4], [2, 5], [3, 6])];
+    const zipped = [...zip([1, 4], [2, 5], [3, 6])];
     expect(zipped).toEqual([
       [1, 2, 3],
       [4, 5, 6],
@@ -29,17 +37,17 @@ describe('zip()', () => {
   });
 
   it('zips up a single arrays', () => {
-    const zipped = [...$.zip([1, 2, 3])];
+    const zipped = [...zip([1, 2, 3])];
     expect(zipped).toEqual([[1], [2], [3]]);
   });
 
   it('zips up no arrays', () => {
-    const zipped = [...$.zip()];
+    const zipped = [...zip()];
     expect(zipped).toEqual([]);
   });
 
   it('zips up empty arrays', () => {
-    const zipped = [...$.zip([], [])];
+    const zipped = [...zip([], [])];
     expect(zipped).toEqual([]);
   });
 });

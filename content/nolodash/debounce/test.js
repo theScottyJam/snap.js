@@ -373,7 +373,6 @@ function multiTest(description, expectationGroups, testFn, { only = false } = {}
   (only ? describe.only.bind(describe) : describe)(description, () => {
     for (const { targets, expectations = undefined } of expectationGroups) {
       for (const [name, target] of Object.entries(targets)) {
-        if (only) console.log('???')
         it(`${name}()`, () => testFn(target, expectations));
       }
     }
@@ -578,7 +577,7 @@ describe('debounce()', () => {
     // Just showing that when we start, no timers are scheduled
     expect(fakeTimeout.areTherePendingTimers()).toBe(false);
 
-    expect(debouncedFn).toThrowError(error);
+    expect(debouncedFn).toThrow('Wuh Woh!');
 
     // After it's been called, we should stay in the exact same state,
     // which means no timers should be scheduled still.
