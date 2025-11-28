@@ -30,5 +30,5 @@ function getStyles() {
     .children-container {
       flex: 1;
     }
-  `
+  `;
 };

@@ -16,4 +16,4 @@ function escapeRegExp(string) {
 
 While this mostly works, [MDN warns against solutions like this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape).
 
-> don't try to re-implement [RegExp.escape()]'s functionality by, [...] insert[ing] a `\` before all syntax characters. `RegExp.escape()` is designed to use escape sequences that work in many more edge cases/contexts than hand-crafted code is likely to achieve.
+> don't try to re-implement \[RegExp.escape()]'s functionality by, \[...] insert\[ing] a `\` before all syntax characters. `RegExp.escape()` is designed to use escape sequences that work in many more edge cases/contexts than hand-crafted code is likely to achieve.

@@ -54,7 +54,7 @@ function isEqual(value1, value2) {
       })
     );
   } else {
-    throw new Error(`Unreachable`);
+    throw new Error('Unreachable');
   }
 }
 ```

@@ -19,7 +19,7 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
     [signalContent, signalUtilityPageType],
     (content, utilityPageType) => {
       return filterContent(content[utilityPageType], { signalPageHasFilterBox, signalFilterText });
-    }
+    },
   );
 
   const signalIsPageEmpty = new Signal(false);
@@ -32,13 +32,13 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
   return html`
     ${renderPageSummary({
       signalTopLevelPage: signalUtilityPageType,
-      signalPageContent: Signal.use([signalContent, signalUtilityPageType], (content, utilityPageType) => content[utilityPageType])
+      signalPageContent: Signal.use([signalContent, signalUtilityPageType], (content, utilityPageType) => content[utilityPageType]),
     })}
     ${renderChoice([
       {
         signalWhen: signalPageHasFilterBox,
         render: () => renderFilterBox({ signalFilterText }),
-      }
+      },
     ])}
     ${renderChoice([
       {
@@ -49,7 +49,7 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
         render: () => html`
           <i class="no-results">No Results</i>
         `,
-      }
+      },
     ])}
     ${renderEach(
       signalFilteredPageContent.use(filteredPageContent => {
@@ -60,7 +60,7 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
       }),
       ({ categoryHeading, signalEntries }) => {
         return renderCategory({ heading: categoryHeading, signalEntries, pageInfo });
-      }
+      },
     )}
   `;
 });
@@ -79,9 +79,9 @@ function renderCategory({ heading, signalEntries, pageInfo }) {
           signalEntries.use(entries => entries.map(entry => [entry.name, entry])),
           entry => new DocEntry({ entry, pageInfo }),
         )}
-      `
+      `,
     },
-  ])
+  ]);
 }
 
 function renderPageSummary({ signalTopLevelPage, signalPageContent }) {
@@ -124,7 +124,7 @@ function renderPageSummary({ signalTopLevelPage, signalPageContent }) {
           <span ${set({
             textContent: signalPageContent.use(pageContent => {
               return pageContent.flatMap(section => section.entries).length;
-            })
+            }),
           })}></span> out of 294 entries that have been done,
           and more are constantly being added to this page. If you see any
           issues on any of the existing entries, or if you have any suggestions
@@ -140,12 +140,12 @@ function renderPageSummary({ signalTopLevelPage, signalPageContent }) {
           </summary>
           ${renderNolodashFaq()}
         </details>
-      `
+      `,
     },
     {
       signalWhen: new Signal(true),
       render: () => html``,
-    }
+    },
   ]);
 }
 
@@ -155,11 +155,11 @@ const signalNolodashFaq = new Signal({ type: 'unready' });
 function renderNolodashFaq() {
   if (signalNolodashFaq.get().type === 'unready') {
     signalNolodashFaq.set({ type: 'loading' });
-    (async function() {
+    (async function () {
       try {
         const responseText = await fetch('nolodashFaq.html')
           .then(response => {
-            if (!response.ok) throw new Error('non-2xx response received while fetching FAQ.')
+            if (!response.ok) throw new Error('non-2xx response received while fetching FAQ.');
             return response.text();
           });
         signalNolodashFaq.set({ type: 'ready', value: responseText });
@@ -185,7 +185,7 @@ function renderNolodashFaq() {
         signalContentHtml: signalNolodashFaq.use(nolodashFaq => nolodashFaq.value),
       }),
     },
-  ])
+  ]);
 }
 
 function renderFilterBox({ signalFilterText }) {

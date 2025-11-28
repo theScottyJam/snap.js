@@ -54,6 +54,7 @@ describe('isArrayLike()', () => {
   });
 
   it('considers a value with a really large length to not be array-like (as those are represented as floats)', () => {
+    // eslint-disable-next-line no-loss-of-precision
     expect(isArrayLike({ length: 2e999 })).toBe(false);
   });
 });

@@ -80,21 +80,21 @@ const onUninitContext = new Context();
 /**
  * Use this to bootstrap a root component. This is what allows your components
  * to use hooks such as {@link useCleanup}.
- * 
+ *
  * @param callback This callback will be auto-called. While it is running,
  *   lifecycle hooks will be available to be used.
- * 
+ *
  * @returns an object containing two properties:
  * * value: Contains the return value of your callback.
  * * uninit: If you ever need to remove the component from the DOM,
  *     call this to allow the components to clean themselves up.
  *     If you never plan on uninitializing the component, you
  *     can just ignore this function.
- * 
+ *
  * @example <caption>Rendering an app root</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, useCleanup, html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * // Hooks such as useCleanup() are available to this component and
  * // descendent components it renders (such as `renderAppContent()`) because it
@@ -122,44 +122,44 @@ const onUninitContext = new Context();
  *   return html`<p>Dummy app content</p>`;
  * }
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * // Only grabbing the .el property and ignoring the uninit property
  * // because we don't need it.
  * const el = withLifecycle(renderApp).value;
  * document.body.append(el);
- * 
+ *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Rendering an element that may be removed in the future</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, useCleanup, html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * document.body.append(html`
  *   <button ${el => el.id = 'toggle-widget'}>Toggle Widget</button>
  *   <div ${el => el.id = 'widget-container'}></div>
  * `);
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderWidget() {
  *   useCleanup(() => {
  *     console.log('This will be called as the component is being cleaned up.');
  *   });
- * 
+ *
  *   const fragment = html`
  *     <p style="background: pink">This widget can be added or removed!</p>
  *   `;
- * 
+ *
  *   const el = fragment.querySelector('p');
  *   const intervalId = setInterval(() => {
  *     el.style.background = el.style.background === 'pink' ? 'yellow' : 'pink';
  *   }, 1000);
- * 
+ *
  *   // The useCleanup() hook will be called when the uninit()
  *   // function returned by withLifecycle() is called.
  *   useCleanup(() => clearInterval(intervalId));
- * 
+ *
  *   return fragment;
  * }
- * 
+ *
  * const widgetContainerEl = document.getElementById('widget-container');
  * let showingWidget = false;
  * let uninit;
@@ -174,7 +174,7 @@ const onUninitContext = new Context();
  *   }
  *   showingWidget = !showingWidget;
  * }
- * 
+ *
  * document.getElementById('toggle-widget')
  *   .addEventListener('click', toggleWidget);
  *
@@ -206,33 +206,33 @@ export function withLifecycle(callback) {
 /**
  * The `useCleanup()` hook will call the provided callback as the component
  * is unmounting.
- * 
+ *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, useCleanup, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderTimer({ initialValue }) {
  *   const signalTimeLeft = new Signal(initialValue);
- * 
+ *
  *   const intervalId = setInterval(() => {
  *     signalTimeLeft.set(signalTimeLeft.get() - 1);
  *     if (signalTimeLeft.get() === 0) {
  *       clearInterval(intervalId);
  *     }
  *   }, 1000);
- * 
+ *
  *   // This will make sure the interval is stopped when the component unmounts,
  *   // otherwise, it will continue to try to update the element's contents
  *   // even though the element isn't being shown to the user anymore.
  *   useCleanup(() => clearInterval(intervalId));
- * 
+ *
  *   return html`
  *     <p ${set({ textContent: signalTimeLeft })}></p>
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const renderExample = () => renderTimer({ initialValue: 5 });
  * const { value: el, uninit } = withLifecycle(renderExample);
  * document.body.append(el);
@@ -254,7 +254,7 @@ export function useCleanup(listener) {
   if (registerUninitListener === undefined) {
     throw new Error(
       'useCleanup() must be called during the execution ' +
-      'of a withLifecycle() callback.'
+      'of a withLifecycle() callback.',
     );
   }
   registerUninitListener(listener);
@@ -266,32 +266,32 @@ export function useCleanup(listener) {
  * An event emitter with state. You can provide an initial state to it when
  * constructing it, then `.get()` or `.set()` that piece of state at any
  * point in time.
- * 
+ *
  * Others can listen for state changes via `Signal.use()`, which is a hook that
  * allows you to subscribe to multiple signals at once. Because it's a hook,
  * it's capable of automatically cleaning up after itself when your component
  * unmounts, allowing itself to be garbage collected. Any {@link useCleanup}
  * calls done from within the callback will be executed each time the callback
  * is re-ran, allowing the previous execution to clean itself up.
- * 
+ *
  * `Signal.use()` takes a list of signals to watch and an `onChange` callback
  * that fires as soon as it is registered, and whenever any of the watched
  * signals are updated. The callback receives, as a parameter, the current
  * values of all of the watched signals.
- * 
+ *
  * `Signal.use()` returns a new, derived signal that holds the last value that
  * the `onChange` callback returned. Each time the callback returns a different
  * value, the returned signal will be updated. You may choose to ignore this
  * return value and simply use `Signal.use()` as a way to trigger side effects
  * whenever a signal changes.
- * 
+ *
  * Signals are on the JavaScript standard track!
  * See {@link https://github.com/tc39/proposal-signals|the Signals proposal}.
  *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderEchoBox() {
  *   const signalText = new Signal('');
@@ -303,7 +303,7 @@ export function useCleanup(listener) {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * document.body.append(withLifecycle(renderEchoBox).value);
  * //# COMPLETE-EXAMPLE-END
  *
@@ -312,7 +312,7 @@ export function useCleanup(listener) {
  * import {
  *   Signal, withLifecycle, html, set,
  * } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderLogo({ src, signalWidth, signalHeight }) {
  *   return html`
@@ -325,7 +325,7 @@ export function useCleanup(listener) {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const params = {
  *   src: '%ASSETS%/snap-logo.png',
  *   signalWidth: new Signal(64),
@@ -340,20 +340,20 @@ export function useCleanup(listener) {
  *   params.signalHeight.set(randNumb(128));
  * }, 1000)
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * @example <caption>Using Signal.use() to trigger side-effects</caption>
  * //# COMPLETE-EXAMPLE-START
  * import {
  *   Signal, withLifecycle, useCleanup, html, set,
  * } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderBomb({ signalAnimate }) {
  *   const fragment = html`
  *     <img src="%ASSETS%/bomb.svg" style="visibility: visible"/>
  *   `;
  *   const bombEl = fragment.querySelector('img');
- * 
+ *
  *   let intervalId = undefined;
  *   Signal.use([signalAnimate], animate => {
  *     if (animate) {
@@ -368,18 +368,18 @@ export function useCleanup(listener) {
  *       bombEl.style.visibility = 'visible';
  *     }
  *   });
- * 
+ *
  *   // This callback will be called when the component is being unmounted.
  *   useCleanup(() => {
  *     if (intervalId !== undefined) {
  *       clearInterval(intervalId);
  *     }
  *   });
- * 
+ *
  *   return fragment;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * function renderExample() {
  *   const signalAnimate = new Signal(false);
  *   return html`
@@ -391,10 +391,10 @@ export function useCleanup(listener) {
  *     </button>
  *   `;
  * }
- * 
+ *
  * const renderedResult = withLifecycle(renderExample);
  * document.body.append(renderedResult.value);
- * 
+ *
  * // Provide a button to self-destruct the content,
  * // mostly as a way to demonstrate that the cleanup hook works.
  * const selfDestructFragment = html`<button>Self Destruct!</button>`;
@@ -467,7 +467,7 @@ export class Signal {
             signalToParents.set(signal, parent !== undefined ? [parent] : []);
             const toProcess = [...signal.#signalsListening]
               .map(listener => ({ signal: listener, parent: signal }));
-            processingStack.push(...toProcess)
+            processingStack.push(...toProcess);
           } else {
             console.assert(parent !== undefined);
             signalToParents.get(signal).push(parent);
@@ -594,25 +594,25 @@ export class Signal {
 
 /**
  * A template tag for generating HTML nodes.
- * 
+ *
  * If you interpolate HTML elements or fragments, they will be inserted at that
  * location.
- * 
+ *
  * If you interpolate a function inside of an element tag, that function will
  * get called with a reference to the element as a parameter.
- * 
+ *
  * Use the {@link set} helper function to set properties on an element in your
  * template. {@link set} can also be used to dynamically insert text inside of
  * an element, by setting the `textContent` property of that element.
- * 
+ *
  * This is a stand-alone function that isn't dependent on anything else, which
  * means you can copy-paste it into any project and use it as-is, without
  * copying the whole Snap Framework.
- * 
+ *
  * @example <caption>Interpolating nested HTML elements</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderApp() {
  *   return html`
@@ -620,21 +620,21 @@ export class Signal {
  *     ${renderHelloWorldText()}
  *   `;
  * }
- * 
+ *
  * function renderHelloWorldText() {
  *   return html`
  *     <p>Hello World!</p>
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * @example <caption>Interpolating a callback</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * let color = 'red';
  * document.body.append(html`
@@ -716,14 +716,14 @@ export function html(strings, ...values) {
  * Sets properties on an element. If signals are provided, it will
  * automatically subscribe to those signals and auto-update the associated
  * properties whenever the signal is changed.
- * 
+ *
  * It's important to note that this sets properties
  * (e.g. `element.id = 'your-id'`), not HTML attributes
  * (e.g. it does not do `element.setAttribute('id', 'your-id')`).
  * As a result, if you want to set the CSS class of an element, you have to use
  * `className` as your key instead of `class`, since that's how the property
  * is named on native HTML elements.
- * 
+ *
  * You can update the text inside of an element by setting the `textContent`
  * property on that element.
  *
@@ -731,15 +731,15 @@ export function html(strings, ...values) {
  *   (or signals with values)
  * @param getRef (optional) a callback that will be called with a reference
  *   to the element being updated.
- * 
+ *
  * @returns a hook that expects an element as an argument.
  *   Most of the time you won't call this hook yourself,
  *   instead, you would interpolate it in the {@link html} template tag.
- * 
+ *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderButton({ text, signalDisabled, onClick }) {
  *   return html`
@@ -758,12 +758,12 @@ export function html(strings, ...values) {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const signalDisabled = new Signal(false);
  * setInterval(() => {
  *   signalDisabled.set(!signalDisabled.get());
  * }, 1000);
- * 
+ *
  * const renderExample = () => renderButton({
  *   text: 'Push Me!',
  *   signalDisabled,
@@ -771,11 +771,11 @@ export function html(strings, ...values) {
  * });
  * document.body.append(withLifecycle(renderExample).value);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * @example <caption>using set() on your own components</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderApp() {
  *   // This example shows how you would use set() to adjust properties from
@@ -789,7 +789,7 @@ export function html(strings, ...values) {
  *     <p>App Body</p>
  *   `;
  * }
- * 
+ *
  * function renderHeader() {
  *   // The html template tag returns a fragment.
  *   // Fragments can't be styled, but elements can,
@@ -798,15 +798,15 @@ export function html(strings, ...values) {
  *   return html`<h1>My Awesome App!</h1>`.firstElementChild;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using the getRef parameter</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderHeader(text) {
  *   return html`
@@ -820,14 +820,14 @@ export function html(strings, ...values) {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const renderExample = () => renderHeader('Example App');
  * document.body.append(withLifecycle(renderExample).value);
  * //# COMPLETE-EXAMPLE-END
  * @example <caption>setting a CSS class with className</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderButton({ text, bold }) {
  *   return html`
@@ -837,7 +837,7 @@ export function html(strings, ...values) {
  *         className: bold ? 'bold' : '',
  *       })
  *     }></button>
- * 
+ *
  *     <style>
  *       .bold {
  *         font-weight: bold;
@@ -846,7 +846,7 @@ export function html(strings, ...values) {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const renderExample1 = () => renderButton({ text: 'Not Bold', bold: false });
  * document.body.append(withLifecycle(renderExample1).value);
  *
@@ -871,31 +871,31 @@ export const set = (fields, getRef = undefined) => el => {
 
   getRef?.(el);
   return el;
-}
+};
 
 // ==================== Flow Control ====================
 
 /**
  * This is similar to doing a for loop, but inside of a template.
- * 
+ *
  * Given a signal holding an array of entries, the `renderChild()` parameter
  * will render one node per entry in the array. Each entry in the signal's array
  * should be a tuple containing a key-value pair. Every time a new element needs
  * to be rendered, the `initChild()` callback will be called with the
  * entry value as the first parameter, followed by the entry key. `initChild()`
  * should return a new HTML node to be rendered.
- * 
+ *
  * The signal's entry keys are used to uniquely identify that particular entry,
  * so if the contents of the array are updated, it can figure out,
  * by comparing keys, if elements need to be moved, destroyed, or created.
  *
  * As long as an entry's key remains the same, the entry's value won't be
  * re-rendered. If you need the value to rerender, make the value into a signal.
- * 
+ *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, html, set, renderEach } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * function renderApp() {
  *   const signalTodos = new Signal([]);
  *   return html`
@@ -913,7 +913,7 @@ export const set = (fields, getRef = undefined) => el => {
  *     </button>
  *   `;
  * }
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderTodoItems(signalTodos) {
  *   return html`
@@ -928,7 +928,7 @@ export const set = (fields, getRef = undefined) => el => {
  *   `;
  * }
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * function renderTodoItem({ todo, signalTodos }) {
  *   return html`
  *     <div style="display: flex; gap: 5px">
@@ -951,19 +951,19 @@ export const set = (fields, getRef = undefined) => el => {
  *     </div>
  *   `;
  * }
- * 
+ *
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using descendant signals to update list content.</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, html, set, renderEach } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * // Holds a list of todo items of the shape
  * // { id: <number>, signalMessage: <signal holding a string> }
  * const signalTodos = new Signal([]);
- * 
+ *
  * //# COMPLETE-EXAMPLE-START
  * async function fetchTodos() {
  *   // Generate fake data
@@ -976,16 +976,16 @@ export const set = (fields, getRef = undefined) => el => {
  *       });
  *     }
  *   }
- * 
+ *
  *   const shuffle = collection => collection
  *     .map(value => ({ value, order: Math.random() }))
  *     .sort((a, b) => a.order - b.order)
  *     .map(({ value }) => value);
- * 
+ *
  *   return shuffle(fakeTodos);
  * }
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * // Loads an updated todo list and merges the data into signalTodos.
  * // If the updated todo list contains a todo item that we're already aware
  * // of, we'll find the matching todo item from the existing signalTodos,
@@ -1003,10 +1003,10 @@ export const set = (fields, getRef = undefined) => el => {
  *     return { id: todoItem.id, signalMessage };
  *   }));
  * }
- * 
+ *
  * //# COMPLETE-EXAMPLE-START
  * refreshTodos();
- * 
+ *
  * function renderApp() {
  *   return html`
  *     <button ${set({ onclick: refreshTodos })}>
@@ -1019,7 +1019,7 @@ export const set = (fields, getRef = undefined) => el => {
  *     </p>
  *   `;
  * }
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderTodoItems() {
  *   return html`
@@ -1031,7 +1031,7 @@ export const set = (fields, getRef = undefined) => el => {
  *     )}
  *   `;
  * }
- * 
+ *
  * //# COMPLETE-EXAMPLE-START
  * function renderTodoItem(todo) {
  *   return html`
@@ -1041,7 +1041,7 @@ export const set = (fields, getRef = undefined) => el => {
  *     </label>
  *   `;
  * }
- * 
+ *
  * document.body.append(withLifecycle(renderApp).value);
  * //# COMPLETE-EXAMPLE-END
  */
@@ -1118,7 +1118,7 @@ export function renderEach(signalEntries, initChild) {
     // insert the updated content
     renderEachEndMarker.parentNode.insertBefore(
       updatedFragment,
-      renderEachEndMarker
+      renderEachEndMarker,
     );
   });
 
@@ -1127,16 +1127,16 @@ export function renderEach(signalEntries, initChild) {
 
 /**
  * This is similar to doing an if-else chain, but inside of a template.
- * 
+ *
  * This will find the first matching condition from a list of conditions and
  * then render the associated element. If no matches are found, nothing will
  * render.
- * 
+ *
  * @param conditions A list of objects. Each object should have two properties.
  *   1. `signalWhen`, which holds a signal containing a boolean that decides
  *   if this element should render or not, and 2. `render()`, which should
  *   return an element to render.
- * 
+ *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { Signal, withLifecycle, html, renderChoice } from '%FRAMEWORK_LOCATION%';
@@ -1149,7 +1149,7 @@ export function renderEach(signalEntries, initChild) {
  *   signalIsMobileView.set(event.matches)
  * })
  * signalIsMobileView.set(mobileMedia.matches)
- * 
+ *
  * // This signal will be set to true when
  * // the container size is smaller than 550px
  * const signalIsTabletView = new Signal(false);
@@ -1158,7 +1158,7 @@ export function renderEach(signalEntries, initChild) {
  *   signalIsTabletView.set(event.matches)
  * })
  * signalIsTabletView.set(tabletMedia.matches)
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * function renderContent() {
  *   return html`
@@ -1192,7 +1192,7 @@ export function renderEach(signalEntries, initChild) {
  * function renderMobileViewContent() {
  *   return html`<p>Mobile View</p>`;
  * }
- * 
+ *
  * document.body.append(withLifecycle(renderContent).value);
  * //# COMPLETE-EXAMPLE-END
  */
@@ -1221,7 +1221,7 @@ export function renderChoice(conditions) {
 /**
  * The primary purpose of `defineElement()` is to encapsulate the CSS of a
  * component or group of components.
- * 
+ *
  * @param name The name of this custom element.
  * @param init A component function. It will receive a "this" argument that is
  *   a reference to the custom element class instance, which you can then use to
@@ -1231,29 +1231,29 @@ export function renderChoice(conditions) {
  *   yet-to-be-added built-in methods. Remember that to receive a "this"
  *   parameter, you must use a non-arrow function. Arrow functions trap the
  *   "this" parameter from its surrounding scope while normal functions do not.
- * 
+ *
  * This is a stand-alone function that isn't dependent on anything else, which
  * means you can copy-paste it into any project and use it as-is, without
  * copying the whole Snap Framework.
- * 
+ *
  * @example
  * //# COMPLETE-EXAMPLE-START
  * import { defineElement, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * export const ExampleApp = defineElement('ExampleApp', ({ text }) => {
  *   return html`
  *     ${renderHeader()}
  *     <p ${set({ textContent: text })}></p>
- * 
+ *
  *     <style ${set({ textContent: css })}></style>
  *   `;
  * });
- * 
+ *
  * function renderHeader() {
  *   return html`<h1>This is an example app!</h1>`;
  * }
- * 
+ *
  * // This CSS only effects ExampleApp and renderHeader.
  * // If ExampleApp were to interpolate another custom element instance,
  * // it would not be effected by this CSS.
@@ -1263,16 +1263,16 @@ export function renderChoice(conditions) {
  *   }
  * `;
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * const renderExampleApp = () => new ExampleApp({ text: 'Example Text' });
  * document.body.append(withLifecycle(renderExampleApp).value);
  * document.body.append(html`<p>This is not affected by the CSS</p>`);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * @example <caption>Using slots to create container-like custom elements.</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { defineElement, withLifecycle, html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * const ExampleApp = defineElement('ExampleApp', () => {
  *   // The CSS is able to target the "children" html property because
@@ -1284,7 +1284,7 @@ export function renderChoice(conditions) {
  *         <p>This is the app's contents</p>
  *       `,
  *     })}
- * 
+ *
  *     <style>
  *       h1, p {
  *         font-style: italic;
@@ -1292,20 +1292,20 @@ export function renderChoice(conditions) {
  *     </style>
  *   `;
  * });
- * 
+ *
  * // Note the use of the non-arrow function,
  * // which permits the use of "this".
  * export const Colored = defineElement('Colored', function({ children }) {
  *   // Adds the children element to the custom element instance,
  *   // which allows it to be slotted.
  *   this.append(children);
- * 
+ *
  *   // The <slot/> element indicates where the child should get slotted.
  *   return html`
  *     <div>
  *       <slot/>
  *     </div>
- * 
+ *
  *     <style>
  *       div {
  *         background: yellow;
@@ -1314,15 +1314,15 @@ export function renderChoice(conditions) {
  *   `;
  * });
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * document.body.append(withLifecycle(() => new ExampleApp()).value);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * //# COLLAPSE-EXAMPLES
  * @example <caption>Using multiple slots</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { defineElement, withLifecycle, html } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * const ExampleApp = defineElement('ExampleApp', () => {
  *   return html`
@@ -1333,7 +1333,7 @@ export function renderChoice(conditions) {
  *         <p slot="child2">This goes in the second slot.</p>
  *       `,
  *     })}
- * 
+ *
  *     <style>
  *       h1, p {
  *         font-style: italic;
@@ -1341,10 +1341,10 @@ export function renderChoice(conditions) {
  *     </style>
  *   `;
  * });
- * 
+ *
  * export const Colored = defineElement('Colored', function({ children }) {
  *   this.append(children);
- * 
+ *
  *   return html`
  *     <div style="background: yellow">
  *       <slot name="child1"/>
@@ -1355,14 +1355,14 @@ export function renderChoice(conditions) {
  *   `;
  * });
  * //# COMPLETE-EXAMPLE-START
- * 
+ *
  * document.body.append(withLifecycle(() => new ExampleApp()).value);
  * //# COMPLETE-EXAMPLE-END
- * 
+ *
  * @example <caption>Attaching properties to the "api" field.</caption>
  * //# COMPLETE-EXAMPLE-START
  * import { defineElement, withLifecycle, html, set } from '%FRAMEWORK_LOCATION%';
- * 
+ *
  * //# COMPLETE-EXAMPLE-END
  * export const ProfileCard = defineElement('ProfileCard', function(params) {
  *   const { name, address, src } = params;
@@ -1371,7 +1371,7 @@ export function renderChoice(conditions) {
  *   this.api.getSizeOfText = () => {
  *     return textEl.getBoundingClientRect();
  *   };
- * 
+ *
  *   return html`
  *     <img ${set({ src })}>
  *     <div ${el => textEl = el}>
@@ -1380,17 +1380,17 @@ export function renderChoice(conditions) {
  *     </div>
  *   `;
  * });
- * 
+ *
  * const profileInfo = {
  *   name: 'Cookie Monster',
  *   address: 'sesame street',
  *   src: '%ASSETS%/profile.svg',
  * };
- * 
+ *
  * const profileEl = withLifecycle(() => new ProfileCard(profileInfo)).value;
- * 
+ *
  * document.body.append(profileEl);
- * 
+ *
  * // Logs out the dimensions of the text portion of the profile card.
  * console.log(profileEl.api.getSizeOfText());
  */

@@ -1,11 +1,11 @@
-import { html, renderChoice, set, Signal, useCleanup } from './snapFramework.js'
+import { html, renderChoice, set, Signal, useCleanup } from './snapFramework.js';
 import {
   classNameBuilder,
   defineStyledElement,
   parentPage,
   useCapturedValue,
   useCssTransition,
-  useProtectedSignal
+  useProtectedSignal,
 } from './shared.js';
 import { Frame } from './Frame/Frame.js';
 import { OverviewPage } from './OverviewPage/OverviewPage.js';
@@ -48,12 +48,12 @@ export const App = defineStyledElement('App', getStyles, () => {
             {
               signalWhen: new Signal(true),
               render: () => new OverviewPage({ signalContent, pageInfo }),
-            }
+            },
           ]),
           pageInfo,
         })}
       `,
-    }
+    },
   ]);
 });
 
@@ -76,7 +76,7 @@ function renderPopupBackdrop({ signalShow, onClick }) {
             },
             [
               signalPhase.use(phase => phase.name),
-            ]
+            ],
           ),
           onclick: () => {
             // If the backdrop is clicked while we're already
@@ -90,13 +90,12 @@ function renderPopupBackdrop({ signalShow, onClick }) {
           ontransitionend: () => endTransition(),
         })}></div>
       `,
-    }
+    },
   ]);
 }
 
 function renderPopupContent({ signalShow, signalContent, pageInfo }) {
   const { signalPage, setSignalPage } = pageInfo;
-
 
   const [signalPhase, endTransition] = useCssTransition(signalShow);
   const signalCapturedPage = useCapturedValue(signalPage, {
@@ -110,11 +109,11 @@ function renderPopupContent({ signalShow, signalContent, pageInfo }) {
         <div ${set({
           className: classNameBuilder(
             {
-              popup: true
+              popup: true,
             },
             [
               signalPhase.use(phase => phase.name),
-            ]
+            ],
           ),
           ontransitionend: () => endTransition(),
         }, undefined)}>
@@ -126,8 +125,8 @@ function renderPopupContent({ signalShow, signalContent, pageInfo }) {
           </div>
         </div>
       `,
-    }
-  ])
+    },
+  ]);
 }
 
 function useLoadContent() {
@@ -180,7 +179,7 @@ function fetchAndNormalizeCurrentHashPath() {
   if (hashRoute === '') {
     return 'utils';
   }
-  
+
   // If it's a route that doesn't start with a valid top-level route
   if (!/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute)) {
     // This won't return notFound for all not-found cases - the
@@ -197,13 +196,13 @@ function getStyles() {
     forSmallerDevices: 10,
     forReallySmallDevices: 2,
   };
-  
+
   const padding = {
     forNormalDevices: 50,
     forSmallerDevices: 20,
     forReallySmallDevices: 15,
   };
-  
+
   const deviceSize = {
     forSmallerDevices: 1000,
     forReallySmallDevices: 400,

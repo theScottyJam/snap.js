@@ -27,7 +27,7 @@
     "deploy": "gh-pages -d build",
     "start": "node ./buildContent.js && serve ./public",
     "build": "node ./buildContent.js",
-    "build:watch": "nodemon --watch './content/**/*' --exec 'npm run build'",
+    "build:watch": "nodemon --watch './content/**/*' --ext '*' --exec 'npm run build'",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint",

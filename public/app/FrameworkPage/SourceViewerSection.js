@@ -100,7 +100,7 @@ export const SourceViewerSection = defineStyledElement('SourceViewerSection', ge
         'documented-code-grid': true,
         'minified': signalViewMode.use(viewMode => viewMode === 'minified'),
         'has-content-below': signalOnLatestVersion,
-      })
+      }),
     }, el => documentedCodeRef.set(el))}>
       ${renderFrameworkSourceViewerContent({ fullText, minifiedText, signalViewMode, version })}
     </div>
@@ -125,7 +125,7 @@ function renderControls({ documentedCodeRef, signalViewMode, updateViewMode }) {
                 'A good starting point if you want to take full ownership of the code.'
               ),
               anchor: 'right',
-              getStyle: getTooltipStyle
+              getStyle: getTooltipStyle,
             })}
           </button>
           <button ${set({
@@ -137,7 +137,7 @@ function renderControls({ documentedCodeRef, signalViewMode, updateViewMode }) {
               child: html`<span class="more-info-icon">ⓘ</span>`,
               tooltip: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
               anchor: 'right',
-              getStyle: getTooltipStyle
+              getStyle: getTooltipStyle,
             })}
           </button>
           <button ${set({
@@ -157,7 +157,7 @@ function renderControls({ documentedCodeRef, signalViewMode, updateViewMode }) {
             range.setEndAfter(lastCodeBlock);
             selection.removeAllRanges();
             selection.addRange(range);
-          }
+          },
         })}>
           Select all
         </button>
@@ -185,7 +185,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, sig
     return `grid-row: ${rowNumb}; grid-column: ${colNumb}`;
   });
 
-  const getGridPosStyleForDocsBlock = rowNumb_ => signalIsSmallScreenSize.use((isSmallScreenSize) => {
+  const getGridPosStyleForDocsBlock = rowNumb_ => signalIsSmallScreenSize.use(isSmallScreenSize => {
     const rowNumb = isSmallScreenSize ? rowNumb_ * 2 : rowNumb_;
     return `grid-row: ${rowNumb}; grid-column: 1`;
   });
@@ -206,7 +206,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, sig
 
   while (!lineBuffer.atEnd()) {
     if (!inTopLevelJsDocs) {
-      let { normalLines, fullDocsLines, stopReason } = gatherCodeLines({ lineBuffer })
+      let { normalLines, fullDocsLines, stopReason } = gatherCodeLines({ lineBuffer });
       if (!normalLines.every(line => isBlankLine(line))) {
         const curRowNumb = rowNumb++;
 
@@ -216,15 +216,16 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, sig
         // and have prepared a render function. The code below is mostly just calling that render function
         // to make it actually get rendered at this point in time.
 
-        docNodes.push(jsDocsInfo !== undefined
-          ? jsDocsInfo.render(curRowNumb)
-          : html`
-            <div class="explanation" ${set({
-              style: Signal.use([signalViewMode, getGridPosStyleForDocsBlock(curRowNumb), signalIsSmallScreenSize], (viewMode, gridPosStyle, isSmallScreenSize) => {
-                return `display: ${viewMode === 'minified' || isSmallScreenSize ? 'none' : 'unset'}; ${gridPosStyle}`;
-              }),
-            })}></div>
-          `
+        docNodes.push(
+          jsDocsInfo !== undefined
+            ? jsDocsInfo.render(curRowNumb)
+            : html`
+              <div class="explanation" ${set({
+                style: Signal.use([signalViewMode, getGridPosStyleForDocsBlock(curRowNumb), signalIsSmallScreenSize], (viewMode, gridPosStyle, isSmallScreenSize) => {
+                  return `display: ${viewMode === 'minified' || isSmallScreenSize ? 'none' : 'unset'}; ${gridPosStyle}`;
+                }),
+              })}></div>
+            `,
         );
 
         // --- Renders a piece of code --- //
@@ -299,7 +300,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, sig
         codeNodes.push(html`
           <div class="code-viewer section-header" ${
             set({
-              // eslint-disable-next-line no-loop-func
+
               style: Signal.use([signalViewMode, getGridPosStyleForCodeBlock(curRowNumb)], (viewMode, gridPosStyle) => {
                 return `display: ${viewMode === 'minified' ? 'none' : 'block'}; ${gridPosStyle}`;
               }),
@@ -352,7 +353,7 @@ export function renderFrameworkSourceViewerContent({ fullText, minifiedText, sig
   );
 
   // --- Renders minified code --- //
-  
+
   const curRowNumb = rowNumb;
   // rowNumb is always pointing to the next row number, not the current, which is why we need to subtract 1.
   signalLastRowNumberForNormalView.set(curRowNumb - 1);
@@ -429,13 +430,13 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, signalGridPosStyle, v
   const isBlankLine = line => line.match(/^ *$/);
   const isStartOfExample = line => line.includes('@example');
   const isCollapseExamplesPragma = line => doesLineHavePragma(line, 'COLLAPSE-EXAMPLES');
-  
+
   const contentNode = document.createDocumentFragment();
 
   const lineBeingAnnotatedMatch = lineBeingAnnotated.match(/(class|function) ([a-zA-Z0-9]+)/);
   let whatIsBeingDocumented = undefined;
   if (lineBeingAnnotatedMatch) {
-    whatIsBeingDocumented = { type: lineBeingAnnotatedMatch[1], name: lineBeingAnnotatedMatch[2] }
+    whatIsBeingDocumented = { type: lineBeingAnnotatedMatch[1], name: lineBeingAnnotatedMatch[2] };
   } else {
     const match = lineBeingAnnotated.match(/const ([a-zA-Z0-9]+) = \(.*\) =>/);
     if (match) {
@@ -463,7 +464,7 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, signalGridPosStyle, v
 
     registerInternalLinkTarget(
       'code-link:' + whatIsBeingDocumented.name,
-      jsdocHeaderEl
+      jsdocHeaderEl,
     );
 
     contentNode.append(jsdocHeaderFragment);
@@ -505,7 +506,7 @@ function renderJsDocs({ lines: lines_, lineBeingAnnotated, signalGridPosStyle, v
 
 /**
  * Renders a bullet point list from js-doc comments
- * 
+ *
  * pre-condition: The "lineBuffer" should only contain lines that deal with jsdocs examples,
  *   and those lines should already have the "*" stripped from the beginning of each line.
  */
@@ -547,7 +548,7 @@ function renderBulletPointList(lineBuffer) {
       ${renderEach(
         new Signal(bulletPoints.map((bulletedText, i) => [i, bulletedText])),
         bulletedText => {
-          return html`<li>${renderExtractedJsDescriptionText(bulletedText)}</ul>`
+          return html`<li>${renderExtractedJsDescriptionText(bulletedText)}</ul>`;
         },
       )}
     </ul>
@@ -556,7 +557,7 @@ function renderBulletPointList(lineBuffer) {
 
 /**
  * Renders a param list from js-doc comments
- * 
+ *
  * pre-condition: The "lineBuffer" should only contain lines that deal with jsdocs examples,
  *   and those lines should already have the "*" stripped from the beginning of each line.
  */
@@ -622,7 +623,7 @@ function renderJsDocsExamples(lineBuffer, { version }) {
   const isEndOfExtraDetails = line => doesLineHavePragma(line, 'COMPLETE-EXAMPLE-END');
   const isAutoOpen = line => doesLineHavePragma(line, 'AUTO-OPEN');
   const extractExampleName = line => line.match(/<caption>(.*)<\/caption>/)?.[1];
-  
+
   const contentNode = document.createDocumentFragment();
 
   let currentExampleDescription; // Set to the current example's description, or undefined if it doesn't have one.
@@ -688,12 +689,12 @@ function renderJsDocsExamples(lineBuffer, { version }) {
             // Technically, lines shouldn't really be wrapping in desktop view,
             // because the lines shouldn't get long enough for that to happen.
             // so it's possible that this could just be set to `true`.
-            signalDisableWrapping: signalIsMobileScreenSize
+            signalDisableWrapping: signalIsMobileScreenSize,
           })}
           <button class="show-complete-example" title="Run example" ${set({
             onclick: () => showPopupWithExample(fullExampleStr, { version }),
           })}>
-            <img ${set({ src: `assets/play.svg`, alt: 'Run example' })}>
+            <img ${set({ src: 'assets/play.svg', alt: 'Run example' })}>
           </button>
         </div>
       `;
@@ -757,12 +758,11 @@ function renderExtractedJsDescriptionText(text) {
       pattern.lastIndex = patternMatch.index + patternMatch[0].length;
       const linkText = patternMatch[1];
       if (linkText.startsWith('https://')) {
-        const [url, displayText=url] = linkText.split('|');
+        const [url, displayText = url] = linkText.split('|');
         contentNode.append(html`
           <a ${set({ href: url, textContent: displayText })}></a>
         `);
       } else {
-
         // The href="..." is set to something that's a little more human readable,
         // so when your browser displays it in the bottom-left, it'll inform the user what the link actually does.
         // Seemed nicer than the generic `javascript:void(0)` that's typically done, and it sounded fun to do.
@@ -772,7 +772,7 @@ function renderExtractedJsDescriptionText(text) {
         }
         contentNode.append(html`
           <a ${set({
-            href: `javascript://Jump to ${linkText}'s docs`, // eslint-disable-line no-script-url
+            href: `javascript://Jump to ${linkText}'s docs`,
             textContent: linkText,
             onclick: () => jumpToInternalLinkTarget('code-link:' + linkText),
           })}></a>
@@ -817,7 +817,7 @@ function reformatJsdocsForDisplay(lines) {
     }
   }
 
-  newLines.push(' */')
+  newLines.push(' */');
   return newLines;
 }
 

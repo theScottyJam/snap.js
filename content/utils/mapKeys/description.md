@@ -1,4 +1,4 @@
-# Parameters
+## Parameters
 
 - `obj`
 
@@ -10,13 +10,14 @@
 
   - `key`: The current key to transform.
 
-# Examples
+## Examples
 
+<!-- eslint-disable-next-line markdown/fenced-code-language -->
 ```
 > mapKeys({ key1: 2, key2: 3 }, k => `prefix_${k}`)
 { prefix_key1: 2, prefix_key2: 3 }
 ```
 
-# Additional Information
+## Additional Information
 
 Any attributes in `obj`'s prototype will be ignored.

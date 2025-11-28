@@ -9,14 +9,14 @@ function handleThemeLoadError(error) {
 }
 
 const signalLightThemeCss = promiseToSignal(
-  fetch(`thirdParty/prism/light-theme.css`)
+  fetch('thirdParty/prism/light-theme.css')
     .then(resp => resp.text())
     .catch(handleThemeLoadError),
   { loadingValue: '' },
 );
 
 const signalDarkThemeCss = promiseToSignal(
-  fetch(`thirdParty/prism/dark-theme.css`)
+  fetch('thirdParty/prism/dark-theme.css')
     .then(resp => resp.text())
     .catch(handleThemeLoadError),
   { loadingValue: '' },
@@ -57,7 +57,7 @@ export const CodeViewer = defineStyledElement('CodeViewer', getStyles, (signalTe
         return (
           (wrapWithinWords ? 'word-break: break-all;' : '') +
           (disableWrapping ? 'white-space: revert;' : '')
-        )
+        );
       }),
     })}></code>`;
 

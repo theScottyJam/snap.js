@@ -40,11 +40,14 @@ export default defineConfig([
       }],
       'markdown/no-missing-link-fragments': 'off',
       '@stylistic/quotes': ['error', 'single', {
-        avoidEscape: true
+        avoidEscape: true,
+      }],
+      '@stylistic/operator-linebreak': ['error', 'after', {
+        overrides: { '?': 'before', ':': 'before' },
       }],
       // Disabling because it's been throwing errors.
       '@stylistic/indent': 'off',
-    }
+    },
   },
   {
     files: ['content/**/src.js'],
@@ -52,8 +55,8 @@ export default defineConfig([
       '@stylistic': stylistic,
     },
     rules: {
-      "no-unused-vars": 'off'
-    }
+      'no-unused-vars': 'off',
+    },
   },
   {
     ignores: [
@@ -61,7 +64,7 @@ export default defineConfig([
       'public/thirdParty/**',
       '**/*.min.js',
       // This version was written while the project used a different linter, and we don't want to change its code formatting.
-      'public/framework/snapFramework-1.0.js'
-    ]
+      'public/framework/snapFramework-1.0.js',
+    ],
   },
 ]);

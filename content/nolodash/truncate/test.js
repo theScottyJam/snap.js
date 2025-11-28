@@ -3,7 +3,7 @@ describe('truncate() without separator support', () => {
     if (string.length <= length) {
       return string;
     }
-  
+
     return string.slice(0, length - omission.length) + omission;
   }
 
@@ -17,17 +17,17 @@ describe('truncate() without separator support', () => {
     expect(truncate('abcde', { length: 4 })).toEqual('a...');
     expect(truncate('abcde', { length: 4, omission: '…' })).toEqual('abc…');
   });
-})
+});
 
 describe('truncate() with separator support', () => {
   function truncate(string, { length, separator = '', omission = '...' }) {
     if (string.length <= length) {
       return string;
     }
-  
+
     // Largest size you can slice `string` while remaining in the `length` restriction.
     const maxSliceLength = length - omission.length;
-  
+
     if (typeof separator === 'string') {
       let index = string.lastIndexOf(separator, maxSliceLength);
       if (index === -1) {
@@ -41,7 +41,7 @@ describe('truncate() with separator support', () => {
           bestMatch = match;
         }
       }
-  
+
       const index = bestMatch?.index ?? maxSliceLength;
       return string.slice(0, index) + omission;
     } else {
@@ -83,4 +83,4 @@ describe('truncate() with separator support', () => {
   it('falls back to truncating anywhere if the regular expression separator fails to find a match', () => {
     expect(truncate('abcdefg', { separator: / /g, length: 5 })).toEqual('ab...');
   });
-})
+});

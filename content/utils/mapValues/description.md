@@ -1,4 +1,4 @@
-# Parameters
+## Parameters
 
 - `obj`
 
@@ -10,13 +10,14 @@
 
   - `value`: The current value to transform.
 
-# Examples
+## Examples
 
+<!-- eslint-disable-next-line markdown/fenced-code-language -->
 ```
 > mapValues({ a: 2, b: 3 }, x => x**2)
 { a: 4, b: 9 }
 ```
 
-# Additional Information
+## Additional Information
 
 Any attributes in `obj`'s prototype will be ignored.

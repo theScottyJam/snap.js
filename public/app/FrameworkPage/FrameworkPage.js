@@ -56,7 +56,7 @@ export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ 
       signalLoading.set(false);
     }
   });
-  
+
   return html`
     ${renderChoice([
       {
@@ -72,7 +72,7 @@ export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ 
           signalSnapFrameworkText.use(textInfo => [[textInfo.version, textInfo]]),
           ({ fullText, minifiedText, lineCount }) => {
             return renderPageContents({ fullText, minifiedText, lineCount, signalLoading, signalVersion, pageInfo });
-          }
+          },
         ),
       },
       {
@@ -81,14 +81,14 @@ export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ 
       },
       {
         signalWhen: new Signal(true),
-        render: renderLoading
+        render: renderLoading,
       },
     ])}
   `;
 });
 
 /** Returns an undefined signal if the route was bad. */
-function useVersion (pageInfo) {
+function useVersion(pageInfo) {
   return pageInfo.signalPage.use(route => {
     if (route === 'framework') {
       return frameworkVersions[0].version;
@@ -118,7 +118,7 @@ function renderLoading() {
 
   return html`
     <p class="loading" ${set({
-      style: signalOpacity.use(opacity => `opacity: ${opacity}`)
+      style: signalOpacity.use(opacity => `opacity: ${opacity}`),
     })}>
       Loading...
     </p>
@@ -181,7 +181,7 @@ function versionPicker({ signalLoading, signalVersion, pageInfo }) {
               })}>
               </option>
             `;
-          }
+          },
         )}
       </select>
     </div>
@@ -192,7 +192,7 @@ function renderTextWithTooltip(text, tooltip) {
   return html`
     ${new WithTooltip({
       child: html`<span class="hoverable-text" ${set({ textContent: text })}></span>`,
-      tooltip
+      tooltip,
     })}
   `;
 }

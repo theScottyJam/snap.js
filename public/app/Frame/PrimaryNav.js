@@ -20,7 +20,7 @@ function renderLink({ target, textContent, pageInfo }) {
       className: classNameBuilder({
         link: true,
         active: signalPage.use(page => page.startsWith(target)),
-      })
+      }),
     })}></a>
   `;
 }

@@ -27,11 +27,11 @@ converter.setOption('ghCodeBlocks', true);
 
 function buildContentFile({ sourcePath, destPath }) {
   const infoFilePath = `${sourcePath}/info.json`;
-  const entryInfo = JSON.parse(fs.readFileSync(infoFilePath, 'utf-8'))
+  const entryInfo = JSON.parse(fs.readFileSync(infoFilePath, 'utf-8'));
 
   const entries = entryInfo.map(({ categoryHeading, hidden = undefined, entries }) => {
     const loadedEntries = entries.map(name => {
-      const entryBasePath = `${sourcePath}/${name}`
+      const entryBasePath = `${sourcePath}/${name}`;
       let src = tryReadFile(`${entryBasePath}/src.js`, { fallbackValue: null });
       if (src !== null) {
         src = src.trim();
@@ -47,7 +47,7 @@ function buildContentFile({ sourcePath, destPath }) {
         src,
         test: tryReadFile(`${entryBasePath}/test.js`, { fallbackValue: '' }),
       };
-    })
+    });
 
     const res = { categoryHeading, entries: loadedEntries };
     if (hidden) {
@@ -59,7 +59,7 @@ function buildContentFile({ sourcePath, destPath }) {
       res.hidden = true;
     }
     return res;
-  })
+  });
 
   const allRegisteredDirectories = new Set(entryInfo.flatMap(category => category.entries));
   for (const directory of getSubDirectories(sourcePath)) {

@@ -28,6 +28,7 @@ describe('isLength()', () => {
   });
 
   it('returns false with large numbers (as those are represented as floats)', () => {
+    // eslint-disable-next-line no-loss-of-precision
     expect(isLength(2e999)).toBe(false);
   });
 });

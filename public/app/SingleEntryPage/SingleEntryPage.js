@@ -5,7 +5,7 @@ import { defineStyledElement, extractUtilityPageTypeFromRoute, lookupContentEntr
 
 export const SingleEntryPage = defineStyledElement('SingleEntryPage', getStyles, ({ signalContent, pageInfo }) => {
   const { signalPage } = pageInfo;
-  const signalPageData = Signal.use([signalContent, signalPage], (content, page) => lookupContentEntryFromRoute(content, page))
+  const signalPageData = Signal.use([signalContent, signalPage], (content, page) => lookupContentEntryFromRoute(content, page));
 
   return renderChoice([
     {
@@ -22,8 +22,8 @@ export const SingleEntryPage = defineStyledElement('SingleEntryPage', getStyles,
     {
       signalWhen: new Signal(true),
       render: () => renderDefaultSingleEntryPage({ signalPageData, pageInfo }),
-    }
-  ])
+    },
+  ]);
 });
 
 function renderDefaultSingleEntryPage({ signalPageData, pageInfo }) {
@@ -37,7 +37,7 @@ function renderDefaultSingleEntryPage({ signalPageData, pageInfo }) {
         {
           signalWhen: signalPageData.use(pageData => pageData.hidden),
           render: () => renderUnlistedWarning(),
-        }
+        },
       ])}
       ${renderChoice([
         {
@@ -45,7 +45,7 @@ function renderDefaultSingleEntryPage({ signalPageData, pageInfo }) {
           render: () => renderCode({
             signalSrc: signalPageData.use(pageData => pageData.src),
           }),
-        }
+        },
       ])}
       ${renderDescription({
         signalSummaryHtml: signalPageData.use(pageData => pageData.manifest.summaryHtml),
@@ -73,7 +73,7 @@ function renderNolodashSingleEntryPage({ signalPageData, pageInfo }) {
           render: () => renderCode({
             signalSrc: signalPageData.use(pageData => pageData.src),
           }),
-        }
+        },
       ])}
       ${renderDescription({
         signalSummaryHtml: signalPageData.use(pageData => pageData.manifest.summaryHtml),
@@ -126,7 +126,7 @@ function renderDescription({ signalDescriptionHtml, signalSummaryHtml }) {
   return new MarkDown({
     signalContentHtml: Signal.use([signalDescriptionHtml, signalSummaryHtml], (descriptionHtml, summaryHtml) => {
       return summaryHtml + descriptionHtml;
-    })
+    }),
   });
 }
 

@@ -1,8 +1,8 @@
 import { defineStyledElement } from '../shared.js';
 import { assert } from '../util.js';
-import { html, set, Signal } from "../snapFramework.js";
+import { html, set, Signal } from '../snapFramework.js';
 
-export const WithTooltip = defineStyledElement('WithTooltip', getStyles, function({ child, tooltip, anchor = 'left', getStyle = undefined }) {
+export const WithTooltip = defineStyledElement('WithTooltip', getStyles, function ({ child, tooltip, anchor = 'left', getStyle = undefined }) {
   this.append(child);
   const signalShowPopup = new Signal(false);
   assert(['left', 'right'].includes(anchor));
@@ -34,7 +34,7 @@ export const WithTooltip = defineStyledElement('WithTooltip', getStyles, functio
 
     <style ${set({
       // Doubling up .tooltip to increase specificity.
-      textContent: getStyle?.('.tooltip.tooltip') ?? ''
+      textContent: getStyle?.('.tooltip.tooltip') ?? '',
     })}></style>
   `;
 });

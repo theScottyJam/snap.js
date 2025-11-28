@@ -32,7 +32,7 @@ function renderCodeSample({ feature, index, signalSelectedFeature }) {
       className: signalSelectedFeature.use(selectedFeature => {
         const base = 'code-example-area';
         return selectedFeature === index ? `${base} show` : base;
-      })
+      }),
     })}>
       <h2 class="mobile-feature-title" ${set({ textContent: feature.header })}></h2>
       <p class="code-tab" ${set({ textContent: feature.tabName })}></p>

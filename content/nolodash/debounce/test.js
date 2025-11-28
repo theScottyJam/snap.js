@@ -1,5 +1,3 @@
-/* global globalThis */
-
 // The below function is copied into description.md under
 //   //# CONFIG { "when": "leading", "withHelpers": "none" }
 //   (with the debounced.cancel() function removed)
@@ -242,7 +240,7 @@ function debounceLeadingAndTrailingWithFlushSupport(func, wait) {
     if (timeoutId === undefined) {
       return lastFuncResult;
     }
-    
+
     clearTimeout(timeoutId);
     return onTimeout();
   };
@@ -254,7 +252,7 @@ class FakeTimeout {
   #originals = {};
   #now = 0;
   #events = [];
-  #fakeSetTimeout(callback, ms=0) {
+  #fakeSetTimeout(callback, ms = 0) {
     if (!Number.isInteger(ms) || ms < 0) {
       throw new Error(`Invalid timeout: ${ms}`);
     }
@@ -404,7 +402,7 @@ describe('debounce()', () => {
   afterEach(() => {
     fakeTimeout.flush();
     mockCallback.reset();
-  })
+  });
 
   afterAll(() => {
     fakeTimeout.uninstall();
@@ -451,7 +449,7 @@ describe('debounce()', () => {
         // However, when only one call happens, these should only invoke the wrapped function once instead of twice.
         debounceLeadingAndTrailing: debounced.leadingAndTrailing,
         debounceLeadingAndTrailingWithFlushSupport: debounced.leadingAndTrailingWithFlushSupport,
-      }
+      },
     },
   ], debouncedFn => {
     debouncedFn();
@@ -541,7 +539,6 @@ describe('debounce()', () => {
     expect(debouncedFn()).toBe(undefined);
   });
 
-
   // This is only applicable for trailing-only debounce functions, because leading debounce functions
   // will simply call the wrapped function again at this point in time and get a new value to memoize.
   multiTest('returns the memoized value shortly after the trailing end of the wait window', [
@@ -553,7 +550,7 @@ describe('debounce()', () => {
     },
   ], debouncedFn => {
     mockCallback.setReturnValue('THE_RETURN_VALUE');
-    debouncedFn()
+    debouncedFn();
 
     fakeTimeout.tick(DEBOUNCE_TIME + 100);
     mockCallback.setReturnValue('NOT_THE_RETURN_VALUE');
@@ -598,7 +595,7 @@ describe('debounce()', () => {
       },
     },
   ], debouncedFn => {
-    debouncedFn()
+    debouncedFn();
 
     const error = new Error('Wuh Woh!');
     mockCallback.throwWhenCalled(error);
@@ -624,12 +621,12 @@ describe('debounce()', () => {
   ], debouncedFn => {
     // Get an old value into the cache
     mockCallback.setReturnValue('OLD_RETURN_VALUE');
-    debouncedFn()
+    debouncedFn();
     fakeTimeout.tick(DEBOUNCE_TIME + 100);
 
     // Start a new time window
     mockCallback.setReturnValue('NEW_RETURN_VALUE_1');
-    debouncedFn()
+    debouncedFn();
 
     // Throw an error after the trailing end of the new time window
     // (which means, nothing will be cached from this time window)
@@ -658,7 +655,7 @@ describe('debounce()', () => {
     fakeTimeout.tick(100);
 
     expect(mockCallback.getCallCount()).toEqual(1);
-    
+
     debouncedFn.cancel();
     debouncedFn();
     expect(mockCallback.getCallCount()).toEqual(2);

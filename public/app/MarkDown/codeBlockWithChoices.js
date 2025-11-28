@@ -53,11 +53,11 @@ function renderCodeBlockChoice({ signalFormState, choices }) {
       return {
         signalWhen: signalFormState.use(formState => {
           return Object.entries(condition).every(
-            ([choiceId, optionId]) => formState[choiceId] === optionId
-          )
+            ([choiceId, optionId]) => formState[choiceId] === optionId,
+          );
         }),
         render: () => new CodeViewer(text),
-      }
+      };
     }),
     {
       signalWhen: new Signal(true),
@@ -65,7 +65,7 @@ function renderCodeBlockChoice({ signalFormState, choices }) {
         console.warn('Failed to find a matching choice.');
         return new CodeViewer('');
       },
-    }
+    },
   ]);
 }
 
@@ -113,7 +113,7 @@ function parseTextWithChoices(text) {
 
     assert(
       choices.length !== 0,
-      `Expected to find a "//# CONFIG" annotation, on line ${index + 1}`
+      `Expected to find a "//# CONFIG" annotation, on line ${index + 1}`,
     );
 
     choices.at(-1).text += line + '\n';

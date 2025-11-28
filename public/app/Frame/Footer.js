@@ -20,7 +20,7 @@ export const Footer = defineStyledElement('Footer', getStyles, () => {
         >the "unlicense" license</a>
       </p>
     </footer>
-  `
+  `;
 });
 
 function getStyles() {

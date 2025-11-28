@@ -14,14 +14,14 @@ signalIsMobileScreenSize.set(mobileScreenSizeMedia.matches);
 
 export function prepareCodeExampleForViewing(code) {
   return code
-    .replaceAll("%FRAMEWORK_LOCATION%", `./snapFramework.js`)
-    .replaceAll("%ASSETS%", `./assets`);
+    .replaceAll('%FRAMEWORK_LOCATION%', './snapFramework.js')
+    .replaceAll('%ASSETS%', './assets');
 }
 
 export function prepareCodeExampleForRunning(code, { version }) {
   return code
-    .replaceAll("%FRAMEWORK_LOCATION%", `./framework/snapFramework-${version}.js`)
-    .replaceAll("%ASSETS%", `./assets`);
+    .replaceAll('%FRAMEWORK_LOCATION%', `./framework/snapFramework-${version}.js`)
+    .replaceAll('%ASSETS%', './assets');
 }
 
 // --- Internal Linking --- //
@@ -34,5 +34,5 @@ export function registerInternalLinkTarget(uniqueId, element) {
 }
 
 export function jumpToInternalLinkTarget(uniqueId) {
-  uniqueIdsToElements.get(uniqueId).scrollIntoView({  behavior: 'smooth' });
+  uniqueIdsToElements.get(uniqueId).scrollIntoView({ behavior: 'smooth' });
 }

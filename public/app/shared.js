@@ -50,7 +50,7 @@ export function lookupContentEntryFromRoute(content, route) {
 /**
  * Maps CSS classes to booleans, or to boolean signals.
  * When true, the returned signal will include it as part of the list of classes it provides.
- * 
+ *
  * The optional second argument is a list of signals holding class names.
  */
 export function classNameBuilder(classToBool, listOfSignalClasses = []) {
@@ -134,7 +134,7 @@ const PHASES = {
 };
 
 export function useCssTransition(signalActive) {
-  const signalPhase = new Signal(signalActive.get() ? PHASES.entered : PHASES.exited)
+  const signalPhase = new Signal(signalActive.get() ? PHASES.entered : PHASES.exited);
 
   let timeoutId;
   signalPhase.use(phase => {
@@ -145,7 +145,7 @@ export function useCssTransition(signalActive) {
       const phase = signalPhase.get();
       signalPhase.set(phase.name === 'init-entering' ? PHASES.entering : phase);
     });
-  })
+  });
 
   useCleanup(() => {
     clearTimeout(timeoutId);

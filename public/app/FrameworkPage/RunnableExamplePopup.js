@@ -35,7 +35,7 @@ export const PopupWithExample = defineStyledElement('PopupWithExample', getStyle
       removePopup();
     }
   };
-  
+
   window.addEventListener('keydown', keyDownListener);
   useCleanup(() => {
     window.removeEventListener('keydown', keyDownListener);
@@ -106,13 +106,13 @@ function renderResultPanel({ codeToRun, signalRerunCodeEvent, removePopup }) {
                   iframeEl,
                   codeToRun,
                   // logLevel is either "info" or "error"
-                  onLog: (logLevel, message ) => {
+                  onLog: (logLevel, message) => {
                     signalLogOutput.set([...signalLogOutput.get(), { cssClass: logLevel, message }]);
                   },
-                })
+                });
               });
             }}></iframe>
-          `
+          `,
         }])}
         ${renderChoice([{
           signalWhen: signalLogOutput.use(logOutput => logOutput.length > 0),
@@ -120,7 +120,7 @@ function renderResultPanel({ codeToRun, signalRerunCodeEvent, removePopup }) {
             <div>
               <p class="log-output-heading">Log Output</p>
             </div>
-          `
+          `,
         }])}
         <div class="log-output">
           ${renderEach(

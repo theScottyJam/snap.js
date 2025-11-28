@@ -12,7 +12,7 @@ export const Header = defineStyledElement('Header', getStyles, () => {
   `;
 });
 
-function getStyles () {
+function getStyles() {
   return `
     :host {
       display: block;

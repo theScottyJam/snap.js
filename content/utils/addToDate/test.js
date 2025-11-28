@@ -61,7 +61,7 @@ describe('addToDate()', () => {
     const oldDate = new Date(2000, 11, 31, 24, 59, 59, 999);
     const newDate = addToDate(oldDate, { ms: 2 });
     expect(newDate.toString()).toBe(
-      new Date(2001, 0, 1, 1, 0, 0, 1).toString()
+      new Date(2001, 0, 1, 1, 0, 0, 1).toString(),
     );
   });
 
@@ -77,7 +77,7 @@ describe('addToDate()', () => {
       ms: 7,
     });
     expect(newDate.toString()).toBe(
-      new Date(2001, 3, 5, 7, 9, 11, 13, 15).toString()
+      new Date(2001, 3, 5, 7, 9, 11, 13, 15).toString(),
     );
   });
 
@@ -93,7 +93,7 @@ describe('addToDate()', () => {
       ms: -7,
     });
     expect(newDate.toString()).toBe(
-      new Date(2000, 1, 2, 3, 4, 5, 6, 7).toString()
+      new Date(2000, 1, 2, 3, 4, 5, 6, 7).toString(),
     );
   });
 });
