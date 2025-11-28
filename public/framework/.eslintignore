@@ -1,0 +1,3 @@
+*.min.js
+# This version was written while the project used a different linter, and we don't want to change its code formatting.
+snapFramework-1.0.js
