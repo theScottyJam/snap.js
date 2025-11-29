@@ -1,14 +1,3 @@
-#!/usr/bin/env -S node --test
-
-// If the code in description.md gets modified, you can copy-paste
-// the modified version below then run this test file to make
-// sure it still behaves correctly.
-//
-// Run this file with `node --test ./tests.js`
-
-const test = require('node:test');
-const assert = require('node:assert').strict;
-
 // ---------- System Under Test ---------- //
 
 const isPrimitive = value => value !== Object(value);
@@ -68,52 +57,52 @@ function isEqual(value1, value2) {
 
 // ---------- Test Cases ---------- //
 
-test('comparing values of different types', t => {
-  assert(!isEqual({}, null)); // Even though `typeof {}` is `null`, these should clearly not be equal
-  assert(!isEqual({}, undefined));
-  assert(!isEqual(null, undefined));
-  assert(!isEqual({}, 2));
-  assert(!isEqual(2, 2n));
-  assert(!isEqual(new Map(), {}));
-  assert(!isEqual(new Map(), new Set()));
+test('comparing values of different types', () => {
+  expect(!isEqual({}, null)).toBe(true); // Even though `typeof {}` is `null`, these should clearly not be equal
+  expect(!isEqual({}, undefined)).toBe(true);
+  expect(!isEqual(null, undefined)).toBe(true);
+  expect(!isEqual({}, 2)).toBe(true);
+  expect(!isEqual(2, 2n)).toBe(true);
+  expect(!isEqual(new Map(), {})).toBe(true);
+  expect(!isEqual(new Map(), new Set())).toBe(true);
 });
 
-test('comparing primitives', t => {
-  assert(isEqual(2, 2));
-  assert(!isEqual(2, 3));
+test('comparing primitives', () => {
+  expect(isEqual(2, 2)).toBe(true);
+  expect(!isEqual(2, 3)).toBe(true);
 
-  assert(isEqual('x', 'x'));
-  assert(!isEqual('x', 'xx'));
+  expect(isEqual('x', 'x')).toBe(true);
+  expect(!isEqual('x', 'xx')).toBe(true);
 
   const s = Symbol('mySymb');
-  assert(isEqual(s, s));
-  assert(!isEqual(s, Symbol('mySymb')));
+  expect(isEqual(s, s)).toBe(true);
+  expect(!isEqual(s, Symbol('mySymb'))).toBe(true);
 
-  assert(isEqual(true, true));
-  assert(!isEqual(true, false));
+  expect(isEqual(true, true)).toBe(true);
+  expect(!isEqual(true, false)).toBe(true);
 
-  assert(isEqual(undefined, undefined));
-  assert(isEqual(null, null));
+  expect(isEqual(undefined, undefined)).toBe(true);
+  expect(isEqual(null, null)).toBe(true);
 });
 
-test('comparing objects', t => {
-  assert(isEqual({ x: { y: 2 } }, { x: { y: 2 } }));
-  assert(isEqual({ x: 2, y: 3 }, { y: 3, x: 2 }));
-  assert(!isEqual({ x: { y: 2 } }, { x: { y: 3 } }));
-  assert(!isEqual({ x: { y: 2 } }, { x: { y: 2, z: 2 } }));
+test('comparing objects', () => {
+  expect(isEqual({ x: { y: 2 } }, { x: { y: 2 } })).toBe(true);
+  expect(isEqual({ x: 2, y: 3 }, { y: 3, x: 2 })).toBe(true);
+  expect(!isEqual({ x: { y: 2 } }, { x: { y: 3 } })).toBe(true);
+  expect(!isEqual({ x: { y: 2 } }, { x: { y: 2, z: 2 } })).toBe(true);
 });
 
-test('comparing arrays', t => {
-  assert(isEqual([1, 2], [1, 2]));
-  assert(isEqual([[1, 2]], [[1, 2]]));
+test('comparing arrays', () => {
+  expect(isEqual([1, 2], [1, 2])).toBe(true);
+  expect(isEqual([[1, 2]], [[1, 2]])).toBe(true);
 
-  assert(!isEqual([[1, 2]], [[1, 3]]));
-  assert(!isEqual([1, 2], [1, 3]));
-  assert(!isEqual([1, 2], [1, 2, 3]));
+  expect(!isEqual([[1, 2]], [[1, 3]])).toBe(true);
+  expect(!isEqual([1, 2], [1, 3])).toBe(true);
+  expect(!isEqual([1, 2], [1, 2, 3])).toBe(true);
 });
 
-test('comparing maps', t => {
-  assert(
+test('comparing maps', () => {
+  expect(
     isEqual(
       new Map([
         [1, 'A'],
@@ -124,11 +113,11 @@ test('comparing maps', t => {
         [1, 'A'],
       ]),
     ),
-  );
-  assert(isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 2 }]])));
+  ).toBe(true);
+  expect(isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 2 }]]))).toBe(true);
 
-  assert(!isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 1 }]])));
-  assert(
+  expect(!isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 1 }]]))).toBe(true);
+  expect(
     !isEqual(
       new Map([
         [1, 'A'],
@@ -139,8 +128,8 @@ test('comparing maps', t => {
         [2, 'C'],
       ]),
     ),
-  );
-  assert(
+  ).toBe(true);
+  expect(
     !isEqual(
       new Map([
         [1, 'A'],
@@ -151,8 +140,8 @@ test('comparing maps', t => {
         [3, 'B'],
       ]),
     ),
-  );
-  assert(
+  ).toBe(true);
+  expect(
     !isEqual(
       new Map([
         [1, 'A'],
@@ -164,5 +153,5 @@ test('comparing maps', t => {
         [3, 'C'],
       ]),
     ),
-  );
+  ).toBe(true);
 });
