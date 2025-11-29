@@ -10,7 +10,7 @@ import { renderEach } from '../../framework/snapFramework-2.0.js';
 // Whenever a new framework version comes out, this list needs to be updated.
 // Search the project for §u5gEq for information on other changes that need to happen.
 const frameworkVersions = [
-  { version: '2.0', lineCount: 285 },
+  { version: '2.0', lineCount: 279 },
   { version: '1.0', lineCount: 195 },
 ];
 

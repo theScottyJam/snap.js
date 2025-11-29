@@ -437,13 +437,6 @@ export class Signal {
    * updates. If the new value is the same as the old one, nothing will happen.
    */
   set(newValue) {
-    const deeplyGetListeningSignals = signal => {
-      const result = [];
-      for (const iterSignal of signal.#signalsListening) {
-        result.push(iterSignal, ...deeplyGetListeningSignals(iterSignal));
-      }
-    };
-
     // Which signals have we processed so far?
     const signalsVisited = new Set();
     // Of the signals we've processed, which ones
