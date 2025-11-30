@@ -1,7 +1,7 @@
 To check if a value is a boolean primitive:
 
 ```javascript
-typeof value === 'boolean';
+typeof value === 'boolean'
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -11,7 +11,7 @@ Lodash will also check if the value is a boolean object. In practice, such objec
 To check if something is specifically a boolean object (and not a primitive), use the following:
 
 ```javascript
-value instanceof Boolean;
+value instanceof Boolean
 ```
 
 This, however, doesn't work cross realm (i.e. a boolean object created from inside an iframe would fail this check). It also would incorrectly state that `Object.create(Boolean.prototype)` is a boolean object, when in reality, it's just a normal object who's prototype is set to `Boolean.prototype`. If you need to worry about these kinds of issues, use the following solution instead:
@@ -40,7 +40,8 @@ function isBoolean(value) {
 Lodash's `_.isBoolean()` also supports cross-realm `Boolean` object checks, but it uses a less robust algorithm that can be easily fooled. For example, the following will return the wrong answer.
 
 ```javascript
-_.isBoolean({ get [Symbol.toStringTag]() { return 'Boolean' } }); // true
+_.isBoolean({ get [Symbol.toStringTag]() { return 'Boolean' } })
+// => true
 ```
 
 If you're exclusively using Node, you can use `require('util').types.isBooleanObject(value)` to specifically check if the value is a boolean object (not a primitive). This solution will also return `true` for both subclasses and `Boolean.prototype`.

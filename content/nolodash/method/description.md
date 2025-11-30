@@ -3,7 +3,8 @@ Instead of using `_.method()` to create a function, such as in this example:
 ```javascript
 const callNestedFn = _.method(['subObj', 'fn']);
 const obj = { subObj: { fn: () => 7 } };
-console.log(callNestedFn(obj)); // => 7
+
+callNestedFn(obj); // => 7
 ```
 
 You can instead define your function with arrow function syntax, like this:
@@ -11,7 +12,8 @@ You can instead define your function with arrow function syntax, like this:
 ```javascript
 const callNestedFn = obj => obj.subObj.fn();
 const obj = { subObj: { fn: () => 7 } };
-console.log(callNestedFn(obj)); // => 7
+
+callNestedFn(obj); // => 7
 ```
 
 If you're receiving property names dynamically and really do need a `_.method()`-like helper function, you can use the following:
@@ -22,7 +24,7 @@ function invoke(object, path, ...args) {
   // Optional string-path support.
   // You can remove this `if` block if you don't need it.
   if (typeof path === 'string') {
-    path = path.split(/[.\[\]\"]+/).filter(x => x);
+    path = path.split(/[.\[\]"]+/).filter(x => x);
   }
 
   const [head, ...tail] = path;

@@ -43,7 +43,7 @@ function merge(object, ...sources) {
       } else if (!isObject(object[key])) {
         object[key] = value;
       } else {
-        merge(object[key], value)
+        merge(object[key], value);
       }
     }
   }
@@ -72,7 +72,7 @@ const isObject = value => ['object', 'function'].includes(typeof value) && value
 // It also may mutate anything that gets attached to `object` during the merge.
 function merge(object, ...sources) {
   if (!isObject(object)) {
-    throw new Error(`Expected ${object} to be an object.`)
+    throw new Error(`Expected ${object} to be an object.`);
   }
 
   for (const source of sources) {
@@ -84,7 +84,7 @@ function merge(object, ...sources) {
       if (object[key] === undefined) {
         object[key] = value;
       } else {
-        merge(object[key], value)
+        merge(object[key], value);
       }
     }
   }

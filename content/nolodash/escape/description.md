@@ -11,6 +11,7 @@ function escapeHtmlChars(string) {
 
 Please be careful when using functions like this as improper usage can result in XSS vulnerabilities. The following is a quick guideline on how this `escapeHtmlChars()` function should and should not be used.
 
+<!-- eslint-skip -->
 ```javascript
 // ✓ - It is safe to use escaped user input between most HTML tags.
 // (Just don't put it inside something silly like the <script> tag).

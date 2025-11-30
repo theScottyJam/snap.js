@@ -1,3 +1,3 @@
 ```javascript
-Date.now();
+Date.now()
 ```

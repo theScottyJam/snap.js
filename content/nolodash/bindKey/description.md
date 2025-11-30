@@ -2,6 +2,7 @@ You can use arrow functions to achieve the same results.
 
 To bind a method's this parameter to the object it is found on:
 
+<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bindKey(obj, 'method')
@@ -12,6 +13,7 @@ _.bindKey(obj, 'method')
 
 If you wish to partially apply some initial arguments in addition to binding a this parameter:
 
+<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bindKey(obj, 'method', 1, 2, 3)
@@ -34,8 +36,8 @@ Notice that if we changed the `method` property on `obj` and swap it out for a n
 
 ```javascript
 const obj = {
-  method: () => 'before'
-}
+  method: () => 'before',
+};
 
 const lodashBindKeyFn = _.bindKey(obj, 'method');
 const arrowFn = () => obj.method();

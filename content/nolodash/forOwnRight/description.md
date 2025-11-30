@@ -1,3 +1,4 @@
+<!-- eslint-skip -->
 ```javascript
 for (const [key, value] of Object.entries(object).reverse()) {
   ...

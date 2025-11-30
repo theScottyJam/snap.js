@@ -1,7 +1,7 @@
 To check if your value is an instance of `Date`:
 
 ```javascript
-value instanceof Date;
+value instanceof Date
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === Date.prototype;
+Object.getPrototypeOf(value) === Date.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -38,6 +38,7 @@ function isDate(value) {
 
 If you additionally need to ensure your are not receiving a `Date` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A Date's prototype's chain should be
 // value -> Date.prototype -> Object.prototype -> null
@@ -49,7 +50,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isDate()` also supports cross-realm `Date` checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
 ```javascript
-_.isDate({ get [Symbol.toStringTag]() { return 'Date' } }); // true
+_.isDate({ get [Symbol.toStringTag]() { return 'Date' } })
+// => true
 ```
 
 In Node, Lodash will instead use `require('util').types.isDate(value)` for it's implementation, which you are also welcome to use if you know your code will only run in Node. This solution will also return `true` for subclasses.

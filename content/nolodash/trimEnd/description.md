@@ -6,6 +6,7 @@ string.trimEnd()
 
 If you want to specify which characters to trim, use the following:
 
+<!-- eslint-skip -->
 ```javascript
 /*# METADATA
 [
@@ -55,7 +56,7 @@ function trimEnd(str, chars) {
   let right = 0;
   for (const { segment, index } of segmenter.segment(str)) {
     const isTrimmable = charList.some(
-      char => collator.compare(char, segment) === 0
+      char => collator.compare(char, segment) === 0,
     );
 
     if (!isTrimmable) {

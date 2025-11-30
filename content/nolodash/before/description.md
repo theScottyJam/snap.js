@@ -1,7 +1,7 @@
 ```javascript
 function before(n, func) {
   let lastResult;
-  return function(...args) {
+  return function (...args) {
     n--;
     if (n <= 0) {
       return lastResult;

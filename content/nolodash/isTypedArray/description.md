@@ -8,8 +8,8 @@ function isTypedArray(value) {
   return value instanceof TypedArray;
 }
 
-isTypedArray(new Int8Array()); // true
-isTypedArray(new Uint32Array()); // true
+isTypedArray(new Int8Array()); // => true
+isTypedArray(new Uint32Array()); // => true
 ```
 
 For the vast majority of scenarios the above should be good enough, but it does technically have a couple of flaws:
@@ -39,6 +39,7 @@ function isTypedArray(value) {
 
 It's generally considered a bad practice to subclass built-ins, but if you suspect that one of the concrete typed array classes might getting subclassed and handed to you, and you wish to exclude subclasses from your check, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A typed array prototype's chain should be
 // value -> concrete class prototype (like Int8Array.prototype) -> TypedArray.prototype -> Object.prototype -> null
@@ -50,7 +51,8 @@ return protoOf(protoOf(protoOf(protoOf(value)))) === null;
 Lodash's `_.isTypedArray()` also supports cross-realm typed array checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
 ```javascript
-_.isTypedArray({ length: 0, get [Symbol.toStringTag]() { return 'Uint8Array' } }); // true
+_.isTypedArray({ length: 0, get [Symbol.toStringTag]() { return 'Uint8Array' } })
+// => true
 ```
 
 In Node, Lodash will instead use `require('util').types.isTypedArray(value)` for it's implementation, which you are also welcome to use if you know your code will only run in Node. This solution will also return `true` for subclasses.

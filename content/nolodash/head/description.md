@@ -1,3 +1,3 @@
 ```javascript
-array[0];
+array[0]
 ```

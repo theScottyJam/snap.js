@@ -1,3 +1,4 @@
+<!-- eslint-skip -->
 ```javascript
 Number(value)
 // or
@@ -6,15 +7,15 @@ Number(value)
 
 Both `Number()` and the `+` unary operator behave the exact same, so either can be chosen. These can be used to convert a variety of different values, including bigint, booleans, strings, etc.
 
-If you are converting a string to a number, you will likely want to additionally compare your string against a regular expression to make sure it is in the format you expect it to be in. The following are some strings that `Number()` will happily parse for you, that you might want to prevent with your regular expression:
+If you are converting a string to a number, you will likely want to additionally compare your string against a regular expression to make sure it is in the format you expect it to be in. The following are some strings that `Number()` will happily parse for you, that you may want prevent with your regular expression, depending on your use-case:
 * Strings containing numbers with leading and/or trailing spaces (e.g. `Number('  23  ') === 23`)
 * Decimal number (e.g. `Number('2.3') === 2.3` or `Number('2.3E+5') === 2.3E+5`)
 * Scientific notation (e.g. `Number('2e3') === 2e3`)
 * Numbers in different basis (e.g. `Number('0x2a') === 0x2a`, `Number('0o47') === 0o47`, or `Number('0b101') === 0b101`)
 * Empty strings and white-space-only strings (e.g. `Number(' \t \n ') === 0`)
 * Numbers with a sign (e.g. `Number('-2') === -2` or `Number('+2') === +2`)
-* Infinity and -Infinity? (e.g. `Number('-Infinity') === -Infinity`)
-* Leading zeros? (e.g. `Number('012') === 12`)
+* Infinity and -Infinity (e.g. `Number('-Infinity') === -Infinity`)
+* Leading zeros (e.g. `Number('012') === 12`)
 
 As a concrete example, if you are receiving user input, and you only want to allow integer inputs (and you are ok with leading zeros), you can use a function like the following to get your desired behavior:
 

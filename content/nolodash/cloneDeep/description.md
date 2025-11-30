@@ -24,19 +24,19 @@ function cloneDeep(value) {
     return value.map(cloneDeep);
   } else if (value instanceof Map) {
     return new Map(
-      [...value].map(([key, value]) => [cloneDeep(key), cloneDeep(value)])
+      [...value].map(([key, value]) => [cloneDeep(key), cloneDeep(value)]),
     );
   } else if (value instanceof Set) {
     return new Set(
-      [...value].map(x => cloneDeep(x))
+      [...value].map(x => cloneDeep(x)),
     );
   } else if (Object.getPrototypeOf(value) === Object.prototype) {
     return Object.fromEntries(
-      Object.entries(value).map(([key, value]) => [key, cloneDeep(value)])
+      Object.entries(value).map(([key, value]) => [key, cloneDeep(value)]),
     );
   } else if (Object.getPrototypeOf(value) === null) {
     const newObject = Object.fromEntries(
-      Object.entries(value).map(([key, value]) => [key, cloneDeep(value)])
+      Object.entries(value).map(([key, value]) => [key, cloneDeep(value)]),
     );
     Object.setPrototypeOf(newObject, null);
     return newObject;

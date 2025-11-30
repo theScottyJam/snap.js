@@ -1,3 +1,3 @@
 ```javascript
-Number.isInteger(value);
+Number.isInteger(value)
 ```

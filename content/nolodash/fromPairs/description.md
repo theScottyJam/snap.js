@@ -1,3 +1,3 @@
 ```javascript
-Object.fromEntries(pairs);
+Object.fromEntries(pairs)
 ```

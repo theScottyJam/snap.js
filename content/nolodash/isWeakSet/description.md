@@ -1,7 +1,7 @@
 To check if your value is an instance of `WeakSet`:
 
 ```javascript
-value instanceof WeakSet;
+value instanceof WeakSet
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === WeakSet.prototype;
+Object.getPrototypeOf(value) === WeakSet.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -38,6 +38,7 @@ function isWeakSet(value) {
 
 If you additionally need to ensure your are not receiving a `WeakSet` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A WeakSet's prototype's chain should be
 // value -> WeakSet.prototype -> Object.prototype -> null
@@ -49,7 +50,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isWeakSet()` also supports cross-realm `WeakSet` checks, but it uses a less robust algorithm that can be easily fooled. For example, the following will return the wrong answer.
 
 ```javascript
-_.isWeakSet({ get [Symbol.toStringTag]() { return 'WeakSet' } }); // true
+_.isWeakSet({ get [Symbol.toStringTag]() { return 'WeakSet' } })
+// => true
 ```
 
 If you're exclusively using Node, you can use `require('util').types.isWeakSet(value)` to specifically check if the value is a WeakSet. This solution will also return `true` for subclasses.

@@ -1,6 +1,6 @@
 ```javascript
 function camelCase(string) {
-  const capitalize = ([first='', ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();
+  const capitalize = ([first = '', ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();
   const [firstWord, ...remainingWords] = string.split(' ');
   return [
     firstWord.toLowerCase(),

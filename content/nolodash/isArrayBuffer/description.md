@@ -1,7 +1,7 @@
 To check if your value is an instance of `ArrayBuffer`:
 
 ```javascript
-value instanceof ArrayBuffer;
+value instanceof ArrayBuffer
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === ArrayBuffer.prototype;
+Object.getPrototypeOf(value) === ArrayBuffer.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -38,6 +38,7 @@ function isArrayBuffer(value) {
 
 If you additionally need to ensure that you are not receiving an ArrayBuffer instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A ArrayBuffer's prototype's chain should be
 // value -> ArrayBuffer.prototype -> Object.prototype -> null
@@ -49,7 +50,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isArrayBuffer()` also supports cross-realm ArrayBuffer checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
 ```javascript
-_.isArrayBuffer({ get [Symbol.toStringTag]() { return 'ArrayBuffer' } }); // true
+_.isArrayBuffer({ get [Symbol.toStringTag]() { return 'ArrayBuffer' } })
+// => true
 ```
 
 In Node, Lodash will instead use `require('util').types.isArrayBuffer(value)` for it's implementation, which you are also welcome to use if you know your code will only run in Node.

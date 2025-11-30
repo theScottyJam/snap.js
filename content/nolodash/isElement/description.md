@@ -1,7 +1,7 @@
 To check if your value is an HTML Element:
 
 ```javascript
-value instanceof Element;
+value instanceof Element
 ```
 
 For the vast majority of scenarios the above should be good enough, but it does technically have a couple of flaws:
@@ -17,7 +17,7 @@ function isElement(value) {
     // If you call a Element method, like .getAttribute(),
     // with a "this" value that's anything
     // other than an Element, a TypeError is thrown.
-    Element.prototype.getAttribute.call(value, '')
+    Element.prototype.getAttribute.call(value, '');
     return true;
   } catch (error) {
     if (error instanceof TypeError) {
@@ -35,5 +35,5 @@ class NotAnElement {
   nodeType = 1;
 }
 
-_.isElement(new NotAnElement()); // true
+_.isElement(new NotAnElement()) // => true
 ```

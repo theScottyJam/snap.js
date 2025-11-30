@@ -1,8 +1,8 @@
 ```javascript
-'abc'.endsWith('bc') // => true
+'abc'.endsWith('bc'); // => true
 ```
 
-If you search from a particular location, use the following:
+If you need to search from a particular location, use the following:
 
 ```javascript
 const end = 3;

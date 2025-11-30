@@ -9,12 +9,8 @@ import stylistic from '@stylistic/eslint-plugin';
 export default defineConfig([
   { files: ['**/*.{js,mjs,cjs}'], plugins: { js }, extends: ['js/recommended'], languageOptions: { globals: globals.browser } },
   { files: ['**/*.json'], plugins: { json }, language: 'json/json', extends: ['json/recommended'] },
-  { files: ['**/*.md'], plugins: { markdown }, language: 'markdown/gfm', extends: ['markdown/recommended'] },
+  { files: ['**/*.md'], plugins: { markdown }, language: 'markdown/gfm', extends: ['markdown/recommended'], processor: 'markdown/markdown' },
   { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
-  stylistic.configs.customize({
-    semi: true,
-    braceStyle: '1tbs',
-  }),
   {
     files: ['**/*.test.js', '**/test.js'],
     languageOptions: {
@@ -23,6 +19,10 @@ export default defineConfig([
       },
     },
   },
+  stylistic.configs.customize({
+    semi: true,
+    braceStyle: '1tbs',
+  }),
   {
     plugins: {
       '@stylistic': stylistic,
@@ -45,6 +45,7 @@ export default defineConfig([
       '@stylistic/operator-linebreak': ['error', 'after', {
         overrides: { '?': 'before', ':': 'before' },
       }],
+      'no-useless-escape': ['error', { allowRegexCharacters: ['[', '-'] }],
       // Disabling because it's been throwing errors.
       '@stylistic/indent': 'off',
     },
@@ -56,6 +57,15 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['**/*.md/*.js'],
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+      // Many code samples are missing semicolons because they represent an expression, not a full statement.
+      '@stylistic/semi': 'off',
     },
   },
   {

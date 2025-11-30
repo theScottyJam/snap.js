@@ -1,7 +1,7 @@
 To check if a value is a string primitive:
 
 ```javascript
-typeof value === 'string';
+typeof value === 'string'
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -11,7 +11,7 @@ Lodash will also check if the value is a string object. In practice, such object
 To check if something is specifically a string object (and not a primitive), use the following:
 
 ```javascript
-value instanceof Boolean;
+value instanceof Boolean
 ```
 
 This, however, doesn't work cross realm (i.e. a string object created from inside an iframe would fail this check). It also would incorrectly state that `Object.create(String.prototype)` is a string object, when in reality, it's just a normal object who's prototype is set to `String.prototype`. If you need to worry about these kinds of issues, use the following solution instead:
@@ -40,7 +40,8 @@ function isString(value) {
 Lodash's `_.isString()` also supports cross-realm `String` object checks, but it uses a less robust algorithm that can be easily fooled. For example, the following will return the wrong answer.
 
 ```javascript
-_.isString({ get [Symbol.toStringTag]() { return 'String' } }); // true
+_.isString({ get [Symbol.toStringTag]() { return 'String' } })
+// => true
 ```
 
 If you're exclusively using Node, you can use `require('util').types.isStringObject(value)` to specifically check if the value is a string object (not a primitive). This solution will also return `true` for both subclasses and `Boolean.prototype`.

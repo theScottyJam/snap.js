@@ -1,5 +1,5 @@
 ```javascript
-function upperFirst([first='', ...rest]) {
+function upperFirst([first = '', ...rest]) {
   return first.toUpperCase() + rest.join('');
 }
 ```

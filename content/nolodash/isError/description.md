@@ -6,20 +6,20 @@ class NotAnError {
   message = 'this is not an error';
 }
 
-_.isError(new NotAnError()); // true
+_.isError(new NotAnError()) // => true
 ```
 
 If you actually want to check if a value is an error or one of its subclasses (like `TypeError`, or a user-defined subclass), you can simply do this:
 
 ```javascript
-value instanceof Error;
+value instanceof Error
 ```
 
 And if you want to check if a value is a specific error type (like `Error`, `TypeError`, or a user defined error), and you want to exclude subclasses, you can compare prototypes like this:
 
 ```javascript
 // Replace `TypeError` with the Error class of your choice.
-Object.getPrototypeOf(value) === TypeError.prototype;
+Object.getPrototypeOf(value) === TypeError.prototype
 ```
 
 For the vast majority of scenarios the above should be good enough, but those solutions do technically have a couple of flaws:
@@ -41,7 +41,8 @@ function isError(value) {
 This helper function can unfortunately be spoofed by providing any object with a `Symbol.toStringTag` property set to one of the expected string tags, like this:
 
 ```javascript
-isError({ [Symbol.toStringTag]: 'DOMException' }); // true
+isError({ [Symbol.toStringTag]: 'DOMException' })
+// => true
 ```
 
 There's not really anything that can be done to avoid this. You could try layering on additional checks, but there will always be a way to cause your `isError()` function to return a wrong answer.

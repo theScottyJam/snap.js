@@ -35,7 +35,7 @@ function mergeWith(object, sources, customizer) {
       } else if (!isObject(object[key])) {
         object[key] = value;
       } else {
-        mergeWith(object[key], value, customizer)
+        mergeWith(object[key], value, customizer);
       }
     }
   }

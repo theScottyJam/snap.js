@@ -18,7 +18,7 @@ const segmenterJa = new Intl.Segmenter('ja-JP', { granularity: 'word' });
 console.log(
   [...segmenterJa.segment(str)]
     .filter(segmentInfo => segmentInfo.isWordLike)
-    .map(segmentInfo => segmentInfo.segment)
+    .map(segmentInfo => segmentInfo.segment),
 );
 // => ['吾輩', 'は', '猫', 'で', 'ある', '名前', 'は', 'たぬき']
 ```

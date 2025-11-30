@@ -3,8 +3,10 @@ Using `_.transform()` really isn't any different from using the built-in `array.
 1. If you're dealing with objects, you need to use `Object.entries(yourObject)` to turn it into an array of tuples first.
 2. With `array.reduce()`, you need to always return the accumulator
 
-What this looks like in practice, using an example from Lodash's website.
+Here's what it looks like in practice to convert from a `_.transform()` call to `.reduce()`, starting with an example from their website:
 
+<!-- eslint-disable @stylistic/quote-props-->
+<!-- eslint-disable @stylistic/space-before-function-paren -->
 ```javascript
 _.transform({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
   (result[value] || (result[value] = [])).push(key);
@@ -20,6 +22,7 @@ Object.entries({ 'a': 1, 'b': 2, 'c': 1 }).reduce((result, [key, value]) => {
 
 A simple for loop will work just as well, if that's your preference.
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 const result = {};
 for (const [key, value] of Object.entries({ 'a': 1, 'b': 2, 'c': 1 })) {

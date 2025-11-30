@@ -4,7 +4,7 @@ augend + addend;
 
 One reason `_.add()` exists, is because it's a ready-made function, that can easily be passed into other functions, like this:
 
-```javascript
+```
 > _.reduce([2, 3, 4], _.add);
 9
 ```

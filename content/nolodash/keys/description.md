@@ -1,3 +1,3 @@
 ```javascript
-Object.keys(object);
+Object.keys(object)
 ```

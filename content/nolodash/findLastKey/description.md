@@ -1,6 +1,6 @@
 ```javascript
 Object.entries(object)
-  .findLast(([key, value]) => predicate(value))?.[0];
+  .findLast(([key, value]) => predicate(value))?.[0]
 ```
 
 Please don't actually use this solution.

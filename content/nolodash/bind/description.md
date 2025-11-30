@@ -2,6 +2,7 @@ You can use an arrow function to get the same effect, or the native `.bind()` me
 
 To bind a method to the object it is found on:
 
+<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bind(obj.method, obj)
@@ -15,6 +16,7 @@ obj.method.bind(obj)
 
 To bind a method to any object:
 
+<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bind(obj.method, anyObj)
@@ -28,6 +30,7 @@ obj.method.bind(anyObj)
 
 If you wish to partially apply some initial arguments:
 
+<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bind(obj.method, obj, 1, 2, 3)

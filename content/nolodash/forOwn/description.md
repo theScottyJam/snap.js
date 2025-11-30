@@ -1,5 +1,6 @@
 If you wish to iterate over both keys and values:
 
+<!-- eslint-skip -->
 ```javascript
 for (const [key, value] of Object.entries(object)) {
   ...
@@ -8,6 +9,7 @@ for (const [key, value] of Object.entries(object)) {
 
 If, instead, you just want values, you can use `Object.values(object)`.
 
+<!-- eslint-skip -->
 ```javascript
 for (const value of Object.values(object)) {
   ...
@@ -16,6 +18,7 @@ for (const value of Object.values(object)) {
 
 And if you just want keys, you can use `Object.keys(object)`.
 
+<!-- eslint-skip -->
 ```javascript
 for (const key of Object.keys(object)) {
   ...
@@ -24,9 +27,10 @@ for (const key of Object.keys(object)) {
 
 You'll find the `.forEach()` method to be very popular in the JavaScript community as well.
 
+<!-- eslint-skip -->
 ```javascript
 Object.entries(object).forEach(([key, value]) => {
-
+  ...
 });
 ```
 

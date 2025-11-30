@@ -3,7 +3,7 @@ function defaultResolver(...args) {
   if (args.length !== 1) {
     throw new Error(
       'Exactly one argument must be passed in to this memoized function ' +
-      '(unless a custom resolver function is provided)'
+      '(unless a custom resolver function is provided)',
     );
   }
   return args[0];

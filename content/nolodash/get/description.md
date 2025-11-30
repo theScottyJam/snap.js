@@ -3,7 +3,7 @@ function get(object, path, defaultValue = undefined) {
   // Optional string-path support.
   // You can remove this `if` block if you don't need it.
   if (typeof path === 'string') {
-    path = path.split(/[.\[\]\"]+/).filter(x => x);
+    path = path.split(/[.\[\]"]+/).filter(x => x);
   }
 
   if (path.length === 0) {
@@ -24,9 +24,9 @@ One of the primary reasons Lodash's `_.get()` function was commonly used, was as
 For example, these two are effectively the same:
 
 ```javascript
-_.get(obj, 'a.b', null);
+_.get(obj, 'a.b', null)
 
-obj?.a?.b ?? null;
+obj?.a?.b ?? null
 ```
 
 Note that the support for string paths in the above `get()` implementation isn't very robust. It'll take invalid-looking input, such as `"prop1.[prop2"`, ignore the invalid parts, and attempt to work with it anyways. Lodash's `_.get()` isn't all that different in this regard. If you really need support for string inputs, like this, it's recommended to build out your own mini-parser, according to your specific use-cases. For everyone else, there shouldn't be a real reason to need this capability with the modern syntax that JavaScript provides.

@@ -1,7 +1,7 @@
 To take the intersection of array1 and array2, use the following:
 
 ```javascript
-array1.filter(x => array2.includes(x));
+array1.filter(x => array2.includes(x))
 ```
 
 If you also wish to remove duplicate elements from the final result, the same way `_.intersection()` does, you can use a set, like so:

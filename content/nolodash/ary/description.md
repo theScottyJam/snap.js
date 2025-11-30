@@ -13,7 +13,7 @@ If you wish to have a utility function that acts like Lodash's `_.ary()`, you ca
 
 ```javascript
 function ary(func, n) {
-  return function(...args) {
+  return function (...args) {
     // Using .call() may be overkill.
     // You could just do `return func(...args.slice(0, n))` if you
     // don't need to worry about preserving the "this" argument.

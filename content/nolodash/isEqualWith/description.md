@@ -53,8 +53,8 @@ function isEqualWith(value1, value2, customizer, _parentNodeInfo = undefined) {
           iterValue,
           value2[i],
           customizer,
-          { value1Parent: value1, value2Parent: value2, key: i }
-        )
+          { value1Parent: value1, value2Parent: value2, key: i },
+        ),
       )
     );
   } else if (type === 'plainObject') {
@@ -69,7 +69,7 @@ function isEqualWith(value1, value2, customizer, _parentNodeInfo = undefined) {
             iterValue,
             value2AsMap.get(iterKey),
             customizer,
-            { value1Parent: value1, value2Parent: value2, key: iterKey }
+            { value1Parent: value1, value2Parent: value2, key: iterKey },
           )
         );
       })
@@ -80,8 +80,8 @@ function isEqualWith(value1, value2, customizer, _parentNodeInfo = undefined) {
 }
 ```
 
-In Lodash, the customizer function would be called with a sixth "stack" argument. Some probing shows that it's an instance of an internal "Stack" class that provides some methods which, presumably, can be used to gather information about the objects you're comparing. Due to the fact that this seems to be a rather complex feature that's entirely undocumented, it'll be assumed that the vast majority of users do not use this parameter, and so it's functionality won't be recreated here either.
+In Lodash, the `customizer` function would be called with a sixth "stack" argument. Some probing shows that it's an instance of an internal "Stack" class that provides some methods which, presumably, can be used to gather information about the objects you're comparing. Due to the fact that this seems to be a rather complex feature that's entirely undocumented, it'll be assumed that the vast majority of users do not use this parameter, and so it's functionality won't be recreated here either.
 
 Special data types, like Maps and Sets, are not supported in the above example. This is partly because Lodash chooses to support them in a slightly odd way that you may not wish to mirror. For example:
-* The fourth or fifth argument to your customizer function is supposed to be the parent node, but if that parent node was a `Map` or `Set` instance, you'll instead receive arrays containing the node's contents (e.g. a map of usernames to ids would be turned into `[['Sally', 1], ['Zack', 2]]` before being provided to you).
+* The fourth or fifth argument to your `customizer` function is supposed to be the parent node, but if that parent node was a `Map` or `Set` instance, you'll instead receive arrays containing the node's contents (e.g. a map of usernames to ids would be turned into `[['Sally', 1], ['Zack', 2]]` before being provided to you).
 * When comparing two sets, like `new Set([1, 2, 3, 4])` and `new Set([5, 6, 7, 8])`, its going to call your `customizer` function _16_ different times (assuming the `customizer` function returns `false` or `undefined` each time). As your sets grow in length, the amount of times it has to call your customizer grows exponentially. Maps have a similar issue. This behavior is required to implement the general-purpose algorithm Lodash was going for, but maybe for your use-case you don't need your algorithm to be so general-purpose - maybe you can cut some corners to help with performance.

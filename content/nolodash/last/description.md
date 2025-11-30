@@ -1,3 +1,3 @@
 ```javascript
-array.at(-1);
+array.at(-1)
 ```

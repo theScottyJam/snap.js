@@ -14,6 +14,7 @@ async function doExpensiveTask() {
 
 If you need a helper function similar to Lodash's `_.once()`, you can use the following:
 
+<!-- eslint-skip -->
 ```javascript
 /*# METADATA
 [
@@ -51,7 +52,7 @@ function once(func) {
 function once(func) {
   let cachedResult;
   let hasCachedResult = false;
-  return function(...args) {
+  return function (...args) {
     if (hasCachedResult) {
       return cachedResult;
     }

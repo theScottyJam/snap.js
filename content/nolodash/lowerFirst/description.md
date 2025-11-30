@@ -1,7 +1,7 @@
 I'm not entirely sure what the use-case is behind this function aside from trying to provide a lowercase version of every uppercasing-related function available. But it can be done as follows:
 
 ```javascript
-function lowerFirst([first='', ...rest]) {
+function lowerFirst([first = '', ...rest]) {
   return first.toLowerCase() + rest.join('');
 }
 ```

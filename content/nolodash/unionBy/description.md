@@ -18,5 +18,5 @@ function uniqBy(array, iteratee) {
 // Merge the given arrays, then filter out duplicates.
 // This end-effect will be the union of these two arrays,
 // using `iteratee` to decide equivalence.
-uniqBy([...array1, ...array2], iteratee);
+uniqBy([...array1, ...array2], iteratee)
 ```

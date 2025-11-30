@@ -1,5 +1,5 @@
 ```javascript
-array.filter(x => x !== value);
+array.filter(x => x !== value)
 ```
 
 If you wish to filter out multiple values, look at the plain JavaScript version of `_.difference()`. Both `_.difference()` and `_.without()` achieve the same effect, but with slightly different function signatures.

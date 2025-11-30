@@ -1,21 +1,22 @@
 `_.zip()` is actually the inverse of itself, meaning you can use it to unzip the result of `_.zip()`, like this:
 
 ```javascript
-const original = [[1, 2, 3], ['A', 'B', 'C']]
+const original = [[1, 2, 3], ['A', 'B', 'C']];
 const zipped = _.zip(...original); // [[1, 'A'], [2, 'B'], [3, 'C']]
 const unzipped = _.zip(...zipped); // [[1, 2, 3], ['A', 'B', 'C']]
 ```
 
 The only difference between `_.zip()` and `_.unzip()` is how it accepts parameters.
 
+<!-- eslint-disable @stylistic/no-multi-spaces -->
 ```javascript
 // With _.zip(), arrays are passed in as separate parameters
-_.zip([1, 2], ['A', 'B']);     // [[1, 'A'], [2, 'B']]
+_.zip([1, 2], ['A', 'B'])     // => [[1, 'A'], [2, 'B']]
 // With _.unzip(), arrays are placed inside a single larger array.
-_.unzip([[1, 2], ['A', 'B']]); // [[1, 'A'], [2, 'B']]
+_.unzip([[1, 2], ['A', 'B']]) // => [[1, 'A'], [2, 'B']]
 ```
 
-So, to implement an unzip function, all you really need is an implementation for `zip()`.
+This means that the you don't need both `zip()` and `unzip()`, you can just use a `zip` implementation for both use-cases:
 
 ```javascript
 function zip(...arrays) {
@@ -33,7 +34,7 @@ function zip(...arrays) {
 }
 ```
 
-If you want a Lodash-style unzip function, here's how to implement it:
+If you want a Lodash-style unzip function, here's how to implement it based off of `zip()`:
 
 ```javascript
 function unzip(arrays) {

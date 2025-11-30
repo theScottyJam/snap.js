@@ -43,7 +43,7 @@ If you need a version of the omit function that can omit nested properties, you 
 const isObject = value => ['object', 'function'].includes(typeof value) && value !== null;
 
 function omit(object, keys) {
-  const newObject = Array.isArray(object) ? [ ...object ] : { ...object };
+  const newObject = Array.isArray(object) ? [...object] : { ...object };
 
   for (const key of keys) {
     let keyPath;
@@ -51,7 +51,7 @@ function omit(object, keys) {
       // Optional string-path support.
       // You can remove this key.split() stuff, and simply use `keyPath = [key];`
       // if you don't need it.
-      keyPath = key.split(/[.\[\]\"]+/).filter(x => x);
+      keyPath = key.split(/[.\[\]"]+/).filter(x => x);
     } else if (Array.isArray(key)) {
       keyPath = key;
     } else {

@@ -1,7 +1,7 @@
 To simply check if a number is between two others, use the following:
 
 ```javascript
-start <= number && number < end;
+start <= number && number < end
 ```
 
 If you're uncertain which of the two numbers are lower, use the following:

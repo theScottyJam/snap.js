@@ -1,3 +1,3 @@
 ```javascript
-Object.values(object);
+Object.values(object)
 ```

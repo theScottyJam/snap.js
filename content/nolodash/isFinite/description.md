@@ -1,3 +1,3 @@
 ```javascript
-Number.isFinite(value);
+Number.isFinite(value)
 ```

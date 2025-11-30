@@ -12,7 +12,7 @@ function hasIn(object, path) {
   // Optional nested-property string support.
   // You can remove this `if` block if you don't need it.
   if (typeof path === 'string') {
-    path = path.split(/[.\[\]\"]+/).filter(x => x);
+    path = path.split(/[.\[\]"]+/).filter(x => x);
   }
 
   const [head, ...tail] = path;
@@ -35,7 +35,9 @@ For example, these two are the same:
 ```javascript
 _.hasIn(obj, 'a.b.c');
 
-'c' in obj?.a?.b;
+// `... in undefined` causes an error to be thrown, the use of `?? {}`
+// prevents `undefined` from ever appearing on the right-hand side.
+'c' in (obj?.a?.b ?? {});
 ```
 
 Note that the support for nested string paths in the above `hasIn()` implementation isn't very robust. It'll take invalid-looking input, such as `"prop1.[prop2"`, ignore the invalid parts, and attempt to work with it anyways. Lodash's `_.hasIn()` isn't all that different in this regard. If you really need support for nested string paths, it's recommended to build out your own mini-parser, according to your specific use-cases. For everyone else, there shouldn't be a real reason to need this capability. Just provide the path you desire as an array instead.

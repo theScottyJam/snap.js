@@ -1,3 +1,3 @@
 ```javascript
-array.flat();
+array.flat()
 ```

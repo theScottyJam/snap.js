@@ -12,6 +12,7 @@ function isArrayLike(value) {
 
 The JavaScript specification uses a much looser definition for "array-like" - basically, as long as you can get a "length" property from the value and coerce it into an integer somehow, then it's an array-like value. This means that even `{}` is "array-like", because it's able to get the (non-existent) length property (`undefined`), then coerce that into an integer (`0`). This definition technically makes almost any value except undefined, null, and a couple of other minor edge cases "array-like". A good way to check if something is considered array-like or not per the spec, is to run the following snippet and see if it throws an error, if it does not, your value is an array-like value.
 
+<!-- eslint-skip -->
 ```javascript
 Array.prototype.slice.call(<your value>);
 ```

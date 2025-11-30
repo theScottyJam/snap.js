@@ -1,6 +1,6 @@
 ```javascript
 function dropRightWhile(array, predicate) {
-  const index = array.findLastIndex((...args) => !predicate(...args))
+  const index = array.findLastIndex((...args) => !predicate(...args));
   if (index === -1) {
     return [];
   }

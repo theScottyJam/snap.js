@@ -1,8 +1,8 @@
-describe('capitalize()', () => {
-  function capitalize([first = '', ...rest]) {
-    return first.toUpperCase() + rest.join('').toLowerCase();
-  }
+function capitalize([first = '', ...rest]) {
+  return first.toUpperCase() + rest.join('').toLowerCase();
+}
 
+describe('capitalize()', () => {
   it('It converts the first character to upper case and the remaining to lower case', () => {
     expect(capitalize('a b C')).toEqual('A b c');
   });

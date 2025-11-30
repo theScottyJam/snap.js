@@ -5,8 +5,8 @@ value <= other
 One reason `_.lte()` exists, is because it's a ready-made function, that can easily be passed into other functions, like this:
 
 ```javascript
-> _.zipWith([1, 2, 3], [3, 2, 1], _.lte)
-[true, true, false]
+_.zipWith([1, 2, 3], [3, 2, 1], _.lte)
+// => [true, true, false]
 ```
 
 When Lodash was first born, the only alternative at the time would be to create an entire function, using the `function` keyword.

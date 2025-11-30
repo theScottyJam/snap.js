@@ -1,7 +1,7 @@
 The `Buffer` class is part of Node, and isn't found in the core JavaScript language. You can check if something is an instance of Buffer using Node's `isBuffer()` method as follows:
 
 ```javascript
-Buffer.isBuffer(value);
+Buffer.isBuffer(value)
 ```
 
 This will return `true` for `Buffer` subclasses. If you want to ensure your buffer instance is not a subclass, you can do the following:
@@ -15,7 +15,7 @@ function isNonInheritedBuffer(value) {
   return (
     Buffer.isBuffer(value) &&
     protoOf(protoOf(protoOf(protoOf(protoOf(value))))) === null
-  )
+  );
 }
 ```
 

@@ -1,8 +1,8 @@
 If you have a simple key, then `Object.hasOwn()` can be used to check if it's a non-inherited property.
 
 ```javascript
-Object.hasOwn({}, 'toString'); // false
-Object.hasOwn({ toString() { return '{}' } }, 'toString'); // true
+Object.hasOwn({}, 'toString') // => false
+Object.hasOwn({ toString() { return '{}' } }, 'toString') // => true
 ```
 
 If you have an array of path keys you wish to travel down, or perhaps, a string containing nested property access (like `x.y.z`), use this:
@@ -12,7 +12,7 @@ function has(object, path) {
   // Optional nested-property string support.
   // You can remove this `if` block if you don't need it.
   if (typeof path === 'string') {
-    path = path.split(/[.\[\]\"]+/).filter(x => x);
+    path = path.split(/[.\[\]"]+/).filter(x => x);
   }
 
   const [head, ...tail] = path;
@@ -33,5 +33,7 @@ Note that the support for nested string paths in the above `has()` implementatio
 If you don't have dynamic strings being provided to you, and you don't need to do the "is-not-inherited" checks, then you can simply use the `in` operator with "optional chaining" (`?.`) to check for the existence of a nested property.
 
 ```javascript
-'z' in object?.x?.y;
+'z' in (object?.x?.y ?? {})
 ```
+
+The `?? {}` portion of this example is necessary since `?.` may produce `undefined`, and executing `... in undefined` causes an error to be thrown.

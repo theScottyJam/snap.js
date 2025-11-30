@@ -6,8 +6,8 @@ function intersectionBy(array1, array2, iteratee = x => x) {
   for (const element of array1) {
     const transformedElement = iteratee(element);
     const isInIntersection = (
-      !resultTransformed.has(transformedElement)
-      && array2Transformed.has(transformedElement)
+      !resultTransformed.has(transformedElement) &&
+      array2Transformed.has(transformedElement)
     );
 
     if (isInIntersection) {

@@ -1,7 +1,7 @@
 To check if your value is a "plain object" like `{ x: 2 }`
 
 ```javascript
-value != null && [null, Object.prototype].includes(Object.getPrototypeOf(value));
+value != null && [null, Object.prototype].includes(Object.getPrototypeOf(value))
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -33,14 +33,14 @@ Unfortunately you can't have an is-plain-object check that's both cross-realm-co
 ```javascript
 class SpecialClass {
   static {
-    Object.setPrototypeOf(SpecialClass.prototype, null)
+    Object.setPrototypeOf(SpecialClass.prototype, null);
     // This doesn't literally change the class's constructor,
     // it just changes an informational property to be a lie.
     SpecialClass.prototype.constructor = Object;
   }
 }
 
-isPlainObject(new SpecialClass()); // true
+isPlainObject(new SpecialClass()); // => true
 ```
 
 Even Lodash's algorithm can be spoofed.
@@ -52,7 +52,7 @@ class SpecialClass {
   }
 }
 
-_.isPlainObject(new SpecialClass()); // true
+_.isPlainObject(new SpecialClass()) // => true
 ```
 
 Some very early JavaScript proposals may provide support for cross-realm type checking:

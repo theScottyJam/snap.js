@@ -1,5 +1,5 @@
 ```javascript
-Math.max(...array);
+Math.max(...array)
 ```
 
 There's a couple of very minor differences in behavior between Lodash's `_.max()`, and JavaScript's native `Math.max()` (apart from the fact that you have to spread your array into JavaScript's version).

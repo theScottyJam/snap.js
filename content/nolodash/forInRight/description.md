@@ -1,3 +1,4 @@
+<!-- eslint-skip -->
 ```javascript
 const keys = [];
 for (const key in object) {

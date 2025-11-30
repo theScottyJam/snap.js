@@ -1,7 +1,7 @@
 They give the following usage example, which calls a method on each value in your array:
 
 ```javascript
-_.invokeMap([[5, 1, 7], [3, 2, 1]], 'sort');
+_.invokeMap([[5, 1, 7], [3, 2, 1]], 'sort')
 // => [[1, 5, 7], [1, 2, 3]]
 ```
 
@@ -11,10 +11,10 @@ The equivalent in JavaScript would be:
 [[5, 1, 7], [3, 2, 1]].map(value => value.sort())
 ```
 
-Lodash's `_.invokeMap()` also has a completely separate use-case with it - it can behave like a regular `.map()`, except it passes each value to the callback as the "this" parameter instead of a normal parameter, as they demonstraighted with this example:
+Lodash's `_.invokeMap()` also has a completely separate use-case with it - it can behave like a regular `.map()`, except it passes each value to the callback as the "this" parameter instead of a normal parameter, as they demonstrated with this example:
 
 ```javascript
-_.invokeMap([123, 456], String.prototype.split, '');
+_.invokeMap([123, 456], String.prototype.split, '')
 // => [['1', '2', '3'], ['4', '5', '6']]
 ```
 

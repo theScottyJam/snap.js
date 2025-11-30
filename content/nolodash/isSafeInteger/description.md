@@ -1,3 +1,3 @@
 ```javascript
-Number.isSafeInteger(value);
+Number.isSafeInteger(value)
 ```

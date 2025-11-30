@@ -4,7 +4,7 @@ That being said, if you really want your own implementation of the flip function
 
 ```javascript
 function flip(func) {
-  return function(...args) {
+  return function (...args) {
     // Using .call() may be overkill.
     // You could just do `return func(...args.reverse())` if you
     // don't need to worry about preserving the "this" argument.

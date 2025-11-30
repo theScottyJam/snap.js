@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 // Top-level jsdocs will be parsed and displayed in their own special sections
 // on the webpage. The parsing isn't very exact, but should be good enough for
 // this use-case. It does mean if changes are made to those jsdoc comments, it's

@@ -1,7 +1,7 @@
 To check if your value is an instance of `Set`:
 
 ```javascript
-value instanceof Set;
+value instanceof Set
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === Set.prototype;
+Object.getPrototypeOf(value) === Set.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -38,6 +38,7 @@ function isSet(value) {
 
 If you additionally need to ensure your are not receiving a `Set` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A Set's prototype's chain should be
 // value -> Set.prototype -> Object.prototype -> null
@@ -49,7 +50,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isSet()` also supports cross-realm `Set` checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
 ```javascript
-_.isSet({ get [Symbol.toStringTag]() { return 'Set' } }); // true
+_.isSet({ get [Symbol.toStringTag]() { return 'Set' } })
+// => true
 ```
 
 In Node, Lodash will instead use `require('util').types.isSet(value)` for it's implementation, which you are also welcome to use if you know your code will only run in Node. This solution will also return `true` for subclasses.

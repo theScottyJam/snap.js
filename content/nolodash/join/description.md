@@ -1,3 +1,3 @@
 ```javascript
-array.join(separator);
+array.join(separator)
 ```

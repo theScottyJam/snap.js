@@ -3,8 +3,8 @@ function intersectionWith(array1, array2, comparator) {
   const result = [];
   for (const element of array1) {
     const isInIntersection = (
-      !result.some(x => comparator(x, element))
-      && array2.some(x => comparator(x, element))
+      !result.some(x => comparator(x, element)) &&
+      array2.some(x => comparator(x, element))
     );
 
     if (isInIntersection) {

@@ -1,5 +1,5 @@
 ```javascript
-value === undefined;
+value === undefined
 ```
 
 At one point in time it was often considered a good practice to compare against `void 0` instead of `undefined`, as `undefined` was just a property on the window object that could be overwritten to be any value while `void 0` (which returns the undefined value) can not be overwritten since it is syntax. The ability to globally overwrite the `undefined` value was changed in ES5, removing this concern in modern browsers. Even back then, this concern was largely over-hyped - yes you can override the value of `undefined`, but you can also override `Array`, `Math`, `Object`, `Function`, `setTimeout`, and so on - if the code you write doesn't try to defend against these globals being overwritten, then it should not try to defend against `undefined` being overwritten either.

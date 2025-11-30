@@ -67,7 +67,7 @@ function sortObjKeysReplacer(key, maybeObj) {
 
   return Object.fromEntries(
     Object.entries(maybeObj)
-      .sort((a, b) => a[0] > b[0] ? 1 : -1)
+      .sort((a, b) => a[0] > b[0] ? 1 : -1),
   );
 }
 

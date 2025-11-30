@@ -1,7 +1,7 @@
 To check if your value is an instance of `WeakMap`:
 
 ```javascript
-value instanceof WeakMap;
+value instanceof WeakMap
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === WeakMap.prototype;
+Object.getPrototypeOf(value) === WeakMap.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -38,6 +38,7 @@ function isWeakMap(value) {
 
 If you additionally need to ensure your are not receiving a `WeakMap` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A WeakMap's prototype's chain should be
 // value -> WeakMap.prototype -> Object.prototype -> null
@@ -49,7 +50,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isWeakMap()` also supports cross-realm `WeakMap` checks, but it uses a less robust algorithm that can be easily fooled. For example, the following will return the wrong answer.
 
 ```javascript
-_.isWeakMap({ get [Symbol.toStringTag]() { return 'WeakMap' } }); // true
+_.isWeakMap({ get [Symbol.toStringTag]() { return 'WeakMap' } })
+// => true
 ```
 
 If you're exclusively using Node, you can use `require('util').types.isWeakMap(value)` to specifically check if the value is a WeakMap. This solution will also return `true` for subclasses.

@@ -1,12 +1,13 @@
 `_.after()` was a convenient helper function back when asynchronous programming was done primarily through callbacks - it allowed you execute a function after a number of asynchronous tasks have finished, as shown in this example from their documentation.
 
+<!-- eslint-skip -->
 ```javascript
 var saves = ['profile', 'settings'];
- 
+
 var done = _.after(saves.length, function() {
   console.log('done saving!');
 });
- 
+
 _.forEach(saves, function(type) {
   asyncSave({ 'type': type, 'complete': done });
 });
@@ -19,7 +20,7 @@ Now days, the `asyncSave()` function from the example would typically be written
 await Promise.all([
   asyncSave({ type: 'profile' }),
   asyncSave({ type: 'settings' }),
-])
+]);
 
 console.log('done saving!');
 // => Logs 'done saving!' after the two async saves have completed.
@@ -29,10 +30,10 @@ If the `saves` array is dynamically generated, you can use the [`Promise.all()` 
 
 ```javascript
 const saves = getAnArrayFromSomewhere();
- 
+
 await Promise.all(saves.map(async type => {
   await asyncSave({ type });
-}))
+}));
 
 console.log('done saving!');
 // => Logs 'done saving!' after the two async saves have completed.
@@ -43,7 +44,7 @@ That being said, if you need a utility that acts like Lodash's `_.after()`, here
 ```javascript
 function after(n, func) {
   let callCount = 0;
-  return function(...args) {
+  return function (...args) {
     callCount++;
     if (callCount < n) {
       return;

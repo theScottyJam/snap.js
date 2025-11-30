@@ -1,5 +1,5 @@
 ```javascript
-Math.min(...array);
+Math.min(...array)
 ```
 
 There's a couple of very minor differences in behavior between Lodash's `_.min()`, and JavaScript's native `Math.min()` (apart from the fact that you have to spread your array into JavaScript's version).

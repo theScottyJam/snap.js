@@ -1,5 +1,6 @@
 In one-off situations, you can simply create a function to handle it:
 
+<!-- eslint-skip -->
 ```javascript
 // Always returns the second argument
 (_, x) => x

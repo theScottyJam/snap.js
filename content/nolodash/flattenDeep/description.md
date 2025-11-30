@@ -1,3 +1,3 @@
 ```javascript
-array.flat(Infinity);
+array.flat(Infinity)
 ```

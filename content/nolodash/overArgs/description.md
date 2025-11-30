@@ -4,9 +4,9 @@ Instead of this:
 const doubled = n => n * 2;
 const square = n => n ** 2;
 const originalFunc = (x, y) => [x, y];
- 
+
 const wrappedFunc = _.overArgs(originalFunc, [square, doubled]);
- 
+
 wrappedFunc(9, 3); // => [81, 6]
 ```
 

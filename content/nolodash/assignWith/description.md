@@ -15,6 +15,7 @@ function assignWith(object, sources, customizer) {
 
 However, it's possible that all you really need to do is map over your source objects before merging them, like this:
 
+<!-- eslint-skip -->
 ```javascript
 // Merge your sources together, then map over each entry, updating them as you map over them.
 const updatedEntries = Object.entries({ ...source1, ...source2, ...source3 })

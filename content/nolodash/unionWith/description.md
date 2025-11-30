@@ -15,5 +15,5 @@ function uniqWith(array, comparator) {
 // Merge the given arrays, then filter out duplicates.
 // This end-effect will be the union of these two arrays,
 // using `comparator` to decide equivalence.
-uniqWith([...array1, ...array2], comparator);
+uniqWith([...array1, ...array2], comparator)
 ```

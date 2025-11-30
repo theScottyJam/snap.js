@@ -1,7 +1,7 @@
 To check if your value is a regular expression instance:
 
 ```javascript
-value instanceof RegExp;
+value instanceof RegExp
 ```
 
 The above should be good enough for the vast majority of use-cases.
@@ -9,7 +9,7 @@ The above should be good enough for the vast majority of use-cases.
 It's generally considered a bad practice to subclass built-ins, but if you suspect that a subclass might be handed to you and you wish to exclude subclasses from your check, you can compare prototypes like this:
 
 ```javascript
-Object.getPrototypeOf(value) === RegExp.prototype;
+Object.getPrototypeOf(value) === RegExp.prototype
 ```
 
 Both of the above type-detection mechanisms have a couple of flaws:
@@ -27,7 +27,7 @@ function isRegExp(value) {
   // An argument that throws when stringified will be used
   // to prevent exec() from completing and updating value.lastIndex.
   const badArgument = {
-    toString() { throw new StringifyError(); }
+    toString() { throw new StringifyError(); },
   }
 
   try {
@@ -49,6 +49,7 @@ function isRegExp(value) {
 
 If you additionally need to ensure your are not receiving a `RegExp` instance from an inherited class, you'd also need to walk up the prototype chain. You can modify the above example and replace `return true;` with the following:
 
+<!-- eslint-skip -->
 ```javascript
 // A RegExp's prototype's chain should be
 // value -> RegExp.prototype -> Object.prototype -> null
@@ -60,7 +61,8 @@ return protoOf(protoOf(protoOf(value))) === null;
 Lodash's `_.isRegExp()` also supports cross-realm `RegExp` checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
 ```javascript
-_.isRegExp({ get [Symbol.toStringTag]() { return 'RegExp' } }); // true
+_.isRegExp({ get [Symbol.toStringTag]() { return 'RegExp' } })
+// => true
 ```
 
 In Node, Lodash will instead use `require('util').types.isRegExp(value)` for it's implementation, which you are also welcome to use if you know your code will only run in Node. This solution will also return `true` for subclasses.

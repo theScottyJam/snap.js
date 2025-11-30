@@ -1,5 +1,6 @@
 All of these solutions are equivalent. Pick the one you find to be the most readable.
 
+<!-- eslint-skip -->
 ```javascript
 const isObject = value => value === Object(value);
 

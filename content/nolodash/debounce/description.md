@@ -1,3 +1,5 @@
+<!-- Due to the repeated variable names, eslint can't lint this. You'll need to manually lint it through other means. -->
+<!-- eslint-skip -->
 ```javascript
 /*# METADATA
 [
@@ -311,7 +313,7 @@ function debounceLeadingAndTrailing(func, wait) {
  * attempt to call it during the countdown.
  * @return The value that `func` returned when it was last called.
  */
-function debounceLeadingAndTrailingWithFlushSupport(func, wait) {
+function debounceLeadingAndTrailing(func, wait) {
   let lastFuncResult;
   let timeoutId = undefined;
   // Set to undefined when no countdown is active or
@@ -356,12 +358,11 @@ function debounceLeadingAndTrailingWithFlushSupport(func, wait) {
     if (timeoutId === undefined) {
       return lastFuncResult;
     }
-    
+
     clearTimeout(timeoutId);
     return onTimeout();
   };
 
   return debounced;
 }
-
 ```
