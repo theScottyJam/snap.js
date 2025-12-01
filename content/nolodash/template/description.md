@@ -15,6 +15,7 @@ function esc(string) {
 
 With Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 // Use the "interpolate" delimiter to create a compiled template.
 var compiled = _.template('hello <%= user %>!');
@@ -24,6 +25,7 @@ compiled({ 'user': 'fred' });
 
 Without Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 const compiled = ({ user }) => `hello ${user}!`;
 compiled({ 'user': 'fred' });
@@ -32,6 +34,7 @@ compiled({ 'user': 'fred' });
 
 With Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 // Use the HTML "escape" delimiter to escape data property values.
 var compiled = _.template('<b><%- value %></b>');
@@ -41,6 +44,7 @@ compiled({ 'value': '<script>' });
 
 Without Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 const compiled = ({ value }) => `<b>${esc(value)}</b>`;
 compiled({ 'value': '<script>' });
@@ -49,6 +53,7 @@ compiled({ 'value': '<script>' });
 
 With Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 // Use the "evaluate" delimiter to execute JavaScript and generate HTML.
 var compiled = _.template('<% _.forEach(users, function(user) { %><li><%- user %></li><% }); %>');
@@ -58,6 +63,7 @@ compiled({ 'users': ['fred', 'barney'] });
 
 Without Lodash:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 const compiled = ({ users }) => {
   let result = '';
@@ -72,6 +78,7 @@ As a bonus, in the non-lodash versions, you will get proper editor support for t
 
 If you aren't satisfied with the above solution, and really want something more terse like Lodash provides, consider using a generator function instead, with perhaps another helper function to convert the generator's output into a string, as follows:
 
+<!-- eslint-disable @stylistic/quote-props -->
 ```javascript
 const stringBuilder = generator => (...args) => {
   let result = '';
@@ -83,7 +90,7 @@ const stringBuilder = generator => (...args) => {
 
 // Usage example:
 
-const compiled = stringBuilder(function*({ users }) {
+const compiled = stringBuilder(function* ({ users }) {
   for (const user of users) yield `<li>${esc(user)}</li>`;
 });
 compiled({ 'users': ['fred', 'barney'] });

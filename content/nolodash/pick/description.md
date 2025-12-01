@@ -54,7 +54,7 @@ function pick(object, keys) {
       // Optional string-path support.
       // You can remove this key.split() stuff, and simply use `keyPath = [key];`
       // if you don't need it.
-      keyPath = key.split(/[.\[\]\"]+/).filter(x => x);
+      keyPath = key.split(/[.\[\]"]+/).filter(x => x);
     } else if (Array.isArray(key)) {
       keyPath = key;
     } else {
@@ -69,7 +69,7 @@ function pick(object, keys) {
     } else if (isObject(object[head]) || Array.isArray(object[head])) {
       newObject[head] = {
         ...newObject[head] ?? {},
-        ...pick(object[head], [tail])
+        ...pick(object[head], [tail]),
       };
     }
   }

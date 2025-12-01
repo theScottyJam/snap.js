@@ -4,7 +4,7 @@ Instead of this:
 const buildMessage = _.rest((key, values) => {
   return `${key}: ${values.join(', ')}`;
 });
- 
+
 buildMessage('users', 'fred', 'barney', 'pebbles'); // => 'users: fred, barney, pebbles'
 ```
 
@@ -14,6 +14,6 @@ Use the "rest" syntax.
 const buildMessage = (key, ...values) => {
   return `${key}: ${values.join(', ')}`;
 };
- 
+
 buildMessage('users', 'fred', 'barney', 'pebbles'); // => 'users: fred, barney, pebbles'
 ```

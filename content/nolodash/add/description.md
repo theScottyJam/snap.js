@@ -5,8 +5,8 @@ augend + addend;
 One reason `_.add()` exists, is because it's a ready-made function, that can easily be passed into other functions, like this:
 
 ```
-> _.reduce([2, 3, 4], _.add);
-9
+_.reduce([2, 3, 4], _.add);
+// => 9
 ```
 
 When Lodash was first born, the only alternative at the time would be to create an entire function, using the `function` keyword.

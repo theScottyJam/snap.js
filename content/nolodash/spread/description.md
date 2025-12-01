@@ -1,5 +1,6 @@
 Instead of using `_.spread()`, you can use the spread syntax to spread arguments at the call site, such as what's seen in this example:
 
+<!-- eslint-skip -->
 ```javascript
 // -- An example from their documentation --
 var say = _.spread(function(who, what) {
@@ -20,6 +21,7 @@ say(...['fred', 'hello']); // or, in this specific case, say('fred', 'hello') do
 
 They also provided an example where it wasn't convenient to use spread syntax at the call site - in this particular case, you can just destructure the parameters.
 
+<!-- eslint-skip -->
 ```javascript
 // -- An example from their documentation --
 var numbers = Promise.all([

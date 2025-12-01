@@ -1,5 +1,6 @@
 You can use `Array.from(...)` to generate arrays filled with a range of numbers. Some concrete examples:
 
+<!-- eslint-disable @stylistic/space-infix-ops -->
 ```javascript
 // Same as _.range(5)
 Array.from({ length: 5 }, (_, i) => i) // => [0, 1, 2, 3, 4]
@@ -18,6 +19,7 @@ How it works: `Array.from()` expects an array-like (or an iterable) as the first
 
 Here's another way to accomplishing the same thing in a slightly different style:
 
+<!-- eslint-disable @stylistic/space-infix-ops -->
 ```javascript
 // Same as _.range(4, 10, 2)
 // And the same as Array.from({ length: 3 }, (_, i) => 4 + i*2) // => [4, 6, 8]

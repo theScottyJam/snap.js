@@ -1,6 +1,6 @@
 ```javascript
 function startCase(string) {
-  const capitalize = ([first='', ...rest]) => first.toUpperCase() + rest.join('');
+  const capitalize = ([first = '', ...rest]) => first.toUpperCase() + rest.join('');
   return string.split(' ').map(capitalize).join(' ');
 }
 ```

@@ -5,8 +5,8 @@ minuend - subtrahend;
 One reason `_.subtract()` exists, is because it's a ready-made function, that can easily be passed into other functions, like this:
 
 ```javascript
-> _.reduce([10, 3, 4], _.subtract);
-3
+_.reduce([10, 3, 4], _.subtract);
+// => 3
 ```
 
 When Lodash was first born, the only alternative at the time would be to create an entire function, using the `function` keyword.

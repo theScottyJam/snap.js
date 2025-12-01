@@ -3,7 +3,7 @@ function result(object, path, defaultValue = undefined) {
   // Optional string-path support.
   // You can remove this `if` block if you don't need it.
   if (typeof path === 'string') {
-    path = path.split(/[.\[\]\"]+/).filter(x => x);
+    path = path.split(/[.\[\]"]+/).filter(x => x);
   }
 
   const [head, ...tail] = path;

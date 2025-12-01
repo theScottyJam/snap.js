@@ -7,8 +7,8 @@ Math.round(number);
 Otherwise:
 
 ```javascript
-function round(number, precision=0) {
-  const factor = 10**precision;
+function round(number, precision = 0) {
+  const factor = 10 ** precision;
   return Math.round(number * factor) / factor;
 }
 ```
