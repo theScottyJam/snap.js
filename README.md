@@ -52,6 +52,17 @@ To get a good idea of the vibe I'm shooting for with thesee Lodash doc entries, 
   * If you give Lodash a bad parameter, they like to try to coerce it into something usable instead of throwing an error. Don't bother supporting this in your non-lodash replacement functions. The end-user is encouraged to modify these helper functions to fit their project's style, and that could be mean "don't do any explicit handling of bad parameters as that's too much noise in the codebase" or "throw runtime errors on bad parameters" or "add TypeScript type definitions". This website's job is to just provide the solutions in their simplist form so that it's easy to build on top of them if needed.
   * Some Lodash functions should simply not be used. In cases like this, explain why its a bad idea to use the given function, then provide a non-lodash replacement anyways.
 
+## Code sample formatting
+
+These are general guidelines I've been striving to follow. They're often broken for various reasons - sometimes unintentionally, many times I just feel like it looks better to break it in a specific scenario.
+* If you're have a codeblock that contains an incomplete expression, omit the semicolon on that expression. For example, `array.map(x => x + 1)` should not be shown with a semicolon if that's the only thing contained on the line - that line of code is useless by itself, and it's expected that the reader would add more to the line before using it.
+* If you wish to show what a line would evaluate to or what it would output, use `// =>`, followed by its output.
+  * If there's only one line of code in the code block, then prefer placing the `// =>` on its own line, after the line of code. Otherwise, prefer placing it on the same line as the code it's describing.
+  * For simple examples, prefer avoiding the use of `console.log()` and instead just write the expression followed by a `// =>` comment.
+
+The linter will run over the code samples in the markdown entries, but various rules have been disabled to make the linter more permissive. For example, it won't check the use of semicolons due to the fact that the above guidelines often recommend omitting semicolons on incomplete lines. There's also many instances where the linter will need to be disabled entirely for a codeblock, such as if a single code block is showing many different ways to define the same variable - the linter will chock over that variable re-declaration, and since it's a syntax error, it wouldn't be able to recover from it unless disabled entirely with a `<!-- eslint-skip -->` comment.
+
+
 ## Updating the Snap Framework Code
 
 The actual source code for the snap framework contains lots of pragmas to describe how to parse and present various parts of the framework. The pragma parsing code is somewhat brittle, but it does the job, but it does mean that any time you make a change to the source code, make sure to pay close attention to how it looks on the rendered page. Does it look ok in both the fully documented mode and the "classic" mode? Does it look ok in mobile view? Do the examples open up fine and run?
