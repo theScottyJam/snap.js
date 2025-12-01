@@ -135,7 +135,7 @@ function renderPageContents({ fullText, minifiedText, lineCount, signalLoading, 
   const signalOnLatestVersion = signalVersion.use(version => version === frameworkVersions[0].version);
   const version = signalVersion.get(); // The whole component refreshes each time the version changes, so it's safe to just pull it out.
   return html`
-    ${new OverviewSection()}
+    ${new OverviewSection({ signalOnLatestVersion })}
     <div style="height: 20px"></div>
     ${new FeatureShowcaseSection()}
     <h2 class="header has-section-description">— GRAB 'N GO —</h2>
