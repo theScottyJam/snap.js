@@ -3,12 +3,12 @@ The only difference between `_.zipWith()` and `_.unzipWith()` is how it accepts 
 <!-- eslint-disable @stylistic/no-multi-spaces -->
 ```javascript
 // With _.zipWith(), arrays are passed in as separate parameters
-_.zipWith([10, 20], [1, 2], (a, b) => a + b)     // [11, 22]
+_.zipWith([10, 20], [1, 2], (a, b) => a + b)     // => [11, 22]
 // With _.unzipWith(), arrays are placed inside a single larger array.
-_.unzipWith([[10, 20], [1, 2]], (a, b) => a + b) // [11, 22]
+_.unzipWith([[10, 20], [1, 2]], (a, b) => a + b) // => [11, 22]
 ```
 
-This means that the you don't need both `zipWith()` and `unzipWith()`, you can just use a `zipWith()` implementation for both use-cases:
+This means that the you don't need both `zipWith()` and `unzipWith()`, you can just use [a `zipWith()` implementation](#!/nolodash/zipWith) for both use-cases:
 
 ```javascript
 function zipWith(...args) {

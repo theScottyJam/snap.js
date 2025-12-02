@@ -1,4 +1,4 @@
-We will use a plain JavaScript implementation of `_.sortedLastIndex()` to help define `sortedLastIndexOf()`.
+We will start with [a plain JavaScript implementation of `_.sortedLastIndex()`](#!/nolodash/sortedLastIndex) to help define `sortedLastIndexOf()`.
 
 ```javascript
 function sortedLastIndex(array, value, _range) {
@@ -14,7 +14,11 @@ function sortedLastIndex(array, value, _range) {
 
   return sortedLastIndex(array, value, newRange);
 }
+```
 
+We can now implement `_.sortedLastIndexOf()` like this:
+
+```javascript
 function sortedLastIndexOf(array, value) {
   const index = sortedLastIndex(array, value) - 1;
   return index > -1 && array[index] === value ? index : -1;

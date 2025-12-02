@@ -1,4 +1,4 @@
-We will use a plain JavaScript implementation of `_.sortedIndex()` to help define `sortedIndexOf()`.
+We will start with [a plain JavaScript implementation of `_.sortedIndex()`](#!/nolodash/sortedIndex) to help define `sortedIndexOf()`.
 
 ```javascript
 function sortedIndex(array, value, _range) {
@@ -14,7 +14,11 @@ function sortedIndex(array, value, _range) {
 
   return sortedIndex(array, value, newRange);
 }
+```
 
+We can now implement `_.sortedIndexOf()` like this:
+
+```javascript
 function sortedIndexOf(array, value) {
   const index = sortedIndex(array, value);
   return array[index] === value ? index : -1;

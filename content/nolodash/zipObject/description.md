@@ -1,4 +1,4 @@
-We will use a plain JavaScript implementation of `_.zip()` to solve this problem.
+We will start with [a plain JavaScript implementation of `_.zip()`](#!/nolodash/zip).
 
 ```javascript
 function zip(...arrays) {
@@ -14,8 +14,12 @@ function zip(...arrays) {
 
   return result;
 }
+```
 
+We can now mimic `_.zipObject()` like this:
+
+```javascript
 // First zips the keys and values,
 // then build an object from the zipped entries.
-Object.fromEntries(zip(props, values));
+Object.fromEntries(zip(props, values))
 ```

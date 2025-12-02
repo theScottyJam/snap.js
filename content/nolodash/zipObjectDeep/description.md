@@ -1,4 +1,4 @@
-It's recommended to avoid this function. Building objects via dynamic string paths may (or may not) be indicative of a deeper issue with how the problem is being approached. But, if you really do need support for this sort of thing, it can be done, with the help of the plain JavaScript implementation of `_.set()` and `_.zip()`.
+It's recommended to avoid this function. Building objects via dynamic string paths may (or may not) be indicative of a deeper issue with how the problem is being approached. But, if you really do need support for this sort of thing, it can be done, with the help of the plain JavaScript implementation of [`_.set()`](#!/nolodash/set) and [`_.zip()`](#!/nolodash/zip).
 
 ```javascript
 function set(object, path, value) {
@@ -42,7 +42,11 @@ function zip(...arrays) {
 
   return result;
 }
+```
 
+Now we can define `zipObjectDeep()` as follows:
+
+```javascript
 function zipObjectDeep(props, values) {
   const resultObj = {};
   for (const [path, value] of zip(props, values)) {

@@ -56,6 +56,5 @@ _.isWeakSet({ get [Symbol.toStringTag]() { return 'WeakSet' } })
 
 If you're exclusively using Node, you can use `require('util').types.isWeakSet(value)` to specifically check if the value is a WeakSet. This solution will also return `true` for subclasses.
 
-Some very early JavaScript proposals may provide support for more ergonomic ways to do cross-realm type checking:
-* [istypes](https://github.com/jasnell/proposal-istypes)
+Future JavaScript proposals may provide support for more ergonomic ways to do cross-realm type checking:
 * [Pattern matching's built-in matchers](https://github.com/tc39/proposal-pattern-matching#built-in-custom-matchers-1)

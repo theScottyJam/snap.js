@@ -16,7 +16,7 @@ _.zip([1, 2], ['A', 'B'])     // => [[1, 'A'], [2, 'B']]
 _.unzip([[1, 2], ['A', 'B']]) // => [[1, 'A'], [2, 'B']]
 ```
 
-This means that the you don't need both `zip()` and `unzip()`, you can just use a `zip` implementation for both use-cases:
+This means that the you don't need both `zip()` and `unzip()`, you can just use [a `zip` implementation](#!/nolodash/zip) for both use-cases:
 
 ```javascript
 function zip(...arrays) {

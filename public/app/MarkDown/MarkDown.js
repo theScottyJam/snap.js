@@ -65,6 +65,7 @@ function getStyles() {
     code {
       background: #ddd;
       padding: 0 2px;
+      overflow-wrap: break-word;
     }
 
     ${customElements.getName(CodeViewer)} {

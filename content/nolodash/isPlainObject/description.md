@@ -55,6 +55,5 @@ class SpecialClass {
 _.isPlainObject(new SpecialClass()) // => true
 ```
 
-Some very early JavaScript proposals may provide support for cross-realm type checking:
-* [istypes](https://github.com/jasnell/proposal-istypes)
+Future JavaScript proposals may provide support for cross-realm type checking:
 * [Pattern matching's built-in matchers](https://github.com/tc39/proposal-pattern-matching#built-in-custom-matchers-1)

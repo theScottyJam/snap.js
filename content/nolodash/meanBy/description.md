@@ -1,5 +1,6 @@
 ```javascript
 function mean(array) {
+  // Or use `Math.sumPrecise(array) / array.length` once sumPrecise() is widely available
   return array.reduce((a, b) => a + b) / array.length;
 }
 

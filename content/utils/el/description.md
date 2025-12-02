@@ -30,4 +30,4 @@ el('div', { id: 'my-div' }, [
 
 ## Additional Information
 
-While `el()` can be useful for quick-and-dirty HTML-building, for more complicated content you may want to consider custom elements with HTML templates. [The following MDN guide can help get you started with this style of programming](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots).
+`el()` can be useful for quick-and-dirty HTML-building, but it won't help you write code that automatically reacts to state changes. If you need that level of reactivity, consider reaching for a proper framework instead. If you need something lightweight and transparent, consider using [the Snap Framework](#!/framework), otherwise, there's plenty of other frameworks out there to choose from.
