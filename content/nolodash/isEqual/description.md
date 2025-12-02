@@ -17,7 +17,7 @@ function isEqual(value1, value2) {
     if (Array.isArray(value)) return 'array';
     if (value instanceof Map) return 'map';
     if (isPlainObject(value)) return 'plainObject';
-    throw new Error(`deeply comparing an instance of type ${value1.constructor?.name} is not supported.`);
+    throw new Error(`deeply comparing an instance of type ${value.constructor?.name} is not supported.`);
   };
 
   const type = getType(value1);

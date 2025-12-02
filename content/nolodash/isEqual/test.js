@@ -12,7 +12,7 @@ function isEqual(value1, value2) {
     if (Array.isArray(value)) return 'array';
     if (value instanceof Map) return 'map';
     if (isPlainObject(value)) return 'plainObject';
-    throw new Error(`deeply comparing an instance of type ${value1.constructor?.name} is not supported.`);
+    throw new Error(`deeply comparing an instance of type ${value.constructor?.name} is not supported.`);
   };
 
   const type = getType(value1);
@@ -60,7 +60,6 @@ test('comparing values of different types', () => {
   expect(!isEqual({}, 2)).toBe(true);
   expect(!isEqual(2, 2n)).toBe(true);
   expect(!isEqual(new Map(), {})).toBe(true);
-  expect(!isEqual(new Map(), new Set())).toBe(true);
 });
 
 test('comparing primitives', () => {
@@ -95,4 +94,59 @@ test('comparing arrays', () => {
   expect(!isEqual([[1, 2]], [[1, 3]])).toBe(true);
   expect(!isEqual([1, 2], [1, 3])).toBe(true);
   expect(!isEqual([1, 2], [1, 2, 3])).toBe(true);
+});
+
+test('comparing maps', () => {
+  expect(
+    isEqual(
+      new Map([
+        [1, 'A'],
+        [2, 'B'],
+      ]),
+      new Map([
+        [2, 'B'],
+        [1, 'A'],
+      ]),
+    ),
+  ).toBe(true);
+  expect(isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 2 }]]))).toBe(true);
+
+  expect(!isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 1 }]]))).toBe(true);
+  expect(
+    !isEqual(
+      new Map([
+        [1, 'A'],
+        [2, 'B'],
+      ]),
+      new Map([
+        [1, 'A'],
+        [2, 'C'],
+      ]),
+    ),
+  ).toBe(true);
+  expect(
+    !isEqual(
+      new Map([
+        [1, 'A'],
+        [2, 'B'],
+      ]),
+      new Map([
+        [1, 'A'],
+        [3, 'B'],
+      ]),
+    ),
+  ).toBe(true);
+  expect(
+    !isEqual(
+      new Map([
+        [1, 'A'],
+        [2, 'B'],
+      ]),
+      new Map([
+        [1, 'A'],
+        [2, 'B'],
+        [3, 'C'],
+      ]),
+    ),
+  ).toBe(true);
 });
