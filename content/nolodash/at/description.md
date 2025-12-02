@@ -34,10 +34,11 @@ One of the primary reasons Lodash's `_.get()` and `_.at()` functions was commonl
 
 For example, these two are the same:
 
-<!-- eslint-skip -->
 ```javascript
 _.at(obj, ['a.b', 'c.d'])
+```
 
+```javascript
 [obj?.a?.b, obj?.c?.d]
 ```
 

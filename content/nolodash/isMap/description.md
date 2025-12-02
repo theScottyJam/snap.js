@@ -49,7 +49,6 @@ return protoOf(protoOf(protoOf(value))) === null;
 
 Lodash's `_.isMap()` also supports cross-realm `Map` checks, but it uses a less robust algorithm that can be easily fooled. For example, if you run Lodash in the browser, the following will return the wrong answer.
 
-<!-- eslint-skip -->
 ```javascript
 _.isMap({ get [Symbol.toStringTag]() { return 'Map' } })
 // => true

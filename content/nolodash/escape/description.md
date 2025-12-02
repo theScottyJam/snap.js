@@ -11,20 +11,25 @@ function escapeHtmlChars(string) {
 
 Please be careful when using functions like this as improper usage can result in XSS vulnerabilities. The following is a quick guideline on how this `escapeHtmlChars()` function should and should not be used.
 
-<!-- eslint-skip -->
 ```javascript
 // ✓ - It is safe to use escaped user input between most HTML tags.
 // (Just don't put it inside something silly like the <script> tag).
 `<p>${escapeHtmlChars(untrustedUserInput)}</p>`
+```
 
+```javascript
 // ✓ - It is generally safe to use escaped user input inside of HTML attributes.
 // (Just don't put it inside something silly like onclick="...")
 `<div data-author="${escapeHtmlChars(untrustedUserInput)}">...</div>`
+```
 
+```javascript
 // ✕ - Attribute values should always be quoted when they are being populated
 // with user-supplied data.
 `<img data-author=${escapeHtmlChars(untrustedUserInput)}>`
+```
 
+```javascript
 // ✕ - Using escapeHtmlChars() isn't enough if you want to place
 // the value where a URL is expected. This is because HTML
 // supports fake protocols like `javascript:` that, when used, will execute

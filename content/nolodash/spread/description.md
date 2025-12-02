@@ -6,15 +6,17 @@ Instead of using `_.spread()`, you can use the spread syntax to spread arguments
 var say = _.spread(function(who, what) {
   return who + ' says ' + what;
 });
- 
+
 say(['fred', 'hello']);
 // => 'fred says hello'
+```
 
+```javascript
 // -- The example re-written to use spread syntax --
 function say(who, what) {
   return who + ' says ' + what;
 };
- 
+
 say(...['fred', 'hello']); // or, in this specific case, say('fred', 'hello') does the same thing.
 // => 'fred says hello'
 ```
@@ -28,21 +30,27 @@ var numbers = Promise.all([
   Promise.resolve(40),
   Promise.resolve(36)
 ]);
- 
+
 numbers.then(_.spread(function(x, y) {
   return x + y;
 }));
 // => a Promise of 76
+```
 
+<!-- eslint-disable @stylistic/comma-dangle -->
+```javascript
 // -- The example re-written to use destructuring --
 const numbers = Promise.all([
   Promise.resolve(40),
   Promise.resolve(36)
 ]);
- 
+
 numbers.then(([x, y]) => x + y);
 // => a Promise of 76
+```
 
+<!-- eslint-disable @stylistic/comma-dangle -->
+```javascript
 // -- The example re-written to also make use of async/await --
 const [x, y] = await Promise.all([
   Promise.resolve(40),

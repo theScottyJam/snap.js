@@ -2,22 +2,24 @@ You can use arrow functions to achieve the same results.
 
 To bind a method's this parameter to the object it is found on:
 
-<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bindKey(obj, 'method')
+```
 
+```javascript
 // You can use an arrow function
 (...args) => obj.method(...args)
 ```
 
 If you wish to partially apply some initial arguments in addition to binding a this parameter:
 
-<!-- eslint-skip -->
 ```javascript
 // Instead of this
 _.bindKey(obj, 'method', 1, 2, 3)
+```
 
+```javascript
 // You can use an arrow function
 (...args) => obj.method(1, 2, 3, ...args)
 ```
@@ -27,7 +29,9 @@ If you wish to partially apply some arguments from any position in addition to b
 ```javascript
 // Instead of this
 _.bindKey(obj, 'method', 1, _, 2, 3)
+```
 
+```javascript
 // You can use an arrow function
 x => obj.method(1, x, 2, 3)
 ```

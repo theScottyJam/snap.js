@@ -1,7 +1,8 @@
-<!-- eslint-skip -->
 ```javascript
 Number(value)
-// or
+```
+
+```javascript
 +value
 ```
 

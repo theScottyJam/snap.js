@@ -6,8 +6,7 @@
 
 ## Examples
 
-<!-- eslint-disable-next-line markdown/fenced-code-language -->
-```
+```javascript
 invert({ five: '5', six: '6' })
 // => { 5: "five", 6: "six" }
 ```

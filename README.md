@@ -60,7 +60,9 @@ These are general guidelines I've been striving to follow. They're often broken 
   * If there's only one line of code in the code block, then prefer placing the `// =>` on its own line, after the line of code. Otherwise, prefer placing it on the same line as the code it's describing.
   * For simple examples, prefer avoiding the use of `console.log()` and instead just write the expression followed by a `// =>` comment.
 
-The linter will run over the code samples in the markdown entries, but various rules have been disabled to make the linter more permissive. For example, it won't check the use of semicolons due to the fact that the above guidelines often recommend omitting semicolons on incomplete lines. There's also many instances where the linter will need to be disabled entirely for a codeblock, such as if a single code block is showing many different ways to define the same variable - the linter will chock over that variable re-declaration, and since it's a syntax error, it wouldn't be able to recover from it unless disabled entirely with a `<!-- eslint-skip -->` comment.
+The linter will run over the code samples in the markdown entries, but various rules have been disabled to make the linter more permissive. For example, it won't check the use of semicolons due to the fact that the above guidelines often recommend omitting semicolons on incomplete lines. There's also many instances where the linter will need to be disabled entirely for a codeblock, such as if a single code block contains an object literal - that will be parsed as a block and may cause errors. In scenarios like these, `<!-- eslint-skip -->` can be used to skip its parsing.
+
+If you wish to show multiple ways of defining a variable, show each example in a separate code block. The code blocks will be smashed together when shown to the user, making them look like one long code block (with a couple of minor differences). If you don't do this, the linter will throw a parsing error due to the variable redeclaration and will refuse to lint anything from that code block as a result.
 
 
 ## Updating the Snap Framework Code

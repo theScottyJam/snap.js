@@ -12,8 +12,7 @@
 
 ## Examples
 
-<!-- eslint-disable-next-line markdown/fenced-code-language -->
-```
+```javascript
 mapKeys({ key1: 2, key2: 3 }, k => `prefix_${k}`)
 // => { prefix_key1: 2, prefix_key2: 3 }
 ```

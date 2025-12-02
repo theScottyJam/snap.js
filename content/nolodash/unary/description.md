@@ -1,10 +1,11 @@
 You can get the same effect by simply using arrow function syntax.
 
-<!-- eslint-skip -->
 ```javascript
 // With Lodash
 ['6', '8', '10'].map(_.unary(parseInt)) // => [6, 8, 10]
+```
 
+```javascript
 // Without Lodash
 ['6', '8', '10'].map(s => parseInt(s)) // => [6, 8, 10]
 ```

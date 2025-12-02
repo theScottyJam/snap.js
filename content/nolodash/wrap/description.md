@@ -1,13 +1,16 @@
 You can get the same effect by simply using arrow function syntax.
 
-<!-- eslint-skip -->
 ```javascript
 const add = (x, y) => x + y;
+```
 
+```javascript
 // With Lodash
 const addOne = _.wrap(1, add);
 addOne(2) // => 3
+```
 
+```javascript
 // Without Lodash
 const addOne = x => add(1, x);
 addOne(2) // => 3

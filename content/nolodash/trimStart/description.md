@@ -6,6 +6,7 @@ string.trimStart()
 
 If you want to specify which characters to trim, use the following:
 
+<!-- Due to the repeated variable names, eslint can't lint this. You'll need to manually lint it through other means. -->
 <!-- eslint-skip -->
 ```javascript
 /*# METADATA

@@ -1,13 +1,16 @@
 In one-off situations, you can simply create a function to handle it:
 
-<!-- eslint-skip -->
 ```javascript
 // Always returns the second argument
 (_, x) => x
+```
 
+```javascript
 // Always returns the fifth argument
 (...args) => args[4]
+```
 
+```javascript
 // Always returns the second-to-last argument
 (...args) => args.at(-2)
 ```
