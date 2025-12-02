@@ -23,8 +23,8 @@
     "showdown": "^2.1.0"
   },
   "scripts": {
-    "predeploy": "npm run lint-fix && npm run test && npm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "npm run lint:fix && npm run test && npm run build",
+    "deploy": "gh-pages -d public",
     "start": "node ./buildContent.js && serve ./public",
     "build": "node ./buildContent.js",
     "build:watch": "nodemon --watch './content/**/*' --ext '*' --exec 'npm run build'",
