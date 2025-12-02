@@ -100,7 +100,7 @@ function useVersion(pageInfo) {
         const version = parts[2];
         if (parts[2] === frameworkVersions[0].version) {
           // Change the URL to simply /framework if they're viewing the latest version.
-          window.history.replaceState({}, 'Title', '/#!/framework');
+          window.history.replaceState({}, 'Title', '#!/framework');
         }
         return version;
       }
