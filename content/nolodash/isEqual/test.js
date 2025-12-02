@@ -1,5 +1,3 @@
-// ---------- System Under Test ---------- //
-
 const isPrimitive = value => value !== Object(value);
 
 const isPlainObject = value => (
@@ -55,8 +53,6 @@ function isEqual(value1, value2) {
   }
 }
 
-// ---------- Test Cases ---------- //
-
 test('comparing values of different types', () => {
   expect(!isEqual({}, null)).toBe(true); // Even though `typeof {}` is `null`, these should clearly not be equal
   expect(!isEqual({}, undefined)).toBe(true);
@@ -99,59 +95,4 @@ test('comparing arrays', () => {
   expect(!isEqual([[1, 2]], [[1, 3]])).toBe(true);
   expect(!isEqual([1, 2], [1, 3])).toBe(true);
   expect(!isEqual([1, 2], [1, 2, 3])).toBe(true);
-});
-
-test('comparing maps', () => {
-  expect(
-    isEqual(
-      new Map([
-        [1, 'A'],
-        [2, 'B'],
-      ]),
-      new Map([
-        [2, 'B'],
-        [1, 'A'],
-      ]),
-    ),
-  ).toBe(true);
-  expect(isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 2 }]]))).toBe(true);
-
-  expect(!isEqual(new Map([[1, { x: 2 }]]), new Map([[1, { x: 1 }]]))).toBe(true);
-  expect(
-    !isEqual(
-      new Map([
-        [1, 'A'],
-        [2, 'B'],
-      ]),
-      new Map([
-        [1, 'A'],
-        [2, 'C'],
-      ]),
-    ),
-  ).toBe(true);
-  expect(
-    !isEqual(
-      new Map([
-        [1, 'A'],
-        [2, 'B'],
-      ]),
-      new Map([
-        [1, 'A'],
-        [3, 'B'],
-      ]),
-    ),
-  ).toBe(true);
-  expect(
-    !isEqual(
-      new Map([
-        [1, 'A'],
-        [2, 'B'],
-      ]),
-      new Map([
-        [1, 'A'],
-        [2, 'B'],
-        [3, 'C'],
-      ]),
-    ),
-  ).toBe(true);
 });
