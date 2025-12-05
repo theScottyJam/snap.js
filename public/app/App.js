@@ -68,16 +68,24 @@ export const App = defineStyledElement('App', getStyles, () => {
             const { OverviewPage } = await import('./OverviewPage/OverviewPage.js');
             if (signalAborted.get()) return;
 
-            const [utilsContent, nolodashContent] = await Promise.all([
+            const [utilsContent, nolodashContent, nolodashFaqHtml] = await Promise.all([
               import('../utilsContent.json', { with: { type: 'json' } })
                 .then(response => response.default),
               import('../nolodashContent.json', { with: { type: 'json' } })
                 .then(response => response.default),
+              // When import attributes support `type: 'text'`, we can swap this for the import() syntax, and get caching for free.
+              fetch('nolodashFaq.html')
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Failed to load no-lodash faq - received a status code of ' + response.status);
+                  }
+                  return response.text();
+                }),
             ]);
             updateSignalContent({ utils: utilsContent, nolodash: nolodashContent });
             if (signalAborted.get()) return;
 
-            return addToLifecycle(() => new OverviewPage({ signalContent, pageInfo }));
+            return addToLifecycle(() => new OverviewPage({ signalContent, pageInfo, nolodashFaqHtml }));
           }),
         },
       ]),

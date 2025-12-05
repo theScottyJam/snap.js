@@ -4,7 +4,7 @@ import { defineStyledElement, extractUtilityPageTypeFromRoute } from '../shared.
 import { assert } from '../util.js';
 import { DocEntry } from './DocEntry.js';
 
-export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ signalContent, pageInfo }) => {
+export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ signalContent, pageInfo, nolodashFaqHtml }) => {
   const { signalPage } = pageInfo;
 
   const signalFilterText = new Signal('');
@@ -33,6 +33,7 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
     ${renderPageSummary({
       signalTopLevelPage: signalUtilityPageType,
       signalPageContent: Signal.use([signalContent, signalUtilityPageType], (content, utilityPageType) => content[utilityPageType]),
+      nolodashFaqHtml,
     })}
     ${renderChoice([
       {
@@ -84,7 +85,7 @@ function renderCategory({ heading, signalEntries, pageInfo }) {
   ]);
 }
 
-function renderPageSummary({ signalTopLevelPage, signalPageContent }) {
+function renderPageSummary({ signalTopLevelPage, signalPageContent, nolodashFaqHtml }) {
   return renderChoice([
     {
       signalWhen: signalTopLevelPage.use(topLevelPage => topLevelPage === 'utils'),
@@ -138,52 +139,13 @@ function renderPageSummary({ signalTopLevelPage, signalPageContent }) {
           <summary>
             <strong>FAQ</strong>
           </summary>
-          ${renderNolodashFaq()}
+          ${new MarkDown({ signalContentHtml: new Signal(nolodashFaqHtml) })}
         </details>
       `,
     },
     {
       signalWhen: new Signal(true),
       render: () => html``,
-    },
-  ]);
-}
-
-// { type: 'unready' | 'loading' } { type: 'ready', value: string }
-const signalNolodashFaq = new Signal({ type: 'unready' });
-
-function renderNolodashFaq() {
-  if (signalNolodashFaq.get().type === 'unready') {
-    signalNolodashFaq.set({ type: 'loading' });
-    (async function () {
-      try {
-        const responseText = await fetch('nolodashFaq.html')
-          .then(response => {
-            if (!response.ok) throw new Error('non-2xx response received while fetching FAQ.');
-            return response.text();
-          });
-        signalNolodashFaq.set({ type: 'ready', value: responseText });
-      } catch (error) {
-        signalNolodashFaq.set({ type: 'unready' });
-        throw error;
-      }
-    })();
-  }
-
-  return renderChoice([
-    {
-      signalWhen: signalNolodashFaq.use(nolodashFaq => nolodashFaq.type === 'unready'),
-      render: () => html`<p>Failed to load the FAQ</p>`,
-    },
-    {
-      signalWhen: signalNolodashFaq.use(nolodashFaq => nolodashFaq.type === 'loading'),
-      render: () => html`<p>Loading...</p>`,
-    },
-    {
-      signalWhen: signalNolodashFaq.use(nolodashFaq => nolodashFaq.type === 'ready'),
-      render: () => new MarkDown({
-        signalContentHtml: signalNolodashFaq.use(nolodashFaq => nolodashFaq.value),
-      }),
     },
   ]);
 }
