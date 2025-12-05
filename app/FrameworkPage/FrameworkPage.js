@@ -14,48 +14,40 @@ const frameworkVersions = [
   { version: '1.0', lineCount: 195 },
 ];
 
-export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ pageInfo }) => {
-  const signalVersion = useVersion(pageInfo);
-  const signalSnapFrameworkText = new Signal(undefined);
+export const renderFrameworkPageAsync = async ({ pageInfo, signalAborted, addToLifecycle, goToPageLoadError }) => {
+  const snapFrameworkText = await loadPageDependencies(getVersion(pageInfo.signalPage.get()));
+  if (signalAborted.get()) return;
+
+  return addToLifecycle(() => new FrameworkPage({ pageInfo, snapFrameworkText, goToPageLoadError }));
+};
+
+const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ pageInfo, snapFrameworkText: startingSnapFrameworkText, goToPageLoadError }) => {
+  const signalVersion = pageInfo.signalPage.use(route => getVersion(route));
+  const signalSnapFrameworkText = new Signal(startingSnapFrameworkText);
   const signalLoading = new Signal(false);
-  const signalLoadFailed = new Signal(false);
 
-  const getTextResponse = resp => {
-    if (!resp.ok) {
-      throw new Error(`Failed to load a required resource - error code: ${resp.code}`);
-    }
-    return resp.text();
-  };
-
+  let skip = true;
   signalVersion.use(async version => {
-    if (version === undefined) {
-      return;
-    }
-
+    if (skip) return;
     const abortController = new AbortController();
     useCleanup(() => abortController.abort());
     signalLoading.set(true);
     try {
-      const [fullText, minifiedText] = await Promise.all([
-        fetch(`framework/snapFramework-${version}.js`, { signal: abortController.signal })
-          .then(getTextResponse),
-        fetch(`framework/snapFramework-${version}.min.js`, { signal: abortController.signal })
-          .then(getTextResponse),
-      ]);
-
-      const lineCount = frameworkVersions.find(verInfo => verInfo.version === version).lineCount;
-      signalSnapFrameworkText.set({ fullText, minifiedText, version, lineCount });
+      signalSnapFrameworkText.set(
+        await loadPageDependencies(version, { signal: abortController.signal }),
+      );
     } catch (error) {
       if (error.name === 'AbortError') {
         // ignore it
       } else {
-        signalLoadFailed.set(true);
+        goToPageLoadError();
         throw error;
       }
     } finally {
       signalLoading.set(false);
     }
   });
+  skip = false;
 
   return html`
     ${renderChoice([
@@ -66,7 +58,7 @@ export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ 
         `,
       },
       {
-        signalWhen: signalSnapFrameworkText,
+        signalWhen: new Signal(true),
         // Using renderEach() to force the content to reload whenever the version number changes
         render: () => renderEach(
           signalSnapFrameworkText.use(textInfo => [[textInfo.version, textInfo]]),
@@ -75,60 +67,52 @@ export const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ 
           },
         ),
       },
-      {
-        signalWhen: signalLoadFailed,
-        render: renderLoadFailed,
-      },
-      {
-        signalWhen: new Signal(true),
-        render: renderLoading,
-      },
     ])}
   `;
 });
 
-/** Returns an undefined signal if the route was bad. */
-function useVersion(pageInfo) {
-  return pageInfo.signalPage.use(route => {
-    if (route === 'framework') {
-      return frameworkVersions[0].version;
-    }
-
-    const parts = route.split('/');
-    if (parts.length === 3 && parts[0] === 'framework' && parts[1] === 'release') {
-      if (frameworkVersions.some(verInfo => verInfo.version === parts[2])) {
-        const version = parts[2];
-        if (parts[2] === frameworkVersions[0].version) {
-          // Change the URL to simply /framework if they're viewing the latest version.
-          window.history.replaceState({}, 'Title', '#!/framework');
-        }
-        return version;
-      }
-    }
-
+async function loadPageDependencies(version, { signal } = {}) {
+  if (version === undefined) {
     return undefined;
-  });
+  }
+
+  const getTextResponse = resp => {
+      if (!resp.ok) {
+        throw new Error(`Failed to load a required resource - error code: ${resp.code}`);
+      }
+      return resp.text();
+    };
+
+  const [fullText, minifiedText] = await Promise.all([
+    fetch(`framework/snapFramework-${version}.js`, { signal: signal })
+      .then(getTextResponse),
+    fetch(`framework/snapFramework-${version}.min.js`, { signal: signal })
+      .then(getTextResponse),
+  ]);
+
+  const lineCount = frameworkVersions.find(verInfo => verInfo.version === version).lineCount;
+  return { fullText, minifiedText, version, lineCount };
 }
 
-function renderLoading() {
-  const signalOpacity = new Signal(0);
+/** Returns an undefined signal if the route was bad. */
+function getVersion(route) {
+  if (route === 'framework') {
+    return frameworkVersions[0].version;
+  }
 
-  const timeoutId = setTimeout(() => signalOpacity.set(1), 1000);
-  useCleanup(() => clearTimeout(timeoutId));
+  const parts = route.split('/');
+  if (parts.length === 3 && parts[0] === 'framework' && parts[1] === 'release') {
+    if (frameworkVersions.some(verInfo => verInfo.version === parts[2])) {
+      const version = parts[2];
+      if (parts[2] === frameworkVersions[0].version) {
+        // Change the URL to simply /framework if they're viewing the latest version.
+        window.history.replaceState({}, 'Title', '#!/framework');
+      }
+      return version;
+    }
+  }
 
-  return html`
-    <p class="loading" ${set({
-      style: signalOpacity.use(opacity => `opacity: ${opacity}`),
-    })}>
-      Loading...
-    </p>
-  `;
-}
-
-function renderLoadFailed() {
-  return html`
-    <p class="load-failed">Failed to load page.</p>
-  `;
+  return undefined;
 }
 
 function renderPageContents({ fullText, minifiedText, lineCount, signalLoading, signalVersion, pageInfo }) {
@@ -159,7 +143,7 @@ function versionPicker({ signalLoading, signalVersion, pageInfo }) {
     <div class="version-picker-row">
       ${renderChoice([{
         signalWhen: signalLoading,
-        render: () => html`<p class="inline-loading">Loading...</p>`,
+        render: () => html`<p class="loading">Loading...</p>`,
       }])}
       <a class="changelog" href="https://github.com/theScottyJam/snap.js/blob/main/FRAMEWORK_CHANGELOG.md" rel="noreferrer">
         Changelog
@@ -199,19 +183,6 @@ function renderTextWithTooltip(text, tooltip) {
 
 function getStyles() {
   return `
-    .loading {
-      color: #555;
-      margin-left: 20px;
-      transition: opacity 0.1s;
-    }
-
-    .load-failed {
-      color: #a00;
-      margin-left: 20px;
-      font-weight: bold;
-      letter-spacing: 0.08em;
-    }
-
     .header {
       color: rgb(0, 41, 34);
       font-size: 1.4rem;
@@ -243,7 +214,7 @@ function getStyles() {
       gap: 4px;
     }
 
-    .inline-loading {
+    .loading {
       margin: 0;
       align-self: center;
       color: #555;
