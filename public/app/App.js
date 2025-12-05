@@ -1,4 +1,4 @@
-import { html, renderChoice, set, Signal, useCleanup } from './snapFramework.js';
+import { html, renderChoice, set, Signal, useCleanup, withLifecycle } from './snapFramework.js';
 import {
   classNameBuilder,
   defineStyledElement,
@@ -8,59 +8,181 @@ import {
   useProtectedSignal,
 } from './shared.js';
 import { Frame } from './Frame/Frame.js';
-import { OverviewPage } from './OverviewPage/OverviewPage.js';
-import { FrameworkPage } from './FrameworkPage/FrameworkPage.js';
 import { SingleEntryPage } from './SingleEntryPage/SingleEntryPage.js';
+import { assert } from './util.js';
 
 export const App = defineStyledElement('App', getStyles, () => {
   const [signalPage, setSignalPage] = useRoute();
   const pageInfo = { signalPage, setSignalPage };
 
-  const signalContent = useLoadContent();
-  const signalShowingPopup = signalPage.use(page => page.startsWith('utils/') || page.startsWith('nolodash/'));
+  const [signalContent, updateSignalContent] = useProtectedSignal(null);
+  const signalShowingPopup = Signal.use(
+    [signalPage, signalContent],
+    (page, content) => content !== null && (page.startsWith('utils/') || page.startsWith('nolodash/')),
+  );
 
-  return renderChoice([
-    { // loading
-      signalWhen: signalContent.use(content => content === null),
-      render: () => new Frame({ hideFooter: true, children: html``, pageInfo }),
-    },
-    {
-      signalWhen: new Signal(true),
-      render: () => html`
-        ${renderPopupBackdrop({
-          signalShow: signalShowingPopup,
-          onClick: () => setSignalPage(parentPage(signalPage.get())),
-        })}
-        ${renderPopupContent({ signalShow: signalShowingPopup, signalContent, pageInfo })}
-        ${new Frame({
-          children: renderChoice([
-            // not found
-            {
-              signalWhen: signalPage.use(page => page === 'notFound'),
-              render: () => renderNotFound(),
-            },
-            // Framework page
-            {
-              signalWhen: signalPage.use(page => page.split('/')[0] === 'framework'),
-              render: () => new FrameworkPage({ pageInfo }),
-            },
-            // utility/no-lodash page
-            {
-              signalWhen: new Signal(true),
-              render: () => new OverviewPage({ signalContent, pageInfo }),
-            },
-          ]),
-          pageInfo,
-        })}
-      `,
-    },
-  ]);
+  const signalPageLoading = new Signal(true);
+  let detachLastLoadStateListener;
+  const watchLoadingState = signalLoadState => {
+    detachLastLoadStateListener?.();
+    const { uninit } = withLifecycle(() => {
+      signalLoadState.use(loadState => {
+        signalPageLoading.set(loadState.type === 'loading');
+      });
+    });
+    detachLastLoadStateListener = uninit;
+  };
+
+  return html`
+    ${renderPopupBackdrop({
+      signalShow: signalShowingPopup,
+      onClick: () => setSignalPage(parentPage(signalPage.get())),
+    })}
+    ${renderPopupContent({ signalShow: signalShowingPopup, signalContent, pageInfo })}
+    ${new Frame({
+      children: renderChoice([
+        // not found
+        {
+          signalWhen: signalPage.use(page => page === 'notFound'),
+          render: () => {
+            signalPageLoading.set(false);
+            return renderNotFound();
+          },
+        },
+        // Framework page
+        {
+          signalWhen: signalPage.use(page => page.split('/')[0] === 'framework'),
+          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState, goToPageLoadError }) => {
+            watchLoadingState(signalLoadState);
+            const { renderFrameworkPageAsync } = await import('./FrameworkPage/FrameworkPage.js');
+            if (signalAborted.get()) return;
+
+            return await renderFrameworkPageAsync({ pageInfo, addToLifecycle, signalAborted, goToPageLoadError });
+          }),
+        },
+        // utility/no-lodash page
+        {
+          signalWhen: new Signal(true),
+          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState }) => {
+            watchLoadingState(signalLoadState);
+            const { OverviewPage } = await import('./OverviewPage/OverviewPage.js');
+            if (signalAborted.get()) return;
+
+            const [utilsContent, nolodashContent] = await Promise.all([
+              import('../utilsContent.json', { with: { type: 'json' } })
+                .then(response => response.default),
+              import('../nolodashContent.json', { with: { type: 'json' } })
+                .then(response => response.default),
+            ]);
+            updateSignalContent({ utils: utilsContent, nolodash: nolodashContent });
+            if (signalAborted.get()) return;
+
+            return addToLifecycle(() => new OverviewPage({ signalContent, pageInfo }));
+          }),
+        },
+      ]),
+      signalHideFooter: signalPageLoading,
+      pageInfo,
+    })}
+  `;
 });
 
 function renderNotFound() {
   return html`
-    <p class="not-found">Page not found.</p>
+    <p class="error-text">Page not found.</p>
   `;
+}
+
+/**
+ * Wraps an async render function with an error boundary and loading indicator.
+ *
+ * The asyncRender() function will receive these parameters:
+ * * addToLifecycle(callback) - can be called to enter the existing lifecycle. Must be used before rendering components.
+ * * signalAborted - set to true if a cleanup is happening. This should be checked after every async operation, and you should
+ *   return early if it's ever found to be true.
+ * * signalLoadState - informs you what load state we're currently in.
+ * * goToPageLoadError - call this to replace the page's content with a "failed to load the page" error.
+ */
+function renderAsync(asyncRender) {
+  const [signalAborted, setSignalAborted] = useProtectedSignal(false);
+  const uninitListeners = [];
+  const cleanup = () => {
+    setSignalAborted(true);
+    for (const listener of uninitListeners) {
+      listener();
+    }
+  };
+
+  useCleanup(cleanup);
+
+  const addToLifecycle = callback => {
+    assert(
+      !signalAborted.get(),
+      'Already aborted. Please check the aborted signal before trying to use the lifecycle.',
+    );
+
+    const { uninit, value } = withLifecycle(callback);
+    uninitListeners.push(uninit);
+    return value;
+  };
+
+  const goToPageLoadError = () => {
+    cleanup();
+    setSignalLoadState({ type: 'loadFailed' });
+  };
+
+  // { type: 'loading' } | { type: 'ready', el: ... } | { type: 'loadFailed' }
+  const [signalLoadState, setSignalLoadState] = useProtectedSignal({ type: 'loading' });
+  asyncRender({ addToLifecycle, signalAborted, signalLoadState, goToPageLoadError })
+    .then(el => {
+      setSignalLoadState({ type: 'ready', el });
+    })
+    .catch(error => {
+      console.error(error);
+      setSignalLoadState({ type: 'loadFailed' });
+    });
+
+  const signalLongWait = new Signal(false);
+  signalLoadState.use(loadState => {
+    if (loadState.type !== 'loading') {
+      signalLongWait.set(false);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      if (signalLoadState.get().type === 'loading') {
+        signalLongWait.set(true);
+      }
+    }, 1000);
+
+    useCleanup(() => {
+      clearTimeout(timeoutId);
+    });
+  });
+
+  return renderChoice([
+    {
+      signalWhen: signalLoadState.use(loadState => loadState.type === 'loading'),
+      render: () => html`
+        <p ${set({
+          className: classNameBuilder({
+            loading: true,
+            show: signalLongWait,
+          }),
+        })}>
+          loading...
+        </p>
+      `,
+    },
+    {
+      signalWhen: signalLoadState.use(loadState => loadState.type === 'loadFailed'),
+      render: () => html`<p class="error-text">Failed to load the page.</p>`,
+    },
+    {
+      signalWhen: signalLoadState.use(loadState => loadState.type === 'ready'),
+      render: () => signalLoadState.get().el,
+    },
+  ]);
 }
 
 function renderPopupBackdrop({ signalShow, onClick }) {
@@ -129,22 +251,6 @@ function renderPopupContent({ signalShow, signalContent, pageInfo }) {
   ]);
 }
 
-function useLoadContent() {
-  const [signalContent, updateSignalContent] = useProtectedSignal(null);
-
-  Promise.all([
-    fetch('utilsContent.json').then(x => x.json()),
-    fetch('nolodashContent.json').then(x => x.json()),
-  ]).then(([utilsContent, nolodashContent]) => {
-    updateSignalContent({
-      utils: utilsContent,
-      nolodash: nolodashContent,
-    });
-  });
-
-  return signalContent;
-}
-
 function useRoute() {
   const startingRoute = fetchAndNormalizeCurrentHashPath();
 
@@ -209,6 +315,23 @@ function getStyles() {
   };
 
   return `
+    .loading {
+      color: #555;
+      margin-left: 20px;
+      transition: opacity 0.1s;
+      opacity: 0;
+      &.show {
+        opacity: 1;
+      }
+    }
+
+    .error-text {
+      color: #a00;
+      margin-left: 20px;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+    }
+
     .popup-backdrop {
       position: fixed;
       top: 0;
@@ -231,13 +354,6 @@ function getStyles() {
       &.exited {
         display: none;
       }
-    }
-
-    .not-found {
-      margin-left: 20px;
-      color: #a00;
-      font-weight: bold;
-      letter-spacing: 0.08em;
     }
 
     .popup {

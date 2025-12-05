@@ -1,10 +1,10 @@
-import { html, renderChoice, Signal } from '../snapFramework.js';
+import { html, renderChoice } from '../snapFramework.js';
 import { defineStyledElement } from '../shared.js';
 import { Footer } from './Footer.js';
 import { Header } from './Header/Header.js';
 import { PrimaryNav } from './PrimaryNav.js';
 
-export const Frame = defineStyledElement('Frame', getStyles, function ({ children, hideFooter, pageInfo }) {
+export const Frame = defineStyledElement('Frame', getStyles, function ({ children, signalHideFooter, pageInfo }) {
   this.append(children);
   return html`
     ${new Header()}
@@ -13,7 +13,7 @@ export const Frame = defineStyledElement('Frame', getStyles, function ({ childre
       <slot></slot>
     </div>
     ${renderChoice([{
-      signalWhen: new Signal(!hideFooter),
+      signalWhen: signalHideFooter.use(hideFooter => !hideFooter),
       render: () => new Footer(),
     }])}
   `;
