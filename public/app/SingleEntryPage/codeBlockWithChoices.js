@@ -7,13 +7,7 @@ export function doesCodeBlockHaveChoices(text) {
   return text.trimStart().startsWith('/*# METADATA');
 }
 
-export function replaceWithCodeBlockWithChoices(codeContainerEl) {
-  const el = new CodeBlockWithChoices({ unparsedText: codeContainerEl.textContent });
-  codeContainerEl.after(el);
-  codeContainerEl.parentNode.removeChild(codeContainerEl);
-}
-
-const CodeBlockWithChoices = defineStyledElement('CodeBlockWithChoices', getStyles, ({ unparsedText }) => {
+export const CodeBlockWithChoices = defineStyledElement('CodeBlockWithChoices', getStyles, unparsedText => {
   const { metadata, choices } = parseTextWithChoices(unparsedText);
   const signalFormState = new Signal(Object.fromEntries(metadata.map(choice => [choice.id, choice.default])));
 

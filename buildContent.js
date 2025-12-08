@@ -71,6 +71,12 @@ function buildContentFile({ sourcePath, destPath }) {
   fs.writeFileSync(destPath, JSON.stringify(entries), 'utf-8');
 }
 
+function buildSingleMarkdownFile({ sourcePath, destPath }) {
+  const text = fs.readFileSync(sourcePath, 'utf-8');
+  const html = converter.makeHtml(text);
+  fs.writeFileSync(destPath, html, 'utf-8');
+}
+
 buildContentFile({
   sourcePath: './content/utils',
   destPath: './public/utilsContent.json',
@@ -81,9 +87,12 @@ buildContentFile({
   destPath: './public/nolodashContent.json',
 });
 
-// Build the no-lodash faq file.
-{
-  const nolodashFaqText = fs.readFileSync('./content/nolodashFaq.md', 'utf-8');
-  const nolodashHtml = converter.makeHtml(nolodashFaqText);
-  fs.writeFileSync('./public/nolodashFaq.html', nolodashHtml, 'utf-8');
-}
+buildSingleMarkdownFile({
+  sourcePath: './content/nolodashFaq.md',
+  destPath: './public/nolodashFaq.html',
+});
+
+buildSingleMarkdownFile({
+  sourcePath: './content/testSeamsPage.md',
+  destPath: './public/testSeamsPage.html',
+});

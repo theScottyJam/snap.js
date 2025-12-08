@@ -1,5 +1,5 @@
 import { html, renderChoice, renderEach, set, Signal } from '../snapFramework.js';
-import { MarkDown } from '../MarkDown/MarkDown.js';
+import { MarkDown } from '../MarkDown.js';
 import { defineStyledElement, extractUtilityPageTypeFromRoute } from '../shared.js';
 import { assert } from '../util.js';
 import { DocEntry } from './DocEntry.js';

@@ -1,5 +1,5 @@
 import { html, set, Signal } from '../snapFramework.js';
-import { MarkDown } from '../MarkDown/MarkDown.js';
+import { MarkDown } from '../MarkDown.js';
 import { defineStyledElement, extractUtilityPageTypeFromRoute } from '../shared.js';
 
 export const DocEntry = defineStyledElement('DocEntry', getStyles, ({ entry, pageInfo }) => {

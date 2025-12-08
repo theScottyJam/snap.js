@@ -1,11 +1,11 @@
 import { html, renderChoice, renderEach, set, Signal } from '../snapFramework.js';
 import { CodeViewer } from '../CodeViewer.js';
-import { signalIsMobileScreenSize, jumpToInternalLinkTarget, MOBILE_SCREEN_SIZE, prepareCodeExampleForViewing, registerInternalLinkTarget } from './shared.js';
+import { signalIsMobileScreenSize, jumpToInternalLinkTarget, MOBILE_SCREEN_SIZE } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
 import { WithTooltip } from './WithTooltip.js';
 import { assert } from '../util.js';
-import { classNameBuilder, defineStyledElement } from '../shared.js';
+import { prepareCodeExampleForViewing, registerInternalLinkTarget, classNameBuilder, defineStyledElement } from '../shared.js';
 
 // This is the point in which we switch to using a single-column layout for the code/docs
 const SMALL_SCREEN_SIZE = '1200px';
@@ -904,6 +904,7 @@ function getStyles() {
       }
     }
 
+    /* Similar styles are found at §CpxFg */
     .select-all {
       border-radius: ${CODE_CONTROL_BUTTON_BORDER_RADIUS};
       border: 1px solid ${CODE_CONTROL_BUTTON_MAIN_COLOR};

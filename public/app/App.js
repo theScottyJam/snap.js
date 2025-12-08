@@ -33,6 +33,8 @@ export const App = defineStyledElement('App', getStyles, () => {
     detachLastLoadStateListener = uninit;
   };
 
+  const signalTopLevel = signalPage.use(page => page.split('/')[0]);
+
   return html`
     ${renderPopupBackdrop({
       signalShow: signalShowingPopup,
@@ -41,28 +43,9 @@ export const App = defineStyledElement('App', getStyles, () => {
     ${renderPopupContent({ signalShow: signalShowingPopup, signalContent, pageInfo })}
     ${new Frame({
       children: renderChoice([
-        // not found
-        {
-          signalWhen: signalPage.use(page => page === 'notFound'),
-          render: () => {
-            signalPageLoading.set(false);
-            return renderNotFound();
-          },
-        },
-        // Framework page
-        {
-          signalWhen: signalPage.use(page => page.split('/')[0] === 'framework'),
-          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState, goToPageLoadError }) => {
-            watchLoadingState(signalLoadState);
-            const { renderFrameworkPageAsync } = await import('./FrameworkPage/FrameworkPage.js');
-            if (signalAborted.get()) return;
-
-            return await renderFrameworkPageAsync({ pageInfo, addToLifecycle, signalAborted, goToPageLoadError });
-          }),
-        },
         // utility/no-lodash page
         {
-          signalWhen: new Signal(true),
+          signalWhen: signalTopLevel.use(page => page === 'utils' || page === 'nolodash'),
           render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState }) => {
             watchLoadingState(signalLoadState);
             const { OverviewPage } = await import('./OverviewPage/OverviewPage.js');
@@ -87,6 +70,45 @@ export const App = defineStyledElement('App', getStyles, () => {
 
             return addToLifecycle(() => new OverviewPage({ signalContent, pageInfo, nolodashFaqHtml }));
           }),
+        },
+        // Test Seams page
+        {
+          signalWhen: signalTopLevel.use(page => page === 'seams'),
+          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState }) => {
+            watchLoadingState(signalLoadState);
+            const [{ TestSeamsPage }, testSeamsPageHtml] = await Promise.all([
+              import('./TestSeamsPage.js'),
+              // When import attributes support `type: 'text'`, we can swap this for the import() syntax, and get caching for free.
+              fetch('testSeamsPage.html')
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Failed to load the test-seams page content - received a status code of ' + response.status);
+                  }
+                  return response.text();
+                }),
+            ]);
+            if (signalAborted.get()) return;
+
+            return addToLifecycle(() => new TestSeamsPage({ testSeamsPageHtml }));
+          }),
+        },
+        // Framework page
+        {
+          signalWhen: signalTopLevel.use(page => page === 'framework'),
+          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState, goToPageLoadError }) => {
+            watchLoadingState(signalLoadState);
+            const { renderFrameworkPageAsync } = await import('./FrameworkPage/FrameworkPage.js');
+            if (signalAborted.get()) return;
+
+            return await renderFrameworkPageAsync({ pageInfo, addToLifecycle, signalAborted, goToPageLoadError });
+          }),
+        },
+        {
+          signalWhen: new Signal(true),
+          render: () => {
+            signalPageLoading.set(false);
+            return renderNotFound();
+          },
         },
       ]),
       signalHideFooter: signalPageLoading,
@@ -295,9 +317,9 @@ function fetchAndNormalizeCurrentHashPath() {
   }
 
   // If it's a route that doesn't start with a valid top-level route
-  if (!/^(utils|nolodash|framework)(\/|$)/.exec(hashRoute)) {
+  if (!/^(utils|nolodash|seams|framework)(\/|$)/.exec(hashRoute)) {
     // This won't return notFound for all not-found cases - the
-    // utils and nolodash pages are in charge of rendering their own as needed.
+    // various sub-pages are in charge of rendering their own as needed.
     return 'notFound';
   }
 
