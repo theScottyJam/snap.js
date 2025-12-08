@@ -2,6 +2,7 @@ import { Signal, html, set, renderEach } from '../snapFramework.js';
 import { CodeViewer } from '../CodeViewer.js';
 import { jumpToInternalLinkTarget } from './shared.js';
 import { defineStyledElement, headerStyleMixinRules } from '../shared.js';
+import { CODE_WINDOW_BORDER_RADIUS } from '../sharedStyles.js';
 
 export const FeatureShowcaseSection = defineStyledElement('FeatureShowcaseSection', getStyles, () => {
   const signalSelectedFeature = new Signal(0);
@@ -198,7 +199,6 @@ const LINE_COUNT_OF_LONGEST_EXAMPLE = Math.max(...features.map(feature => featur
 function getStyles() {
   const CODE_PANEL_WIDTH = 700;
   const CODE_PANEL_WIDTH_SMALL_SCREEN = 600;
-  const CODE_VIEWER_BORDER_RADIUS = '8px';
 
   return `
     :host {
@@ -259,9 +259,10 @@ function getStyles() {
       width: ${CODE_PANEL_WIDTH}px;
       margin-top: 20px;
       padding: 15px;
-      background: #efe;
       border-radius: 8px;
       box-sizing: border-box;
+      /* Search the project for §GGWu2 to find similar colors. */
+      background: #efe;
       border: 1px solid #7d7;
     }
 
@@ -269,13 +270,14 @@ function getStyles() {
       margin: 0;
     }
     
+    /* Similar styles are found at §ggWb5 */
     .code-tab {
       display: inline-block;
       color: #ddd;
       padding: 8px 20px;
       margin-bottom: 0;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      border-top-left-radius: ${CODE_WINDOW_BORDER_RADIUS};
+      border-top-right-radius: ${CODE_WINDOW_BORDER_RADIUS};
       background-color: #272822;
       box-shadow: 0 2px 2px 2px rgba(0,0,0,.09);
       /* Moves the element under the code area, so its shadow goes under instead of over the code. */
@@ -287,7 +289,7 @@ function getStyles() {
       display: block;
       width: ${CODE_PANEL_WIDTH}px;
       background-color: #272822;
-      border-radius: 0 ${CODE_VIEWER_BORDER_RADIUS} ${CODE_VIEWER_BORDER_RADIUS} ${CODE_VIEWER_BORDER_RADIUS};
+      border-radius: 0 ${CODE_WINDOW_BORDER_RADIUS} ${CODE_WINDOW_BORDER_RADIUS} ${CODE_WINDOW_BORDER_RADIUS};
       box-shadow: 0 8px 8px -4px rgba(0,0,0,.6), 0 2px 2px 2px rgba(0,0,0,.1);
       padding: 16px;
       box-sizing: border-box;
@@ -371,7 +373,7 @@ function getStyles() {
       }
 
       ${customElements.getName(CodeViewer)} {
-        border-radius: ${CODE_VIEWER_BORDER_RADIUS};
+        border-radius: ${CODE_WINDOW_BORDER_RADIUS};
         order: 2;
         margin-left: calc(calc(100% - ${CODE_PANEL_WIDTH_SMALL_SCREEN}px) / 2);
       }

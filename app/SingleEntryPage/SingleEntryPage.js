@@ -1,7 +1,8 @@
 import { CodeViewer } from '../CodeViewer.js';
 import { html, renderChoice, set, Signal } from '../snapFramework.js';
-import { MarkDown } from '../MarkDown/MarkDown.js';
+import { MarkDown } from '../MarkDown.js';
 import { defineStyledElement, extractUtilityPageTypeFromRoute, lookupContentEntryFromRoute } from '../shared.js';
+import { CodeBlockWithChoices, doesCodeBlockHaveChoices } from './codeBlockWithChoices.js';
 
 export const SingleEntryPage = defineStyledElement('SingleEntryPage', getStyles, ({ signalContent, pageInfo }) => {
   const { signalPage } = pageInfo;
@@ -127,6 +128,13 @@ function renderDescription({ signalDescriptionHtml, signalSummaryHtml }) {
     signalContentHtml: Signal.use([signalDescriptionHtml, signalSummaryHtml], (descriptionHtml, summaryHtml) => {
       return summaryHtml + descriptionHtml;
     }),
+    createCodeBlock: text => {
+      if (doesCodeBlockHaveChoices(text)) {
+        return new CodeBlockWithChoices(text);
+      } else {
+        return new CodeViewer(text);
+      }
+    },
   });
 }
 

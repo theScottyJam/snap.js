@@ -5,6 +5,7 @@ export const PrimaryNav = defineStyledElement('PrimaryNav', getStyles, ({ pageIn
   return html`
     ${renderLink({ target: 'utils', textContent: 'Simple Utilities', pageInfo })}
     ${renderLink({ target: 'nolodash', textContent: 'Lodash Replacements', pageInfo })}
+    ${renderLink({ target: 'seams', textContent: 'Test Seams', pageInfo })}
     ${renderLink({ target: 'framework', textContent: 'Snap Framework', pageInfo })}
   `;
 });
@@ -32,7 +33,7 @@ export function getStyles() {
       padding-left: 6px;
       padding-bottom: 12px;
       display: flex;
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 40rem) {
         flex-flow: column;
         gap: 12px;
         background: #eee;

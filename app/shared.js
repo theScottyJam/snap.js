@@ -43,6 +43,17 @@ export function lookupContentEntryFromRoute(content, route) {
   return null;
 }
 
+const uniqueIdsToElements = new Map();
+
+export function registerInternalLinkTarget(uniqueId, element) {
+  assert(!uniqueIdsToElements.has(element));
+  uniqueIdsToElements.set(uniqueId, element);
+}
+
+export function jumpToInternalLinkTarget(uniqueId) {
+  uniqueIdsToElements.get(uniqueId).scrollIntoView({ behavior: 'smooth' });
+}
+
 // ========================================================================== //
 // Snap.js helpers                                                            //
 // ========================================================================== //
