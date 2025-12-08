@@ -48,7 +48,7 @@ export const MarkDown = defineStyledElement('MarkDown', getStyles, opts => {
     // Move the prepared HTML onto the page.
     containerEl.innerHTML = '';
     containerEl.append(...temporaryContainerEl.childNodes);
-    postProcess(containerEl);
+    postProcess?.(containerEl);
   });
 
   return fragment;
