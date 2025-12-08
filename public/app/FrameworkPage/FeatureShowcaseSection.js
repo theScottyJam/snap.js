@@ -1,7 +1,6 @@
 import { Signal, html, set, renderEach } from '../snapFramework.js';
 import { CodeViewer } from '../CodeViewer.js';
-import { jumpToInternalLinkTarget } from './shared.js';
-import { defineStyledElement, headerStyleMixinRules } from '../shared.js';
+import { defineStyledElement, headerStyleMixinRules, jumpToInternalLinkTarget } from '../shared.js';
 import { CODE_WINDOW_BORDER_RADIUS } from '../sharedStyles.js';
 
 export const FeatureShowcaseSection = defineStyledElement('FeatureShowcaseSection', getStyles, () => {
