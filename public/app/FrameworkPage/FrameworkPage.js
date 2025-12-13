@@ -4,7 +4,7 @@ import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { OverviewSection } from './OverviewSection.js';
 import { WithTooltip } from './WithTooltip.js';
 import { AdditionalInformationSection } from './AdditionalInformationSection.js';
-import { defineStyledElement } from '../shared.js';
+import { defineStyledElement, setPageBaseTitle } from '../shared.js';
 import { renderEach } from '../../framework/snapFramework-2.0.js';
 
 // Whenever a new framework version comes out, this list needs to be updated.
@@ -25,6 +25,14 @@ const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ pageInf
   const signalVersion = pageInfo.signalPage.use(route => getVersion(route));
   const signalSnapFrameworkText = new Signal(startingSnapFrameworkText);
   const signalLoading = new Signal(false);
+
+  signalVersion.use(version => {
+    if (version === frameworkVersions[0].version) {
+      setPageBaseTitle('Snap Framework');
+    } else {
+      setPageBaseTitle(`Snap Framework v${version}`);
+    }
+  });
 
   let skip = true;
   signalVersion.use(async version => {
@@ -53,9 +61,12 @@ const FrameworkPage = defineStyledElement('FrameworkPage', getStyles, ({ pageInf
     ${renderChoice([
       {
         signalWhen: signalVersion.use(version => version === undefined),
-        render: () => html`
-          <h1>Page not found</h1>
-        `,
+        render: () => {
+          setPageBaseTitle('Not Found');
+          return html`
+            <h1>Page not found</h1>
+          `;
+        },
       },
       {
         signalWhen: new Signal(true),

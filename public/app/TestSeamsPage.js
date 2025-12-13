@@ -1,10 +1,12 @@
 import { CodeViewer } from './CodeViewer.js';
 import { MarkDown } from './MarkDown.js';
-import { defineStyledElement, jumpToInternalLinkTarget, registerInternalLinkTarget } from './shared.js';
+import { defineStyledElement, jumpToInternalLinkTarget, registerInternalLinkTarget, setPageBaseTitle } from './shared.js';
 import { CODE_WINDOW_BORDER_RADIUS } from './sharedStyles.js';
 import { html, renderChoice, set, Signal } from './snapFramework.js';
 
 export const TestSeamsPage = defineStyledElement('OverviewPage', getStyles, ({ testSeamsPageHtml }) => {
+  setPageBaseTitle('Test Seams');
+
   return new MarkDown({
     signalContentHtml: new Signal(testSeamsPageHtml),
     codeBlockTheme: 'dark',

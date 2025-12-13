@@ -1,11 +1,13 @@
 import { html, renderChoice, renderEach, set, Signal } from '../snapFramework.js';
 import { MarkDown } from '../MarkDown.js';
-import { defineStyledElement, extractUtilityPageTypeFromRoute } from '../shared.js';
+import { defineStyledElement, extractUtilityPageTypeFromRoute, lookupContentEntryFromRoute, setPageBaseTitle } from '../shared.js';
 import { assert } from '../util.js';
 import { DocEntry } from './DocEntry.js';
 
 export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ signalContent, pageInfo, nolodashFaqHtml }) => {
   const { signalPage } = pageInfo;
+
+  useUtilPageTitle({ signalContent, signalPage });
 
   const signalFilterText = new Signal('');
   const signalUtilityPageType = signalPage.use(page => {
@@ -14,7 +16,6 @@ export const OverviewPage = defineStyledElement('OverviewPage', getStyles, ({ si
     return utilityPageType;
   });
   const signalPageHasFilterBox = signalUtilityPageType.use(utilityPageType => utilityPageType === 'nolodash');
-
   const signalFilteredPageContent = Signal.use(
     [signalContent, signalUtilityPageType],
     (content, utilityPageType) => {
@@ -209,6 +210,27 @@ function matchesViaFuzzySearch(searchInput, target) {
   }
 
   return false;
+}
+
+function useUtilPageTitle({ signalContent, signalPage }) {
+  Signal.use([signalContent, signalPage], (content, page) => {
+    const utilityPageType = extractUtilityPageTypeFromRoute(page);
+    const pageEntryData = lookupContentEntryFromRoute(content, page);
+    let pageCategory;
+    if (utilityPageType === 'utils') {
+      pageCategory = 'Utility Functions';
+    } else if (utilityPageType === 'nolodash') {
+      pageCategory = 'Lodash Replacements';
+    } else {
+      throw new Error('Unreachable');
+    }
+
+    if (pageEntryData === null) {
+      setPageBaseTitle(pageCategory);
+    } else {
+      setPageBaseTitle(pageEntryData.name + '() - ' + pageCategory);
+    }
+  });
 }
 
 function getStyles() {

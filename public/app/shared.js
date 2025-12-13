@@ -43,6 +43,10 @@ export function lookupContentEntryFromRoute(content, route) {
   return null;
 }
 
+export function setPageBaseTitle(baseTitle) {
+  document.head.querySelector('title').textContent = baseTitle + ' - Snap.js, the copy-paste library';
+}
+
 const uniqueIdsToElements = new Map();
 
 export function registerInternalLinkTarget(uniqueId, element) {

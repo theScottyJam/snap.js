@@ -3,6 +3,7 @@ import {
   classNameBuilder,
   defineStyledElement,
   parentPage,
+  setPageBaseTitle,
   useCapturedValue,
   useCssTransition,
   useProtectedSignal,
@@ -118,6 +119,7 @@ export const App = defineStyledElement('App', getStyles, () => {
 });
 
 function renderNotFound() {
+  setPageBaseTitle('Not Found');
   return html`
     <p class="error-text">Page not found.</p>
   `;
