@@ -32,25 +32,25 @@ function renderDefaultSingleEntryPage({ signalPageData, pageInfo }) {
     <div>
       ${renderBackButton({ pageInfo })}
       <h1 class="entry-header" ${set({
-        textContent: signalPageData.use(pageData => pageData.name + '()'),
+        textContent: signalPageData.use(pageData => pageData?.name + '()'), // TODO: The "?." shouldn't be needed
       })}></h1>
       ${renderChoice([
         {
-          signalWhen: signalPageData.use(pageData => pageData.hidden),
+          signalWhen: signalPageData.use(pageData => pageData?.hidden), // TODO: The "?." shouldn't be needed
           render: () => renderUnlistedWarning(),
         },
       ])}
       ${renderChoice([
         {
-          signalWhen: signalPageData.use(pageData => pageData.src),
+          signalWhen: signalPageData.use(pageData => pageData?.src), // TODO: The "?." shouldn't be needed
           render: () => renderCode({
-            signalSrc: signalPageData.use(pageData => pageData.src),
+            signalSrc: signalPageData.use(pageData => pageData?.src), // TODO: The "?." shouldn't be needed
           }),
         },
       ])}
       ${renderDescription({
-        signalSummaryHtml: signalPageData.use(pageData => pageData.manifest.summaryHtml),
-        signalDescriptionHtml: signalPageData.use(pageData => pageData.descriptionHtml),
+        signalSummaryHtml: signalPageData.use(pageData => pageData?.manifest.summaryHtml), // TODO: The "?." shouldn't be needed
+        signalDescriptionHtml: signalPageData.use(pageData => pageData?.descriptionHtml), // TODO: The "?." shouldn't be needed
       })}
     </div>
   `;
@@ -62,23 +62,23 @@ function renderNolodashSingleEntryPage({ signalPageData, pageInfo }) {
       ${renderBackButton({ pageInfo })}
       <h1 class="entry-header">Lodash's version</h1>
       <a class="fn-signature-link" ${set({
-        href: signalPageData.use(pageData => pageData.manifest.lodashLink),
+        href: signalPageData.use(pageData => pageData?.manifest.lodashLink), // TODO: The "?." shouldn't be needed
       })}>
         <pre ${set({
-          textContent: signalPageData.use(pageData => pageData.manifest.fnSignature),
+          textContent: signalPageData.use(pageData => pageData?.manifest.fnSignature), // TODO: The "?." shouldn't be needed
         })}></pre>
       </a>
       ${renderChoice([
         {
-          signalWhen: signalPageData.use(pageData => pageData.src),
+          signalWhen: signalPageData.use(pageData => pageData?.src), // TODO: The `?.` shouldn't be needed.
           render: () => renderCode({
-            signalSrc: signalPageData.use(pageData => pageData.src),
+            signalSrc: signalPageData.use(pageData => pageData?.src), // TODO: The `?.` shouldn't be needed.
           }),
         },
       ])}
       ${renderDescription({
-        signalSummaryHtml: signalPageData.use(pageData => pageData.manifest.summaryHtml),
-        signalDescriptionHtml: signalPageData.use(pageData => '<h1>Plain JavaScript</h1>' + pageData.descriptionHtml),
+        signalSummaryHtml: signalPageData.use(pageData => pageData?.manifest.summaryHtml), // TODO: The `?.` shouldn't be needed.
+        signalDescriptionHtml: signalPageData.use(pageData => '<h1>Plain JavaScript</h1>' + pageData?.descriptionHtml), // TODO: The `?.` shouldn't be needed.
       })}
     </div>
   `;
