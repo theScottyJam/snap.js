@@ -2,7 +2,7 @@ import { html, renderChoice, set, Signal, useCleanup } from '../snapFramework.js
 import { SourceViewerSection } from './SourceViewerSection.js';
 import { FeatureShowcaseSection } from './FeatureShowcaseSection.js';
 import { OverviewSection } from './OverviewSection.js';
-import { WithTooltip } from './WithTooltip.js';
+import { WithTooltip } from '../WithTooltip.js';
 import { AdditionalInformationSection } from './AdditionalInformationSection.js';
 import { defineStyledElement, setPageBaseTitle } from '../shared.js';
 import { renderEach } from '../../framework/snapFramework-2.0.js';
