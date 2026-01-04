@@ -3,7 +3,7 @@ import { CodeViewer } from '../CodeViewer.js';
 import { signalIsMobileScreenSize, prepareCodeExampleForViewing, MOBILE_SCREEN_SIZE } from './shared.js';
 import { ICON_BUTTON_BACKGROUND_ON_HOVER, ICON_BUTTON_OUTLINE_ON_FOCUS } from './sharedStyles.js';
 import { showPopupWithExample } from './RunnableExamplePopup.js';
-import { WithTooltip } from './WithTooltip.js';
+import { WithTooltip } from '../WithTooltip.js';
 import { assert } from '../util.js';
 import { jumpToInternalLinkTarget, registerInternalLinkTarget, classNameBuilder, defineStyledElement } from '../shared.js';
 
@@ -125,7 +125,7 @@ function renderControls({ documentedCodeRef, signalViewMode, updateViewMode }) {
                 'A good starting point if you want to take full ownership of the code.'
               ),
               anchor: 'right',
-              getStyle: getTooltipStyle,
+              wrap: true,
             })}
           </button>
           <button ${set({
@@ -137,7 +137,7 @@ function renderControls({ documentedCodeRef, signalViewMode, updateViewMode }) {
               child: html`<span class="more-info-icon">ⓘ</span>`,
               tooltip: 'Minimal documentation is included - to see the full docs, you can follow a link included at the top of the file.',
               anchor: 'right',
-              getStyle: getTooltipStyle,
+              wrap: true,
             })}
           </button>
           <button ${set({
@@ -820,25 +820,6 @@ function reformatJsdocsForDisplay(lines) {
   newLines.push(' */');
   return newLines;
 }
-
-const getTooltipStyle = tooltipSelector => `
-  ${tooltipSelector} {
-    text-wrap: initial;
-    width: 400px;
-  }
-
-  @media screen and (max-width: 800px) {
-    ${tooltipSelector} {
-      width: 230px;
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    ${tooltipSelector} {
-      width: 160px;
-    }
-  }
-`;
 
 function getStyles() {
   const CODE_BACKGROUND = '#272822';

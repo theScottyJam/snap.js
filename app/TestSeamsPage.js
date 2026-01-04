@@ -3,6 +3,7 @@ import { MarkDown } from './MarkDown.js';
 import { defineStyledElement, jumpToInternalLinkTarget, registerInternalLinkTarget, setPageBaseTitle } from './shared.js';
 import { CODE_WINDOW_BORDER_RADIUS } from './sharedStyles.js';
 import { html, renderChoice, set, Signal } from './snapFramework.js';
+import { WithTooltip } from './WithTooltip.js';
 
 export const TestSeamsPage = defineStyledElement('OverviewPage', getStyles, ({ testSeamsPageHtml }) => {
   setPageBaseTitle('Test Seams');
@@ -21,6 +22,15 @@ function postProcess(markdownEl) {
     linkEl.addEventListener('click', () => {
       jumpToInternalLinkTarget(linkEl.dataset.clickTarget);
     });
+  }
+
+  for (const el of markdownEl.querySelectorAll('[data-tooltip]')) {
+    el.classList.add('tooltip-target');
+    const placeholder = document.createElement('div');
+    el.after(placeholder);
+    const tooltip = new WithTooltip({ child: el, tooltip: el.dataset.tooltip, wrap: true });
+    placeholder.after(tooltip);
+    placeholder.remove();
   }
 }
 
@@ -154,6 +164,11 @@ function getMarkDownStyle() {
       &.test-seam-page-has-file-name {
         border-top-left-radius: 0;
       }
+    }
+
+    .tooltip-target {
+      text-decoration: underline;
+      text-decoration-style: dotted;
     }
   `;
 }

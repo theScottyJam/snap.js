@@ -1,8 +1,12 @@
-import { defineStyledElement } from '../shared.js';
-import { assert } from '../util.js';
-import { html, set, Signal } from '../snapFramework.js';
+import { classNameBuilder, defineStyledElement } from './shared.js';
+import { assert } from './util.js';
+import { html, set, Signal } from './snapFramework.js';
 
-export const WithTooltip = defineStyledElement('WithTooltip', getStyles, function ({ child, tooltip, anchor = 'left', getStyle = undefined }) {
+/**
+ * If `wrap` is provided, the tooltip text will be able to wrap, but at the cost of using fixed-sized containers which
+ * looks a little weird if the text is too small to wrap.
+ */
+export const WithTooltip = defineStyledElement('WithTooltip', getStyles, function ({ child, tooltip, anchor = 'left', wrap }) {
   this.append(child);
   const signalShowPopup = new Signal(false);
   assert(['left', 'right'].includes(anchor));
@@ -24,18 +28,17 @@ export const WithTooltip = defineStyledElement('WithTooltip', getStyles, functio
       },
     })}>
       <slot></slot>
-      <span class="tooltip" ${set({
+      <span ${set({
+        className: classNameBuilder({
+          tooltip: new Signal(true),
+          wrap: new Signal(wrap),
+        }),
         textContent: tooltip,
         style: signalShowPopup.use(showPopup => {
           return `${anchor}: 0` + (showPopup ? '' : '; display: none');
         }),
       })}></span>
     </button>
-
-    <style ${set({
-      // Doubling up .tooltip to increase specificity.
-      textContent: getStyle?.('.tooltip.tooltip') ?? '',
-    })}></style>
   `;
 });
 
@@ -65,8 +68,26 @@ function getStyles() {
       padding: 3px;
       box-sizing: border-box;
       z-index: 9999;
-      text-wrap: nowrap;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.04);
+
+      &:not(.wrap) {
+        text-wrap: nowrap;
+      }
+
+      &.wrap {
+        width: 400px;
+        @media screen and (max-width: 800px) {
+          & {
+            width: 230px;
+          }
+        }
+
+        @media screen and (max-width: 500px) {
+          & {
+            width: 160px;
+          }
+        }
+      }
     }
   `;
 }
