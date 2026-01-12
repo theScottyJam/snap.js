@@ -12,7 +12,7 @@ _.isError(new NotAnError()) // => true
 If you actually want to check if a value is an error or one of its subclasses (like `TypeError`, or a user-defined subclass), you can simply do this:
 
 ```javascript
-value instanceof Error
+Error.isError(value)
 ```
 
 And if you want to check if a value is a specific error type (like `Error`, `TypeError`, or a user defined error), and you want to exclude subclasses, you can compare prototypes like this:
@@ -22,33 +22,26 @@ And if you want to check if a value is a specific error type (like `Error`, `Typ
 Object.getPrototypeOf(value) === TypeError.prototype
 ```
 
-For the vast majority of scenarios the above should be good enough, but those solutions do technically have a couple of flaws:
-1. they don't work with cross-realm values. For example, if you receive an instance of an `Error` from across an iframe boundary, that instance's prototype would link to the iframe's `Error` class, not your `Error` class, and both of the above checks would fail to recognize it as a `Error`.
-2. They will state that `Object.create(Error.prototype)` is an `Error`, but it's not. It's just a regular object who's prototype has been set to `Error.prototype`.
+For the vast majority of scenarios the above should be good enough, but the exclude-subclasses solutions does technically have a couple of flaws:
+1. it doesn't work with cross-realm values. For example, if you receive an instance of an `Error` from across an iframe boundary, that instance's prototype would link to the iframe's `Error` class, not your `Error` class, and the above prototype comparison would fail to recognize it as a `Error`.
+2. It will state that `Object.create(TypeError.prototype)` is a `TypeError`, but it's not. It's just a regular object who's prototype has been set to `TypeError.prototype`. (This issue isn't unique to `TypeError` - any error type you're trying to check will have this issue).
 
 Both of these issues can be solved with a helper function like this:
 
 ```javascript
-// An isError() check that supports cross-realm Errors.
-function isError(value) {
-  // DOMException and its subclasses will set a `Symbol.toStringTag` property
-  // on their instances to the string 'DOMException'.
-  const errorAsString = Object.prototype.toString.call(value);
-  return ['[object Error]', '[object DOMException]'].includes(errorAsString);
+// Cross realm compatible is-non-inherited-type-error check.
+function isNonInheritedTypeError(value) {
+  const protoOf = Object.getPrototypeOf;
+  // A TypeError's prototype chain should normally be
+  // value -> TypeError.prototype -> Error.prototype -> null
+  // If there's an extra link in there, it means inheritance has happened.
+  return (
+    Error.isError(value) &&
+    protoOf(protoOf(value)) !== null &&
+    protoOf(protoOf(protoOf(value))) !== null &&
+    protoOf(protoOf(protoOf(protoOf(value)))) === null
+  );
 }
 ```
 
-This helper function can unfortunately be spoofed by providing any object with a `Symbol.toStringTag` property set to one of the expected string tags, like this:
-
-```javascript
-isError({ [Symbol.toStringTag]: 'DOMException' })
-// => true
-```
-
-There's not really anything that can be done to avoid this. You could try layering on additional checks, but there will always be a way to cause your `isError()` function to return a wrong answer.
-
-If you're exclusively using Node, you can use `require('util').types.isNativeError(value)` to specifically check if the value is an instance of `Error` or one of its subclasses.
-
-Future JavaScript proposals may provide support for more robust ways to do cross-realm type checking:
-* [Error.isError](https://github.com/tc39/proposal-is-error)
-* [Pattern matching's built-in matchers](https://github.com/tc39/proposal-pattern-matching#built-in-custom-matchers-1)
+You can adapt this helper function to any error type you wish - you'll first need to walk the error type's prototype link to see how many links it has before updating the function to count that many links.
