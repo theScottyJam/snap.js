@@ -180,7 +180,8 @@
       "toInteger",
       "toLength",
       "toNumber",
-      "toSafeInteger"
+      "toSafeInteger",
+      "toString"
     ]
   },
   {
