@@ -45,7 +45,7 @@ type AssertFn<T> = T extends (...args: any[]) => any ? T : never;
 /**
  * Use this to define a set of functions that you may
  * wish to replace in automated tests with test doubles.
- * 
+ *
  * Note: This class keeps tabs on all instances which in turn prevents them from
  * being garbage collected. This isn't an issue as long as you don't
  * generate an arbitrary number of instances.
@@ -77,7 +77,7 @@ export class Dependency<T extends {}> {
    */
   define<FnName extends Extract<keyof T, string>, FnDef extends AssertFn<T[FnName]>>(
     fnName: FnName,
-    realImplementation: NoInfer<FnDef>
+    realImplementation: NoInfer<FnDef>,
   ): (...Params: Parameters<FnDef>) => ReturnType<FnDef> {
     this.#behavior[fnName] = realImplementation;
     return (...args: Parameters<FnDef>) => {
@@ -97,7 +97,7 @@ export class Dependency<T extends {}> {
    * to define(), and who's values are fake functions. These fake functions
    * will be called in place of the real ones.
    */
-  async replaceWith(testDouble: Partial<T>) {
+  replaceWith(testDouble: Partial<T>) {
     this.#behavior = testDouble;
   }
 }
@@ -129,6 +129,7 @@ async function readFromTodoFile(): Promise<string[]> {
 
 // ~~~ main ~~~
 
+// Usage example: main(process.argv.slice(2));
 async function main(args: string[]) {
   // Adds the todo item to the list
   const updatedTodoItems = [
@@ -141,8 +142,6 @@ async function main(args: string[]) {
   // Prints the updated list of TODO items
   console.log(updatedTodoItems.join('\n'));
 }
-
-main(process.argv.slice(2));
 ```
 
 This is very simple todo-list management program - you run it with a todo item you'd like to add to your list, and it'll add it to your todo file and print out your current list. That's it. I'm trying to keep the example simple, but you could imagine that this project could grow much larger - the act of adding a new todo item is currently contained in the main function, but over time it could have logic spread across many different modules, all of which you might want to include in your SUT.
@@ -191,6 +190,7 @@ const log = loggerDependency.define('log', console.log);
 
 // ~~~ main ~~~
 
+// Usage example: main(process.argv.slice(2));
 export async function main(args: string[]) {
   // Adds the todo item to the list
   const updatedTodoItems = [
@@ -203,8 +203,6 @@ export async function main(args: string[]) {
   // Prints the updated list of TODO items
   log(updatedTodoItems.join('\n'));
 }
-
-main(process.argv.slice(2));
 ```
 
 To add a test seam, we create an instance of `Dependency`, such as `todoFileDependency`, and supply a type parameter (`TodoFileDependency`) containing all of the functions that this dependency will handle. For each function the dependency handles, we call `const theFn = todoFileDependency.define('aFnName', ...the fn definition...)`. We pass in the desired, default behavior, and the function that gets returned by `.define()` will behave exactly the same as our supplied callback, except when unit testing has started, at which point it'll instead have it's behavior switched to throw errors or to provide fake behavior, depending on what the test does.
@@ -237,7 +235,7 @@ export class TodoFileFake implements TodoFileDependency {
 }
 
 export class LoggerFake implements LoggerDependency {
-  logged = ''
+  logged = '';
   log(...messages: string[]) {
     this.logged += messages.join(' ') + '\n';
   }
@@ -267,8 +265,8 @@ It's not shown in this example, but also note that when you provide a test doubl
 And now we're ready to write our actual test cases. We'll just write a couple of test cases for this demonstration.
 
 ```typescript
-describe('main()', () => {
-  test('adds a new todo item to the todo list file', async () => {
+await describe('main()', async () => {
+  await test('adds a new todo item to the todo list file', async () => {
     const testDoubles = initialize();
 
     // Add some initial TODO items to the list
@@ -283,7 +281,7 @@ describe('main()', () => {
     ]);
   });
 
-  test('prints the updated list of todo items', async () => {
+  await test('prints the updated list of todo items', async () => {
     const testDoubles = initialize();
 
     // Add some initial TODO items to the list
