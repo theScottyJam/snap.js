@@ -30,7 +30,7 @@ type AssertFn&lt;T&gt; = T extends (...args: any[]) =&gt; any ? T : never;
 /**
  * Use this to define a set of functions that you may
  * wish to replace in automated tests with test doubles.
- * 
+ *
  * Note: This class keeps tabs on all instances which in turn prevents them from
  * being garbage collected. This isn't an issue as long as you don't
  * generate an arbitrary number of instances.
@@ -62,7 +62,7 @@ export class Dependency&lt;T extends {}&gt; {
    */
   define&lt;FnName extends Extract&lt;keyof T, string&gt;, FnDef extends AssertFn&lt;T[FnName]&gt;&gt;(
     fnName: FnName,
-    realImplementation: NoInfer&lt;FnDef&gt;
+    realImplementation: NoInfer&lt;FnDef&gt;,
   ): (...Params: Parameters&lt;FnDef&gt;) =&gt; ReturnType&lt;FnDef&gt; {
     this.#behavior[fnName] = realImplementation;
     return (...args: Parameters&lt;FnDef&gt;) =&gt; {
@@ -82,7 +82,7 @@ export class Dependency&lt;T extends {}&gt; {
    * to define(), and who's values are fake functions. These fake functions
    * will be called in place of the real ones.
    */
-  async replaceWith(testDouble: Partial&lt;T&gt;) {
+  replaceWith(testDouble: Partial&lt;T&gt;) {
     this.#behavior = testDouble;
   }
 }
@@ -111,6 +111,7 @@ async function readFromTodoFile(): Promise&lt;string[]&gt; {
 
 // ~~~ main ~~~
 
+// Usage example: main(process.argv.slice(2));
 async function main(args: string[]) {
   // Adds the todo item to the list
   const updatedTodoItems = [
@@ -123,8 +124,6 @@ async function main(args: string[]) {
   // Prints the updated list of TODO items
   console.log(updatedTodoItems.join('\n'));
 }
-
-main(process.argv.slice(2));
 </code></pre>
 <p>This is very simple todo-list management program - you run it with a todo item you'd like to add to your list, and it'll add it to your todo file and print out your current list. That's it. I'm trying to keep the example simple, but you could imagine that this project could grow much larger - the act of adding a new todo item is currently contained in the main function, but over time it could have logic spread across many different modules, all of which you might want to include in your SUT.</p>
 <p>We want to write some unit tests for the main function. In this specific scenario, we want the SUT to be as large as reasonably possible without including any code that causes side effects in the SUT, so we're going to add test seams to keep actual file I/O and logging out of the SUT.</p>
@@ -169,6 +168,7 @@ const log = loggerDependency.define('log', console.log);
 
 // ~~~ main ~~~
 
+// Usage example: main(process.argv.slice(2));
 export async function main(args: string[]) {
   // Adds the todo item to the list
   const updatedTodoItems = [
@@ -181,8 +181,6 @@ export async function main(args: string[]) {
   // Prints the updated list of TODO items
   log(updatedTodoItems.join('\n'));
 }
-
-main(process.argv.slice(2));
 </code></pre>
 <p>To add a test seam, we create an instance of <code>Dependency</code>, such as <code>todoFileDependency</code>, and supply a type parameter (<code>TodoFileDependency</code>) containing all of the functions that this dependency will handle. For each function the dependency handles, we call <code>const theFn = todoFileDependency.define('aFnName', ...the fn definition...)</code>. We pass in the desired, default behavior, and the function that gets returned by <code>.define()</code> will behave exactly the same as our supplied callback, except when unit testing has started, at which point it'll instead have it's behavior switched to throw errors or to provide fake behavior, depending on what the test does.</p>
 <p>Note that the code in <code>main()</code> that was calling the functions registered with <code>todoFileDependency</code> did not have to be updated - that portion of the code still reads exactly the same. Adding test seams like this is relatively unobtrusive. The same isn't true for <code>console.log()</code> - any code that directly depended on a built-in function that causes side-effects will need to be updated.</p>
@@ -206,7 +204,7 @@ main(process.argv.slice(2));
 }
 
 export class LoggerFake implements LoggerDependency {
-  logged = ''
+  logged = '';
   log(...messages: string[]) {
     this.logged += messages.join(' ') + '\n';
   }
@@ -228,8 +226,8 @@ export class LoggerFake implements LoggerDependency {
 <p>Note how we're calling <code>&lt;dependency&gt;.replaceWith()</code> to supply the fake behavior we wish to use. If you were to comment one of these out, then try to run one of the tests defined below, you'll quickly get an error stating that an implementation for that dependency is missing.</p>
 <p>It's not shown in this example, but also note that when you provide a test double to <code>.replaceWith()</code>, you're not required to provide a fake implementation to every function - you can omit some when the test doesn't need it.</p>
 <p>And now we're ready to write our actual test cases. We'll just write a couple of test cases for this demonstration.</p>
-<pre><code class="typescript language-typescript">describe('main()', () =&gt; {
-  test('adds a new todo item to the todo list file', async () =&gt; {
+<pre><code class="typescript language-typescript">await describe('main()', async () =&gt; {
+  await test('adds a new todo item to the todo list file', async () =&gt; {
     const testDoubles = initialize();
 
     // Add some initial TODO items to the list
@@ -244,7 +242,7 @@ export class LoggerFake implements LoggerDependency {
     ]);
   });
 
-  test('prints the updated list of todo items', async () =&gt; {
+  await test('prints the updated list of todo items', async () =&gt; {
     const testDoubles = initialize();
 
     // Add some initial TODO items to the list
