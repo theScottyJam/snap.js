@@ -41,3 +41,21 @@ function unzip(arrays) {
   return zip(...arrays);
 }
 ```
+
+Note that there is also [an upcoming proposal](https://github.com/tc39/proposal-joint-iteration) to provide array zipping as a native feature. Once implemented, you'll be able to do the following:
+
+```javascript
+Iterator.zip([
+  [0, 1, 2],
+  [3, 4, 5],
+]).toArray()
+
+/*
+Produces:
+[
+  [0, 3],
+  [1, 4],
+  [2, 5],
+]
+*/
+```

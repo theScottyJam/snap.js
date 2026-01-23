@@ -13,3 +13,21 @@ function zip(...arrays) {
   return result;
 }
 ```
+
+There is also [an upcoming proposal](https://github.com/tc39/proposal-joint-iteration) to provide this as a native feature. Once available, you will be able to do the following:
+
+```javascript
+Iterator.zip([
+  [0, 1, 2],
+  [3, 4, 5],
+]).toArray()
+
+/*
+Produces:
+[
+  [0, 3],
+  [1, 4],
+  [2, 5],
+]
+*/
+```
