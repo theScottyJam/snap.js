@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.rearg(func, indexes)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#rearg",
+  "summary": "Creates a function that invokes `func` with arguments arranged according to the specified `indexes` where the argument value at the first index is provided as the first argument, the argument value at the second index is provided as the second argument, and so on."
+}

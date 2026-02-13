@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.flow(funcs)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#flow",
+  "summary": "Creates a function that returns the result of invoking the given functions, where each successive invocation is supplied the return value of the previous."
+}

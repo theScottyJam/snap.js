@@ -1,0 +1,5 @@
+{
+  "fnSignature": "_.cond(pairs)",
+  "lodashLink": "https://lodash.com/docs/4.17.15#pairs",
+  "summary": "Creates a function that iterates over `pairs` and invokes the corresponding function of the first predicate to return truthy."
+}
