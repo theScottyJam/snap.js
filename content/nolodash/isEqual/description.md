@@ -63,6 +63,7 @@ If you're dealing with JSON-serializable data (i.e. data that does not contain v
 
 ```javascript
 function sortObjKeysReplacer(key, maybeObj) {
+  if (Array.isArray(maybeObj)) return maybeObj;
   if (typeof maybeObj !== 'object' || maybeObj === null) return maybeObj;
 
   return Object.fromEntries(
