@@ -1,15 +1,15 @@
 import { CodeViewer } from './CodeViewer.js';
 import { MarkDown } from './MarkDown.js';
-import { defineStyledElement, jumpToInternalLinkTarget, registerInternalLinkTarget, setPageBaseTitle } from './shared.js';
+import { defineStyledElement, jumpToInternalLinkTarget, setPageBaseTitle } from './shared.js';
 import { CODE_WINDOW_BORDER_RADIUS } from './sharedStyles.js';
 import { html, renderChoice, set, Signal } from './snapFramework.js';
 import { WithTooltip } from './WithTooltip.js';
 
-export const TestSeamsPage = defineStyledElement('TestSeamsPage', getStyles, ({ testSeamsPageHtml }) => {
-  setPageBaseTitle('Test Seams');
+export const FetchPage = defineStyledElement('FetchPage', getStyles, ({ fetchPageHtml }) => {
+  setPageBaseTitle('Fetch');
 
   return new MarkDown({
-    signalContentHtml: new Signal(testSeamsPageHtml),
+    signalContentHtml: new Signal(fetchPageHtml),
     codeBlockTheme: 'dark',
     createCodeBlock,
     postProcess,
@@ -35,12 +35,6 @@ function postProcess(markdownEl) {
 }
 
 function createCodeBlock(text) {
-  const fileNameMatch = /\/\/# fileName (.*)/.exec(text);
-  const fileName = fileNameMatch?.[1];
-  text = fileNameMatch === null
-    ? text
-    : text.slice(0, fileNameMatch.index) + text.slice(fileNameMatch.index + fileNameMatch[0].length + 1); // + 1 to remove the new line
-
   const selectAllButtonMatch = /\/\/# selectAllButton.*/.exec(text);
   text = selectAllButtonMatch === null
     ? text
@@ -48,25 +42,12 @@ function createCodeBlock(text) {
   const showSelectAllButton = selectAllButtonMatch !== null;
 
   const codeViewer = new CodeViewer(text, { theme: 'dark' });
-  if (fileName !== undefined) {
-    codeViewer.classList.add('test-seam-page-has-file-name');
-  }
 
   return html`
     ${renderChoice([{
-      signalWhen: new Signal(fileName !== undefined),
-      render: () => {
-        const fragment = html`
-          <p class="test-seam-page-code-tab" ${set({ textContent: fileName })}></p>
-        `;
-        registerInternalLinkTarget('file:' + fileName, fragment.querySelector('p'));
-        return fragment;
-      },
-    }])}
-    ${renderChoice([{
       signalWhen: new Signal(showSelectAllButton),
       render: () => html`
-        <div class="test-seam-page-select-all-container">
+        <div class="fetch-page-select-all-container">
           <button ${set({
             onclick: () => {
               const selection = window.getSelection();
@@ -88,24 +69,13 @@ function createCodeBlock(text) {
 
 function getMarkDownStyle() {
   return `
-    /* Similar styles are found at §ggWb5 */
-    .test-seam-page-code-tab {
-      display: inline-block;
-      color: #ddd;
-      padding: 8px 20px;
-      margin-bottom: 0;
-      border-top-left-radius: ${CODE_WINDOW_BORDER_RADIUS};
-      border-top-right-radius: ${CODE_WINDOW_BORDER_RADIUS};
-      background-color: #272822;
-    }
-
-    .test-seam-page-select-all-container {
+    .fetch-page-select-all-container {
       position: absolute;
       right: 0;
     }
 
     /* Similar styles are found at §CpxFg */
-    .test-seam-page-select-all-container button {
+    .fetch-page-select-all-container button {
       /*
         This allows the ::after pseudo-element to be absolutely positioned inside of the button.
         And we use it to shift the button over a bit.
@@ -141,27 +111,10 @@ function getMarkDownStyle() {
       }
     }
 
-    details {
-      border-radius: 8px;
-      padding: 8px;
-      padding-bottom: 0;
-      border: 1px solid transparent;
-
-      &[open] {
-        /* Search the project for §GGWu2 to find similar colors. */
-        background: #efe;
-        border-color: #7d7;
-      }
-
-      &::details-content {
-        margin-top: 1rem;
-      }
-    }
-
     ${customElements.getName(CodeViewer)} {
       background: #272822;
       border-radius: ${CODE_WINDOW_BORDER_RADIUS};
-      &.test-seam-page-has-file-name {
+      &.fetch-page-has-file-name {
         border-top-left-radius: 0;
       }
     }

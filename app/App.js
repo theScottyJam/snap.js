@@ -93,6 +93,27 @@ export const App = defineStyledElement('App', getStyles, () => {
             return addToLifecycle(() => new TestSeamsPage({ testSeamsPageHtml }));
           }),
         },
+        // Fetch page
+        {
+          signalWhen: signalTopLevel.use(page => page === 'fetch'),
+          render: () => renderAsync(async ({ addToLifecycle, signalAborted, signalLoadState }) => {
+            watchLoadingState(signalLoadState);
+            const [{ FetchPage }, fetchPageHtml] = await Promise.all([
+              import('./FetchPage.js'),
+              // When import attributes support `type: 'text'`, we can swap this for the import() syntax, and get caching for free.
+              fetch('fetchPage.html')
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Failed to load the fetch page content - received a status code of ' + response.status);
+                  }
+                  return response.text();
+                }),
+            ]);
+            if (signalAborted.get()) return;
+
+            return addToLifecycle(() => new FetchPage({ fetchPageHtml }));
+          }),
+        },
         // Framework page
         {
           signalWhen: signalTopLevel.use(page => page === 'framework'),
@@ -319,7 +340,7 @@ function fetchAndNormalizeCurrentHashPath() {
   }
 
   // If it's a route that doesn't start with a valid top-level route
-  if (!/^(utils|nolodash|seams|framework)(\/|$)/.exec(hashRoute)) {
+  if (!/^(utils|nolodash|fetch|seams|framework)(\/|$)/.exec(hashRoute)) {
     // This won't return notFound for all not-found cases - the
     // various sub-pages are in charge of rendering their own as needed.
     return 'notFound';

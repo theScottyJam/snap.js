@@ -1,0 +1,222 @@
+<h1>Snap Fetch</h1>
+<p>How to use <code>fetch()</code> instead of Axios (or other similar libraries) without losing out on any of Axios's distinguishing features.</p>
+<p>We will start with the following piece of boilerplate - everything discussed below will add onto this.</p>
+<pre><code class="javascript language-javascript">//# selectAllButton
+class HttpError extends Error {
+  constructor(request, response) {
+    super(
+      `Request failed with status ${response.status} ${response.statusText}: ` +
+      `${request.method} ${request.url}.`,
+    );
+    this.request = request;
+    this.response = response;
+  }
+}
+
+async function sendRequest(url_, opts = {}) {
+  const {
+    body: body_ = undefined,
+    jsonBody = undefined,
+    headers: headers_ = {},
+    queryParams = undefined,
+    ...etc
+  } = opts;
+
+  // Add `queryParams` to the URL
+  const url = new URL(url_);
+  for (const [key, value] of new URLSearchParams(queryParams)) {
+    url.searchParams.append(key, value);
+  }
+
+  // JSON-encode the `jsonBody`
+  const body = jsonBody === undefined ? body_ : JSON.stringify(jsonBody);
+
+  // Add a default application/json header if `jsonBody` is being used.
+  const headers = new Headers(headers_);
+  if (jsonBody !== undefined &amp;&amp; !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json')
+  }
+
+  // Send the request
+  const request = new Request(url, { body, headers, ...etc });
+  const response = await fetch(request);
+  if (!response.ok) {
+    throw new HttpError(request, response);
+  }
+
+  return response;
+}
+
+// Sending a POST body example:
+// const response = await sendRequest('https://jsonplaceholder.typicode.com/posts', {
+//   method: 'POST',
+//   jsonBody: { title: 'foo', body: 'bar', userId: 1 },
+// })
+//   .then(resp =&gt; resp.json());
+
+// Query parameters example:
+// const response = await sendRequest('https://jsonplaceholder.typicode.com/comments', {
+//   queryParams: { postId: 1 },
+// })
+//   .then(resp =&gt; resp.json());
+</code></pre>
+<p>This code does a few useful things for us:</p>
+<ol>
+<li>It throws an instance of <code>HttpError</code> on bad HTTP codes.</li>
+<li>It allows us to provide a <code>jsonBody</code> parameter, which it will automatically JSON-stringify and use as the request body, and set the appropriate <code>Content-Type</code> header to go with it.</li>
+<li>It allows us to provide <code>queryParams</code>, which it'll auto-attach to whatever URL we provide.</li>
+</ol>
+<p>This is a fairly solid core to get you started. What follows are various features Axios provides, and how you can get those same features with native <code>fetch()</code>.</p>
+<h2>Create Customized Instances</h2>
+<p>Axios lets you create new instances of the <code>Axios</code> class with certain configuration pre-applied, such as automatically providing auth headers or supplying a base URL.</p>
+<p>I would argue the native <code>fetch()</code> API handles this even better than Axios. If you want a customized <code>fetch()</code>, you just wrap it in your own custom function, that's it. Easy to understand, and no special explicit support is required.</p>
+<pre><code class="javascript language-javascript">// By the way, this jsonplaceholder.typicode.com website is pretty awesome.
+// It provides a mock REST API anyone can use.
+
+async function jsonPlaceholderFetch(path, { headers: headers_ = {}, ...etc } = {}) {
+  // Set a base URL
+  const url = new URL(path, 'https://jsonplaceholder.typicode.com');
+
+  // Provide auth headers
+  const headers = new Headers(headers_);
+  const encodedCreds = btoa('dummyUsername:dummyPassword');
+  headers.set('Authorization', `Basic ${encodedCreds}`);
+
+  return await sendRequest(url, { headers, ...etc });
+}
+
+// Example usage:
+// const response = await jsonPlaceholderFetch('/todos/1')
+//   .then(resp =&gt; resp.json());
+</code></pre>
+<h2>Interceptors</h2>
+<p>This, too, is arguably handled better with <code>fetch()</code> than <code>Axios</code>. To intercept requests, just edit your wrapper functions to include your interception logic. For example, if you want to cause any 401 error to redirect the end-user to the login screen, simply add the code to the appropriate wrapper function.</p>
+<p>In this case, we'll add it to our <code>jsonPlaceholderFetch()</code> function defined earlier. (We'll also remove the basic-auth header logic and instead assume cookies are being used to authenticate the request - those cookies may expire and cause you to become logged out).</p>
+<pre><code class="javascript language-javascript">async function jsonPlaceholderFetch(path, opts = {}) {
+  // Set a base URL
+  const url = new URL(path, 'https://jsonplaceholder.typicode.com');
+
+  try {
+    return await sendRequest(url, opts);
+  } catch (error) {
+    if (error instanceof HttpError &amp;&amp; error.response.status === 401) {
+      // The user is logged out, redirect them to the login screen.
+      window.location.href = '/login';
+    } else {
+      throw error;
+    }
+  }
+}
+</code></pre>
+<h2>Request Timeouts</h2>
+<p>If you want to abort a request after, say, 10 seconds, you can use <code>fetch()</code>'s native abort system as follows:</p>
+<pre><code class="javascript language-javascript">const response = await sendRequest('https://jsonplaceholder.typicode.com/todos/1', {
+  signal: AbortSignal.timeout(10_000),
+})
+  .then(resp =&gt; resp.json());
+</code></pre>
+<h2>Automatically JSON-Parsing Results</h2>
+<p>Yes, Axios can automatically JSON-parse your results.</p>
+<p>But Axios's implementation for this <a href="https://github.com/axios/axios/issues/5719">is actually quite poor</a>. They try to blindly JSON-parse all response bodies, regardless of what <code>responseType</code> says, and if they're successful, they will return the parsed version, which causes real issues such as <a href="https://github.com/axios/axios/issues/811#issuecomment-616669653">lost precision in numbers that were never meant to be interpreted as JSON</a>.</p>
+<p>A better implementation would be to only JSON-parse when the <code>Content-Type</code> header contains <code>application/json</code>. You could choose to provide automatic parsing for other <code>Content-Type</code>s as well. I'm personally not a fan of this approach though. For one, on success responses, that <code>Content-Type</code> header is typically redundant information - your client code is already hard-coded to expect JSON, there's no point in letting the server decide for you how to try to parse the response when there's only one option your client accepts - JSON (same is true for other content types).</p>
+<p>Parsing <code>Content-Type</code> headers can also be finicky. The server may return <code>Content-Type: application/json</code> today, then later switch it to <code>Content-Type: APPLICATION/JSON</code>, or <code>Content-Type: application/json; charset=utf-8</code> both of which should behave the same way. They may even change their header to something like <code>Content-Type: application/fhir+json</code>, saying "this isn't any JSON, but fhir-standard-compatible JSON" (FHIR being a special patient-data format - there's many such context-specific JSON content-types).</p>
+<h2>Tracking Upload Progress</h2>
+<p>The one thing that <code>fetch()</code> does not support, that <code>XMLHTTPRequest</code> does support (and Axios by extension, since it is built on <code>XMLHTTPRequest</code>) is the ability to track the progress of a file upload.</p>
+<p>So, if you need this and aren't using <code>Axios</code>, just use <code>XMLHTTPRequest</code>. Yes, it's ugly, but you can clean it up with a helper function.</p>
+<pre><code class="javascript language-javascript">//# selectAllButton
+async function uploadFile(url, opts) {
+  const {
+    method,
+    file,
+    headers: headers_ = undefined,
+    onProgress = undefined,
+  } = opts;
+
+  return await new Promise((resolve, reject) =&gt; {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    xhr.upload.onprogress = event =&gt; {
+      if (event.lengthComputable) {
+        // Provides the caller with progress events.
+        // This can be displayed to the end-user with
+        // `loaded / total` amount of a progress bar filled up.
+        onProgress?.({ loaded: event.loaded, total: event.total })
+      }
+    };
+
+    xhr.onload = () =&gt; {
+      if (xhr.status &gt;= 200 &amp;&amp; xhr.status &lt; 300) {
+        resolve(xhr.responseText);
+      } else {
+        const error = new Error(`Upload failed with status: ${xhr.status}`);
+        error.status = xhr.status;
+        reject(error);
+      }
+    };
+
+    xhr.addEventListener('error', () =&gt; {
+      reject(new Error('A network error occurred.'));
+    });
+
+    xhr.open(method, url, true);
+
+    const headers = new Headers(headers_);
+    for (const [key, value] of headers) {
+      xhr.setRequestHeader(key, value);
+    }
+
+    xhr.send(formData);
+  });
+}
+</code></pre>
+<p><a href="https://developer.chrome.com/docs/capabilities/web-apis/fetch-streaming-requests">Support for streaming requests to the server may be supported in the future</a>, which would let you track how much has been sent up, which can be used to make a progress bar.</p>
+<h2>Improved Error Handling</h2>
+<p>When using either Axios or the <code>sendRequest()</code> implementation on the server-side, I find the uncaught error messages to be sub-par. In both cases, they'll log out a large volume of data, much of which is useless when trying to understand what went wrong. I would recommend beefing up the <code>HttpError</code> class to provide relevant information in the error message itself, then hiding the other properties so they don't get logged out, as follows:</p>
+<pre><code class="javascript language-javascript">//# selectAllButton
+class HttpError extends Error {
+  constructor(request, response, responseBody) {
+    super([
+      `Request failed with status ${response.status} ${response.statusText}.`,
+      `Endpoint: ${request.method} ${request.url}`,
+      '--- Response body ---',
+      (responseBody.length &gt; 1000 ? responseBody.slice(0, 1000) + '…' : responseBody),
+      '--- Request headers ---',
+      ...[...request.headers].map(([key, value]) =&gt; key + ': ' + value),
+      '--- Response headers ---',
+      ...[...response.headers].map(([key, value]) =&gt; key + ': ' + value),
+      '------------------------',
+    ].join('\n'));
+
+    // Ensuring these properties aren't enumerable.
+    // Node won't log out non-enumerable properties, and these properties can
+    // create quite a lot of noise in the logs when logged out.
+    Object.defineProperty(this, 'request', { value: request, enumerable: false });
+    Object.defineProperty(this, 'response', { value: response, enumerable: false });
+    Object.defineProperty(this, 'responseBody', { value: responseBody, enumerable: false });
+  }
+
+  static async create(request, response) {
+    return new HttpError(request, response, await response.text());
+  }
+}
+</code></pre>
+<p>Make sure you call <code>await HttpError.create()</code> instead of <code>new HttpError()</code> to create instances.</p>
+<h2>Design Notes</h2>
+<p><details>
+<summary>View</summary></p>
+<h3>Why do I keep doing <code>.then(resp =&gt; resp.json())</code>? Why not <code>const parsedResponse = await resp.json()</code>?</h3>
+<p>Why needlessly introduce an extra variable to the function's scope (the <code>resp</code> variable), when its only use is for the very next line (to do <code>await resp.json()</code>)?</p>
+<p>Many JavaScript developers, myself included, have been craving for the introduction of <a href="https://github.com/tc39/proposal-pipeline-operator">a pipeline operator</a>. We don't have it yet, but the promise API does provide methods that are very pipeline-like - doing <code>.then(...)</code> isn't that different from adding a step to a pipeline.</p>
+<p>Yes, <code>await</code> syntax is newer and very useful, but its existence shouldn't cause us to boycott all uses of <code>.then()</code> and <code>.catch()</code>, they have their uses too.</p>
+<h3>Why are you throwing on bad status codes? Isn't it bad to use errors for control flow?</h3>
+<p><em>No</em>. Idiomatic JavaScript says that you throw an error if the operation you're trying to perform failed. <code>JSON.parse()</code>, for example, throws a <code>SyntaxError</code> when you supply bad JSON. If, on the application end, it's expected that you may be supplying bad JSON, you may be required to catch that <code>SyntaxError</code> and handle it, making error handling be part of your control flow, and <em>that's ok</em>. Good even. The alternative would be for <code>JSON.parse()</code> to <em>return</em> the syntax error information and rely on all callers to manually throw it if bad JSON was unexpected, which makes for an uglier API to use, and forgetting to throw the errors can make for hard-to-debug issues.</p>
+<p>Almost all built in and third-party APIs follow this approach, of throwing on failure. <code>fetch()</code> itself still somewhat follows this philosophy. If you're completely disconnected from the internet, it will throw an error. Network instability should be expected in any given webpage, so you'll need to be checking for this and handling it appropriately, making these errors part of your normal control flow.</p>
+<p>A common counter argument is that a bad status code <em>isn't</em> a failure, <code>fetch()</code> is just transmitting the response message to you, good or bad. To which I would argue <em>Of course it is an error</em>. If you request a JSON file and the server responded with <code>404</code>, then your request for that file has failed. <code>fetch()</code> speaks and understands many aspects of the HTTP standard. Status codes, such as 404, are defined by the HTTP standard as being error codes. There's no reason <code>fetch()</code> shouldn't interpret this as an error and throw it. This is an unfortunate flaw in <code>fetch()</code>'s design that we don't need to try and excuse away. </p>
+<p>In the end, it's simply more convenient to let your application do all error handling in the catch block, as opposed to handling network errors in a catch block and other failures outside.</p>
+<h3>What's with your variable names with trailing underscores, such as <code>headers_</code>?</h3>
+<p>It's a loose combination of different ideas that's turned into a habit I've picked up.</p>
+<p>In Python's PEP 8's style guide, they recommend putting a trailing underscore on a variable name if you want to use a name that conflicts with a built-in name or keyword, such as naming a variable <code>class_</code> instead of <code>class</code>, since <code>class</code> is a reserved keyword. I've taken some creative liberty with this guideline and have started using trailing underscores to avoid any kind of name conflict, not just conflicts with built-in names.</p>
+<p>Functional languages often allow the apostrophe character in names, such as <code>x'</code>, which reads as "x prime". If you want to create a new <code>x</code> variable that's been modified, you'd name your modified version <code>x'</code> instead of <code>x</code> (since you're typically not allowed to overwrite the existing variable). JavaScript doesn't let you use apostrophes in variable names, but I still often try to avoid reassigning variables, preferring instead to create new variables, where the less-used one would be named with a trailing underscore to distinguish it.</p>
+<p>Put together, I've grown into a pattern of naming variables holding unnormalized values with a trailing underscore, then once I've normalized them the way I like, I store that in a variable without the trailing underscore. Of course, if you don't like it, feel free to change it up to your preferences. But I do think it would be cool if this became a pattern that was more widely adopted.</p>
