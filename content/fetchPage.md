@@ -1,8 +1,8 @@
 # Snap Fetch
 
-How to use `fetch()` instead of Axios (or other similar libraries) without losing out on any of Axios's distinguishing features.
+`fetch()` is great, but it is missing a small handful of commonly-needed features. What follows is a copy-paste friendly wrapper function you can use to fill in the largest feature gaps, along with some information on how to replicate some of the most loved features from Axios.
 
-We will start with the following piece of boilerplate - everything discussed below will add onto this.
+We will start with the wrapper function:
 
 ```javascript
 //# selectAllButton
