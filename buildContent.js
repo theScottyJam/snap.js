@@ -96,3 +96,8 @@ buildSingleMarkdownFile({
   sourcePath: './content/testSeamsPage.md',
   destPath: './public/testSeamsPage.html',
 });
+
+buildSingleMarkdownFile({
+  sourcePath: './content/fetchPage.md',
+  destPath: './public/fetchPage.html',
+});

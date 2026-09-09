@@ -5,6 +5,7 @@ export const PrimaryNav = defineStyledElement('PrimaryNav', getStyles, ({ pageIn
   return html`
     ${renderLink({ target: 'utils', textContent: 'Simple Utilities', pageInfo })}
     ${renderLink({ target: 'nolodash', textContent: 'Lodash Replacements', pageInfo })}
+    ${renderLink({ target: 'fetch', textContent: 'Fetch', pageInfo })}
     ${renderLink({ target: 'seams', textContent: 'Test Seams', pageInfo })}
     ${renderLink({ target: 'framework', textContent: 'Snap Framework', pageInfo })}
   `;
