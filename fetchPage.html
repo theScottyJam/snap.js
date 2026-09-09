@@ -1,6 +1,6 @@
 <h1>Snap Fetch</h1>
-<p>How to use <code>fetch()</code> instead of Axios (or other similar libraries) without losing out on any of Axios's distinguishing features.</p>
-<p>We will start with the following piece of boilerplate - everything discussed below will add onto this.</p>
+<p><code>fetch()</code> is great, but it is missing a small handful of commonly-needed features. What follows is a copy-paste friendly wrapper function you can use to fill in the largest feature gaps, along with some information on how to replicate some of the most loved features from Axios.</p>
+<p>We will start with the wrapper function:</p>
 <pre><code class="javascript language-javascript">//# selectAllButton
 class HttpError extends Error {
   constructor(request, response) {
